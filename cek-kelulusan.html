@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cek Kelulusan — SMKN 1 Sukorejo</title>
+  <meta name="description" content="Cek status kelulusan siswa SMKN 1 Sukorejo." />
+  <link rel="icon" href="assets/logo/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="site-header minimal-header">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <svg class="brand__logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 3L2 8l10 5 8-4.09V15h2V8L12 3z" fill="currentColor"/>
+          <path d="M6 12.18v3.64C6 18.09 8.69 20 12 20s6-1.91 6-4.18v-3.64l-6 3-6-3z" fill="currentColor"/>
+        </svg>
+        SMKN 1 SUKOREJO
+      </a>
+      <a href="index.html" class="back-link">&larr; Kembali ke Beranda</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Shown when the user is not logged in -->
+    <section class="form-section graduation-locked is-active" id="graduation-locked">
+      <div class="container form-wrap">
+        <div class="form-card graduation-locked__card">
+          <div class="graduation-locked__icon" aria-hidden="true">&#128274;</div>
+          <h1>Portal Kelulusan</h1>
+          <p>Untuk melindungi informasi kelulusan siswa, silakan masuk ke akun Anda terlebih dahulu.</p>
+          <button type="button" class="btn btn-primary btn-block" data-open-auth="login">Masuk</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Shown once the user is logged in (simulated session) -->
+    <div class="graduation-dashboard" id="graduation-dashboard">
+
+      <div class="page-header page-header--center">
+        <div class="container">
+          <h1>Portal Kelulusan</h1>
+          <p>Berikut adalah ringkasan hasil kelulusan Anda tahun ajaran ini.</p>
+        </div>
+      </div>
+
+      <!-- 1. Graduation status -->
+      <section class="section--alt">
+        <div class="container">
+          <div class="graduation-status">
+            <div class="graduation-status__emoji" aria-hidden="true">&#127891;</div>
+            <h2>Selamat, Anda Dinyatakan Lulus!</h2>
+            <div class="graduation-status__meta">
+              <div class="graduation-status__item">
+                <span class="graduation-status__label">Status</span>
+                <span class="graduation-status__badge">LULUS</span>
+              </div>
+              <div class="graduation-status__item">
+                <span class="graduation-status__label">Tahun Ajaran</span>
+                <span class="graduation-status__value" id="dash-tahun">2025/2026</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2 & 3. Student information + Academic summary -->
+      <section>
+        <div class="container">
+          <div class="graduation-grid">
+            <div class="graduation-card">
+              <h3>Data Siswa</h3>
+              <dl class="info-list">
+                <div class="info-list__row">
+                  <dt>Nama Lengkap</dt>
+                  <dd id="dash-name">David Alvin</dd>
+                </div>
+                <div class="info-list__row">
+                  <dt>NISN</dt>
+                  <dd id="dash-nisn">0057382910</dd>
+                </div>
+                <div class="info-list__row">
+                  <dt>Kelas</dt>
+                  <dd id="dash-kelas">XII RPL 2</dd>
+                </div>
+                <div class="info-list__row">
+                  <dt>Jurusan</dt>
+                  <dd id="dash-jurusan">Rekayasa Perangkat Lunak</dd>
+                </div>
+                <div class="info-list__row">
+                  <dt>Tahun Kelulusan</dt>
+                  <dd id="dash-tahun-lulus">2025/2026</dd>
+                </div>
+              </dl>
+            </div>
+
+            <div class="graduation-card">
+              <h3>Ringkasan Akademik</h3>
+              <div class="stat-block">
+                <span class="stat-block__value" id="dash-rata-rata">89.75</span>
+                <span class="stat-block__label">Rata-rata Nilai Akhir</span>
+              </div>
+              <div class="stat-block stat-block--secondary">
+                <span class="stat-block__value" id="dash-predikat">Sangat Baik</span>
+                <span class="stat-block__label">Predikat Akademik</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Subject score summary -->
+      <section class="section--alt">
+        <div class="container">
+          <div class="section-head">
+            <div class="section-head__text">
+              <h2>Rekap Nilai Mata Pelajaran</h2>
+              <p>Nilai akhir untuk setiap mata pelajaran pada semester ini.</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="score-table">
+              <thead>
+                <tr>
+                  <th>Mata Pelajaran</th>
+                  <th>Nilai Akhir</th>
+                </tr>
+              </thead>
+              <tbody id="score-table-body">
+                <!-- populated by js/graduation.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 & 6. Achievements + Documents -->
+      <section>
+        <div class="container">
+          <div class="graduation-grid">
+            <div class="graduation-card">
+              <h3>Prestasi Siswa</h3>
+              <ul class="achievement-list" id="achievement-list">
+                <!-- populated by js/graduation.js -->
+              </ul>
+            </div>
+
+            <div class="graduation-card">
+              <h3>Dokumen Kelulusan</h3>
+              <p>Unduh dokumen resmi kelulusan Anda dalam format PDF.</p>
+              <div class="doc-actions">
+                <button type="button" class="btn btn-primary">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Unduh Ijazah
+                </button>
+                <button type="button" class="btn btn-outline-navy">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Unduh Transkrip Nilai
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <div class="footer-brand">
+        <p class="footer-brand__name">SMKN 1 SUKOREJO</p>
+        <p>Mencetak generasi muda yang kompeten, berkarakter, profesional, dan siap menghadapi tantangan industri global.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Website resmi">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18z" stroke="currentColor" stroke-width="1.6"/></svg>
+          </a>
+          <a href="#" aria-label="Bagikan">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="18" cy="5" r="2.4" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="12" r="2.4" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="19" r="2.4" stroke="currentColor" stroke-width="1.6"/><path d="M8.1 10.8l7.8-4.4M8.1 13.2l7.8 4.4" stroke="currentColor" stroke-width="1.6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h3>Tautan Cepat</h3>
+        <ul>
+          <li><a href="profil-sekolah.html">Profil Sekolah</a></li>
+          <li><a href="profil-sekolah.html#visi-misi">Visi Misi</a></li>
+          <li><a href="agenda.html">Agenda</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Informasi</h3>
+        <ul>
+          <li><a href="prestasi.html">Prestasi</a></li>
+          <li><a href="cek-kelulusan.html">Lulusan Terbaru</a></li>
+          <li><a href="cek-kelulusan.html">Pendaftaran</a></li>
+        </ul>
+      </div>
+      <div class="footer-col footer-contact">
+        <h3>Kontak Kami</h3>
+        <ul>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg>
+            <span>Jl. Raya Sukorejo No. 1, Pasuruan, Jawa Timur</span>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2-1-4-3-5-5l2-2-3-6-4 3z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            <span>(0343) 611234</span>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 6.5l8 6 8-6" stroke="currentColor" stroke-width="1.6"/></svg>
+            <span>info@smkn1sukorejo.sch.id</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 SMKN 1 SUKOREJO. All rights reserved.</div>
+  </footer>
+
+  <div class="auth-overlay" id="auth-overlay" aria-hidden="true">
+    <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+      <button type="button" class="icon-btn auth-modal__close" id="auth-modal-close" aria-label="Tutup">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+
+      <!-- Login panel -->
+      <div class="auth-panel is-active" id="auth-panel-login">
+        <h2 class="auth-modal__title" id="auth-modal-title">Masuk ke Akun</h2>
+        <p class="auth-modal__subtitle">Gunakan NISN dan kata sandi Anda untuk masuk.</p>
+
+        <form class="auth-form" id="login-form" novalidate>
+          <div class="form-field">
+            <label for="login-nisn">NISN</label>
+            <div class="input-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <input type="text" id="login-nisn" name="nisn" placeholder="Masukkan NISN" autocomplete="username" />
+            </div>
+            <p class="form-error" data-error-for="login-nisn"></p>
+          </div>
+
+          <div class="form-field">
+            <label for="login-password">Kata Sandi</label>
+            <div class="input-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.6"/></svg>
+              <input type="password" id="login-password" name="password" placeholder="Masukkan kata sandi" autocomplete="current-password" />
+            </div>
+            <p class="form-error" data-error-for="login-password"></p>
+          </div>
+
+          <div class="auth-form__row">
+            <label class="auth-checkbox">
+              <input type="checkbox" id="login-remember" name="remember" />
+              <span>Ingat saya</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Masuk</button>
+
+          <p class="auth-form__switch">Belum punya akun? <button type="button" class="auth-link" data-switch-to="register">Daftar</button></p>
+        </form>
+      </div>
+
+      <!-- Register panel -->
+      <div class="auth-panel" id="auth-panel-register">
+        <h2 class="auth-modal__title">Buat Akun Baru</h2>
+        <p class="auth-modal__subtitle">Lengkapi data diri Anda untuk mendaftar.</p>
+
+        <form class="auth-form" id="register-form" novalidate>
+          <div class="form-field">
+            <label for="register-name">Nama Lengkap</label>
+            <div class="input-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke="currentColor" stroke-width="1.6"/></svg>
+              <input type="text" id="register-name" name="fullname" placeholder="Masukkan nama lengkap" autocomplete="name" />
+            </div>
+            <p class="form-error" data-error-for="register-name"></p>
+          </div>
+
+          <div class="form-field">
+            <label for="register-nisn">NISN</label>
+            <div class="input-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <input type="text" id="register-nisn" name="nisn" placeholder="Masukkan NISN" autocomplete="username" />
+            </div>
+            <p class="form-error" data-error-for="register-nisn"></p>
+          </div>
+
+          <div class="form-field">
+            <label for="register-password">Kata Sandi</label>
+            <div class="input-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.6"/></svg>
+              <input type="password" id="register-password" name="password" placeholder="Buat kata sandi" autocomplete="new-password" />
+            </div>
+            <p class="form-error" data-error-for="register-password"></p>
+          </div>
+
+          <div class="form-field">
+            <label for="register-confirm">Konfirmasi Kata Sandi</label>
+            <div class="input-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.6"/></svg>
+              <input type="password" id="register-confirm" name="confirm" placeholder="Ulangi kata sandi" autocomplete="new-password" />
+            </div>
+            <p class="form-error" data-error-for="register-confirm"></p>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Daftar</button>
+
+          <p class="auth-form__switch">Sudah punya akun? <button type="button" class="auth-link" data-switch-to="login">Masuk</button></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/script.js" defer></script>
+  <script src="js/graduation.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMKN 1 Sukorejo — Membentuk Generasi Unggul dan Kompeten</title>
+  <meta name="description" content="SMKN 1 Sukorejo mempersiapkan pendidikan vokasi terbaik dan menyiapkan siswa untuk sukses di dunia industri modern." />
+  <link rel="icon" href="assets/logo/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <svg class="brand__logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 3L2 8l10 5 8-4.09V15h2V8L12 3z" fill="currentColor"/>
+          <path d="M6 12.18v3.64C6 18.09 8.69 20 12 20s6-1.91 6-4.18v-3.64l-6 3-6-3z" fill="currentColor"/>
+        </svg>
+        SMKN 1 SUKOREJO
+      </a>
+      <nav class="main-nav" aria-label="Navigasi utama">
+        <a href="index.html" aria-current="page">Beranda</a>
+        <a href="profil-sekolah.html">Profil Sekolah</a>
+        <a href="agenda.html">Agenda</a>
+        <a href="prestasi.html">Prestasi</a>
+        <a href="cek-kelulusan.html">Lulusan Terbaru</a>
+        <a href="contact.html">Kontak</a>
+      </nav>
+      <div class="header-account">
+        <button type="button" class="user-chip__trigger" id="account-trigger" aria-haspopup="true" aria-expanded="false">
+          <span class="user-chip__avatar" aria-hidden="true">&#128100;</span>
+          <span class="user-chip__name">Portal Siswa</span>
+          <svg class="user-chip__caret" width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="user-chip__menu" id="account-menu">
+          <a href="cek-kelulusan.html" class="user-chip__link">
+            <span aria-hidden="true">&#127891;</span> Portal Kelulusan
+          </a>
+          <button type="button" class="user-chip__logout">
+            <span aria-hidden="true">&#128682;</span> Keluar
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero" id="hero-cta">
+      <div class="container">
+        <div class="hero__content">
+          <h1>Membentuk Generasi Unggul dan Kompeten</h1>
+          <p>Selamat datang di SMKN 1 Sukorejo. Kami berkomitmen untuk menyelenggarakan pendidikan vokasi terbaik, mempersiapkan siswa untuk sukses di dunia industri modern.</p>
+          <div class="hero__actions">
+            <a href="cek-kelulusan.html" class="btn btn-primary">Pendaftaran Siswa Baru</a>
+            <a href="program-keahlian.html" class="btn btn-outline-light">Jelajahi Program</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- School Introduction Video -->
+    <section class="section--alt video-intro">
+      <div class="container">
+        <div class="video-intro__grid">
+          <div class="video-intro__text">
+            <h2>&#127909; Jelajahi SMKN 1 Sukorejo</h2>
+            <p>Kenali SMKN 1 Sukorejo lebih dekat melalui video profil singkat yang menampilkan lingkungan sekolah, fasilitas, program akademik, kegiatan ekstrakurikuler, prestasi, hingga keseharian siswa.</p>
+            <span class="video-intro__badge">Video Profil Resmi Sekolah</span>
+            <div>
+              <a href="profil-sekolah.html" class="btn btn-outline-navy video-intro__cta">Pelajari Lebih Lanjut</a>
+            </div>
+          </div>
+
+          <div class="video-intro__media">
+            <video controls poster="assets/images/hero/hero.jpg">
+              <source src="assets/videos/sketsu.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sambutan Kepala Sekolah -->
+    <section class="sambutan">
+      <div class="container">
+        <div class="sambutan__card">
+          <img class="sambutan__photo" src="assets/images/profile/pak-jaya.png" alt="" />
+          <div class="sambutan__body">
+            <h2>Sambutan Kepala Sekolah</h2>
+            <blockquote>&ldquo;Pendidikan vokasi adalah kunci kemajuan bangsa. Di SMKN 1 Sukorejo, kami tidak hanya mentransfer ilmu pengetahuan, tetapi juga membentuk karakter dan keterampilan yang relevan dengan kebutuhan industri masa kini. Mari bergabung dan wujudkan masa depan gemilang bersama kami.&rdquo;</blockquote>
+            <p class="sambutan__name">Iskandar Jaya</p>
+            <p class="sambutan__role">Kepala SMKN 1 Sukorejo</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Agenda Sekolah -->
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="section-head__text">
+            <h2>Agenda Sekolah</h2>
+            <p>Informasi kegiatan dan acara terdekat di SMKN 1 Sukorejo.</p>
+          </div>
+          <a href="agenda.html" class="link-arrow">Lihat Semua &rarr;</a>
+        </div>
+
+        <div class="agenda-grid">
+          <article class="agenda-card">
+            <div class="agenda-card__media">
+              <img src="assets/images/gallery/mpls.png" alt="Masa Pengenalan Lingkungan Sekolah 2026" />
+              <div class="agenda-card__date"><strong>4</strong><span>Jul</span></div>
+            </div>
+            <div class="agenda-card__body">
+              <h3>Masa Pengenalan Lingkungan Sekolah 2026</h3>
+              <ul class="agenda-card__meta">
+                <li>4 Juli &ndash; 8 Juli</li>
+                <li>SMKN 1 SUKOREJO</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="agenda-card">
+            <div class="agenda-card__media">
+              <img src="assets/images/gallery/hutri.png" alt="Peringatan HUT-RI 2026" />
+              <div class="agenda-card__date"><strong>17</strong><span>Agu</span></div>
+            </div>
+            <div class="agenda-card__body">
+              <h3>Upacara HUT-RI ke-81</h3>
+              <ul class="agenda-card__meta">
+                <li>07:00 &ndash; Selesai</li>
+                <li>Aula Utama</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="agenda-card">
+            <div class="agenda-card__media">
+              <img src="assets/images/gallery/pilketos.png" alt="Pemilihan Ketua OSIS" />
+              <div class="agenda-card__date"><strong>5</strong><span>Sep</span></div>
+            </div>
+            <div class="agenda-card__body">
+              <h3>PILKETOS (Pemilihan Ketua OSIS)</h3>
+              <ul class="agenda-card__meta">
+                <li>10:00 &ndash; Selesai</li>
+                <li>Gedung Olahraga</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Program Keahlian showcase -->
+    <section class="section--alt">
+      <div class="container">
+        <div class="section-intro">
+          <span class="eyebrow">Program Keahlian</span>
+          <h2>Kompetensi Unggulan Kami</h2>
+          <a href="program-keahlian.html" class="btn btn-outline-navy btn-sm section-intro__cta">Lihat Semua</a>
+        </div>
+
+        <div class="program-showcase" id="program-showcase">
+          <div class="program-showcase__media">
+            <img class="program-showcase__image is-active" data-major="rpl" src="assets/images/majors/rpl.jpg" alt="Aktivitas praktik siswa Rekayasa Perangkat Lunak" />
+            <img class="program-showcase__image" data-major="ki" src="assets/images/majors/kimia-industri.jpg" alt="Aktivitas praktik siswa Kimia Industri" />
+            <img class="program-showcase__image" data-major="tei" src="assets/images/majors/tei.jpg" alt="Aktivitas praktik siswa Teknik Elektronika Industri" />
+            <img class="program-showcase__image" data-major="tav" src="assets/images/majors/tav.webp" alt="Aktivitas praktik siswa Teknik Audio Video" />
+            <img class="program-showcase__image" data-major="tkr" src="assets/images/majors/tkr.avif" alt="Aktivitas praktik siswa Teknik Kendaraan Ringan" />
+          </div>
+
+          <div class="program-carousel" aria-label="Daftar program keahlian">
+            <div class="program-carousel__track" id="program-track">
+              <div class="program-mini-card is-active" data-major="rpl">
+                <div class="program-mini-card__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 18h6M12 3v12m0 0l-4-4m4 4l4-4" stroke="#f0a90f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <h3>Rekayasa Perangkat Lunak</h3>
+                <p>Mempelajari pengembangan perangkat lunak mulai dari perancangan, pemrograman, hingga manajemen kualitas.</p>
+              </div>
+              <div class="program-mini-card" data-major="ki">
+                <div class="program-mini-card__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 3v18M4 8h5M4 16h5M15 3l5 5-5 5" stroke="#f0a90f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <h3>Kimia Industri</h3>
+                <p>Menguasai analisis dan pengendalian mutu bahan baku serta proses produksi pada industri kimia.</p>
+              </div>
+              <div class="program-mini-card" data-major="tei">
+                <div class="program-mini-card__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10" stroke="#f0a90f" stroke-width="2" stroke-linecap="round"/></svg>
+                </div>
+                <h3>Teknik Elektronika Industri</h3>
+                <p>Menguasai sistem kontrol elektronik dan instrumentasi pada berbagai peralatan industri modern.</p>
+              </div>
+              <div class="program-mini-card" data-major="tav">
+                <div class="program-mini-card__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5l16 3-6 3 6 3-16 3V5z" stroke="#f0a90f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <h3>Teknik Audio Video</h3>
+                <p>Membentuk tenaga terampil dalam rekayasa, produksi, dan penyiaran multimedia.</p>
+              </div>
+              <div class="program-mini-card" data-major="tkr">
+                <div class="program-mini-card__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="#f0a90f" stroke-width="2"/><path d="M12 7v5l3 3" stroke="#f0a90f" stroke-width="2" stroke-linecap="round"/></svg>
+                </div>
+                <h3>Teknik Kendaraan Ringan</h3>
+                <p>Membekali siswa dengan keahlian perawatan dan perbaikan kendaraan sesuai standar bengkel industri.</p>
+              </div>
+
+              <!-- Clone of the first card, appended so the carousel can loop back to slide 1 without a visible jump -->
+              <div class="program-mini-card" data-major="rpl" aria-hidden="true" tabindex="-1">
+                <div class="program-mini-card__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 18h6M12 3v12m0 0l-4-4m4 4l4-4" stroke="#f0a90f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <h3>Rekayasa Perangkat Lunak</h3>
+                <p>Mempelajari pengembangan perangkat lunak mulai dari perancangan, pemrograman, hingga manajemen kualitas.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ekstrakurikuler -->
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="section-head__text">
+            <h2>Ekstrakurikuler</h2>
+            <p>Kembangkan bakat dan minat di luar jam pelajaran akademis.</p>
+          </div>
+          <a href="ekstrakurikuler.html" class="link-arrow">Lihat Semua &rarr;</a>
+        </div>
+
+        <div class="ekskul-marquee marquee" aria-label="Daftar ekstrakurikuler">
+          <div class="marquee__track">
+            <a href="ekstrakurikuler.html" class="ekskul-card">
+              <img src="assets/images/extracurricular/futsal.png" alt="Kegiatan ekstrakurikuler Futsal" />
+              <span class="ekskul-card__label">Futsal</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card">
+              <img src="assets/images/extracurricular/basket.png" alt="Kegiatan ekstrakurikuler Basket" />
+              <span class="ekskul-card__label">Basket</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card">
+              <img src="assets/images/extracurricular/volly.png" alt="Kegiatan ekstrakurikuler Volly" />
+              <span class="ekskul-card__label">Volly</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card">
+              <img src="assets/images/extracurricular/badminton.png" alt="Kegiatan ekstrakurikuler Badminton" />
+              <span class="ekskul-card__label">Badminton</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card">
+              <img src="assets/images/extracurricular/kickboxing.png" alt="Kegiatan ekstrakurikuler Kick Boxing" />
+              <span class="ekskul-card__label">Kick Boxing</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card">
+              <img src="assets/images/extracurricular/perisai-diri.png" alt="Kegiatan ekstrakurikuler Perisai Diri" />
+              <span class="ekskul-card__label">Perisai Diri</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card">
+              <img src="assets/images/extracurricular/tari.png" alt="Kegiatan ekstrakurikuler Tari" />
+              <span class="ekskul-card__label">Tari</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card">
+              <img src="assets/images/extracurricular/banjari.png" alt="Kegiatan ekstrakurikuler Al Banjari" />
+              <span class="ekskul-card__label">Al Banjari</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card">
+              <img src="assets/images/extracurricular/band.png" alt="Kegiatan ekstrakurikuler Band" />
+              <span class="ekskul-card__label">Band</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card">
+              <img src="assets/images/extracurricular/pramuka.png" alt="Kegiatan ekstrakurikuler Pramuka" />
+              <span class="ekskul-card__label">Pramuka</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card">
+              <img src="assets/images/extracurricular/paskibra.png" alt="Kegiatan ekstrakurikuler Paskibra" />
+              <span class="ekskul-card__label">Paskibra</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card">
+              <img src="assets/images/extracurricular/pmr.png" alt="Kegiatan ekstrakurikuler PMR" />
+              <span class="ekskul-card__label">PMR</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card">
+              <img src="assets/images/extracurricular/jurnalistik.png" alt="Kegiatan ekstrakurikuler Jurnalistik" />
+              <span class="ekskul-card__label">Jurnalistik</span>
+            </a>
+
+            <!-- Duplicate set (all activities repeated once) for seamless infinite loop (hidden from assistive tech) -->
+            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+              <img src="assets/images/ekskul-futsal.jpg" alt="" />
+              <span class="ekskul-card__label">Futsal</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+              <img src="assets/images/ekskul-basket.jpg" alt="" />
+              <span class="ekskul-card__label">Basket</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+              <img src="assets/images/ekskul-volly.jpg" alt="" />
+              <span class="ekskul-card__label">Volly</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+              <img src="assets/images/ekskul-badminton.jpg" alt="" />
+              <span class="ekskul-card__label">Badminton</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+              <img src="assets/images/ekskul-kickboxing.jpg" alt="" />
+              <span class="ekskul-card__label">Kick Boxing</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+              <img src="assets/images/ekskul-perisai-diri.jpg" alt="" />
+              <span class="ekskul-card__label">Perisai Diri</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+              <img src="assets/images/ekskul-tari.jpg" alt="" />
+              <span class="ekskul-card__label">Tari</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+              <img src="assets/images/ekskul-albanjari.jpg" alt="" />
+              <span class="ekskul-card__label">Al Banjari</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+              <img src="assets/images/ekskul-band.jpg" alt="" />
+              <span class="ekskul-card__label">Band</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+              <img src="assets/images/ekskul-pramuka.jpg" alt="" />
+              <span class="ekskul-card__label">Pramuka</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+              <img src="assets/images/ekskul-paskibra.jpg" alt="" />
+              <span class="ekskul-card__label">Paskibra</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+              <img src="assets/images/ekskul-pmr.jpg" alt="" />
+              <span class="ekskul-card__label">PMR</span>
+            </a>
+            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+              <img src="assets/images/ekskul-jurnalistik.jpg" alt="" />
+              <span class="ekskul-card__label">Jurnalistik</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Staf Pengajar -->
+    <section class="section--alt">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-head__text">
+            <h2>Staf Pengajar</h2>
+            <p>Pendidik profesional yang berdedikasi membimbing siswa.</p>
+          </div>
+          <a href="staf-pengajar.html" class="link-arrow">Lihat Semua &rarr;</a>
+        </div>
+
+        <div class="staff-grid">
+          <article class="staff-card">
+            <img class="staff-card__photo" src="assets/images/profile/bu-ririk.png" alt="" />
+            <h3>Ririk Suryawati S.Pd</h3>
+            <p class="staff-card__role">Guru Produktif TEI</p>
+          </article>
+          <article class="staff-card">
+            <img class="staff-card__photo" src="assets/images/profile/bu-rully.png" alt="" />
+            <h3>Rully Mustikaningrum S.Pd</h3>
+            <p class="staff-card__role">Guru Bahasa Inggris</p>
+          </article>
+          <article class="staff-card">
+            <img class="staff-card__photo" src="assets/images/profile/bu-alfi.png" " />
+            <h3>Siti Alfiyah</h3>
+            <p class="staff-card__role">Guru Matematika</p>
+          </article>
+          <article class="staff-card">
+            <img class="staff-card__photo" src="assets/images/profile/pak-lukman.png" alt="" />
+            <h3>Muhammad Lukman Hadi S.Pd. Gr.</h3>
+            <p class="staff-card__role">Guru Produktif TEI</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Location Preview -->
+    <section class="section--alt">
+      <div class="container">
+        <div class="location-preview">
+          <div class="location-preview__icon" aria-hidden="true">&#128205;</div>
+          <div class="location-preview__body">
+            <span class="eyebrow">Lokasi Kami</span>
+            <h2>SMKN 1 Sukorejo</h2>
+            <p>Jl. Sumber Gareng, Sukorejo, Pasuruan</p>
+          </div>
+          <a href="contact.html#location" class="btn btn-outline-navy location-preview__cta">
+            Lihat Lokasi
+            <span class="location-preview__arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <div class="footer-brand">
+        <p class="footer-brand__name">SMKN 1 SUKOREJO</p>
+        <p>Mencetak generasi muda yang kompeten, berkarakter, profesional, dan siap menghadapi tantangan industri global.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Website resmi">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18z" stroke="currentColor" stroke-width="1.6"/></svg>
+          </a>
+          <a href="#" aria-label="Bagikan">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="18" cy="5" r="2.4" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="12" r="2.4" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="19" r="2.4" stroke="currentColor" stroke-width="1.6"/><path d="M8.1 10.8l7.8-4.4M8.1 13.2l7.8 4.4" stroke="currentColor" stroke-width="1.6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h3>Tautan Cepat</h3>
+        <ul>
+          <li><a href="profil-sekolah.html">Profil Sekolah</a></li>
+          <li><a href="profil-sekolah.html#visi-misi">Visi Misi</a></li>
+          <li><a href="agenda.html">Agenda</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Informasi</h3>
+        <ul>
+          <li><a href="prestasi.html">Prestasi</a></li>
+          <li><a href="cek-kelulusan.html">Lulusan Terbaru</a></li>
+          <li><a href="cek-kelulusan.html">Pendaftaran</a></li>
+        </ul>
+      </div>
+      <div class="footer-col footer-contact">
+        <h3>Kontak Kami</h3>
+        <ul>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg>
+            <span>Jl. Raya Sukorejo No. 1, Pasuruan, Jawa Timur</span>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2-1-4-3-5-5l2-2-3-6-4 3z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            <span>(0343) 611234</span>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 6.5l8 6 8-6" stroke="currentColor" stroke-width="1.6"/></svg>
+            <span>info@smkn1sukorejo.sch.id</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 SMKN 1 SUKOREJO. All rights reserved.</div>
+  </footer>
+
+  <div class="auth-overlay" id="auth-overlay" aria-hidden="true">
+    <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+      <button type="button" class="icon-btn auth-modal__close" id="auth-modal-close" aria-label="Tutup">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+
+      <!-- Login panel -->
+      <div class="auth-panel is-active" id="auth-panel-login">
+        <h2 class="auth-modal__title" id="auth-modal-title">Masuk ke Akun</h2>
+        <p class="auth-modal__subtitle">Gunakan NISN dan kata sandi Anda untuk masuk.</p>
+
+        <form class="auth-form" id="login-form" novalidate>
+          <div class="form-field">
+            <label for="login-nisn">NISN</label>
+            <div class="input-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <input type="text" id="login-nisn" name="nisn" placeholder="Masukkan NISN" autocomplete="username" />
+            </div>
+            <p class="form-error" data-error-for="login-nisn"></p>
+          </div>
+
+          <div class="form-field">
+            <label for="login-password">Kata Sandi</label>
+            <div class="input-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.6"/></svg>
+              <input type="password" id="login-password" name="password" placeholder="Masukkan kata sandi" autocomplete="current-password" />
+            </div>
+            <p class="form-error" data-error-for="login-password"></p>
+          </div>
+
+          <div class="auth-form__row">
+            <label class="auth-checkbox">
+              <input type="checkbox" id="login-remember" name="remember" />
+              <span>Ingat saya</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Masuk</button>
+
+          <p class="auth-form__switch">Belum punya akun? <button type="button" class="auth-link" data-switch-to="register">Daftar</button></p>
+        </form>
+
+        <div class="auth-success" id="auth-success" hidden>
+          <div class="auth-success__icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <p>Login berhasil!</p>
+        </div>
+      </div>
+
+      <!-- Register panel -->
+      <div class="auth-panel" id="auth-panel-register">
+        <h2 class="auth-modal__title">Buat Akun Baru</h2>
+        <p class="auth-modal__subtitle">Lengkapi data diri Anda untuk mendaftar.</p>
+
+        <form class="auth-form" id="register-form" novalidate>
+          <div class="form-field">
+            <label for="register-name">Nama Lengkap</label>
+            <div class="input-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke="currentColor" stroke-width="1.6"/></svg>
+              <input type="text" id="register-name" name="fullname" placeholder="Masukkan nama lengkap" autocomplete="name" />
+            </div>
+            <p class="form-error" data-error-for="register-name"></p>
+          </div>
+
+          <div class="form-field">
+            <label for="register-nisn">NISN</label>
+            <div class="input-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <input type="text" id="register-nisn" name="nisn" placeholder="Masukkan NISN" autocomplete="username" />
+            </div>
+            <p class="form-error" data-error-for="register-nisn"></p>
+          </div>
+
+          <div class="form-field">
+            <label for="register-password">Kata Sandi</label>
+            <div class="input-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.6"/></svg>
+              <input type="password" id="register-password" name="password" placeholder="Buat kata sandi" autocomplete="new-password" />
+            </div>
+            <p class="form-error" data-error-for="register-password"></p>
+          </div>
+
+          <div class="form-field">
+            <label for="register-confirm">Konfirmasi Kata Sandi</label>
+            <div class="input-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.6"/></svg>
+              <input type="password" id="register-confirm" name="confirm" placeholder="Ulangi kata sandi" autocomplete="new-password" />
+            </div>
+            <p class="form-error" data-error-for="register-confirm"></p>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Daftar</button>
+
+          <p class="auth-form__switch">Sudah punya akun? <button type="button" class="auth-link" data-switch-to="login">Masuk</button></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js" defer></script>
+  <script src="js/script.js" defer></script>
+</body>
+</html>
