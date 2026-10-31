@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pembayaran SPP — SMKN 1 Sukorejo</title>
+    <meta
+      name="description"
+      content="SMKN 1 Sukorejo mempersiapkan pendidikan vokasi terbaik dan menyiapkan siswa untuk sukses di dunia industri modern."
+    />
+    <link rel="icon" href="../../assets/logo/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/variables.css" />
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/spp.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="../../index.html" class="brand">
+          <svg
+            class="brand__logo"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path d="M12 3L2 8l10 5 8-4.09V15h2V8L12 3z" fill="currentColor" />
+            <path
+              d="M6 12.18v3.64C6 18.09 8.69 20 12 20s6-1.91 6-4.18v-3.64l-6 3-6-3z"
+              fill="currentColor"
+            />
+          </svg>
+          SMKN 1 SUKOREJO
+        </a>
+        <nav class="main-nav" aria-label="Navigasi utama">
+          <a href="../../index.html">Beranda</a>
+          <a href="../../profil-sekolah.html">Profil Sekolah</a>
+          <a href="../../agenda.html">Agenda</a>
+          <a href="../../prestasi.html">Prestasi</a>
+          <a href="../../cek-kelulusan.html">Lulusan Terbaru</a>
+          <a href="../../contact.html">Kontak</a>
+        </nav>
+        <div class="header-account">
+          <button
+            type="button"
+            class="user-chip__trigger"
+            id="account-trigger"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span class="user-chip__avatar" aria-hidden="true">&#128100;</span>
+            <span class="user-chip__name">Portal Siswa</span>
+            <svg
+              class="user-chip__caret"
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M6 9l6 6 6-6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <div class="user-chip__menu" id="account-menu">
+            <a href="../../cek-kelulusan.html" class="user-chip__link">
+              <span aria-hidden="true">&#127891;</span> Portal Kelulusan
+            </a>
+            <button type="button" class="user-chip__logout">
+              <span aria-hidden="true">&#128682;</span> Keluar
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" data-spp-role="user">
+      <div class="page-header page-header--center">
+        <div class="container">
+          <h1>Pembayaran SPP</h1>
+          <p>Lihat tagihan dan bayar SPP Anda.</p>
+        </div>
+      </div>
+      <section class="spp-section">
+        <div class="container">
+          <p class="form-help spp-demo-note" role="note">
+            <strong>Tampilan contoh.</strong> Semua data di halaman ini adalah
+            placeholder untuk demonstrasi UI dan belum terhubung ke backend.
+            Pratinjau peran: <a href="spp.html">Siswa</a> ·
+            <a href="kasir-spp.html">Kasir</a> ·
+            <a href="admin-spp.html">Admin</a>.
+          </p>
+          <div
+            id="spp-msg"
+            class="form-help"
+            role="status"
+            aria-live="polite"
+          ></div>
+          <div class="spp-grid">
+            <div class="spp-card">
+              <h3>Data Siswa</h3>
+              <dl class="info-list">
+                <div class="info-list__row">
+                  <dt>Nama</dt>
+                  <dd>Siswa Contoh</dd>
+                </div>
+                <div class="info-list__row">
+                  <dt>NIS/NISN</dt>
+                  <dd>0000000001</dd>
+                </div>
+                <div class="info-list__row">
+                  <dt>Kelas</dt>
+                  <dd>XI RPL 1</dd>
+                </div>
+                <div class="info-list__row">
+                  <dt>Jurusan</dt>
+                  <dd>Rekayasa Perangkat Lunak</dd>
+                </div>
+                <div class="info-list__row">
+                  <dt>Tahun Ajaran</dt>
+                  <dd>2026/2027</dd>
+                </div>
+                <div class="info-list__row">
+                  <dt>SPP per Bulan</dt>
+                  <dd>Rp150.000</dd>
+                </div>
+              </dl>
+            </div>
+            <div class="spp-stats">
+              <div class="spp-card spp-stat">
+                <span class="stat-block__label">Total Tagihan</span
+                ><strong class="spp-stat__v">Rp600.000</strong>
+              </div>
+              <div class="spp-card spp-stat">
+                <span class="stat-block__label">Total Pembayaran</span
+                ><strong class="spp-stat__v">Rp150.000</strong>
+              </div>
+              <div class="spp-card spp-stat">
+                <span class="stat-block__label">Total Tunggakan</span
+                ><strong class="spp-stat__v">Rp150.000</strong>
+              </div>
+              <div class="spp-card spp-stat">
+                <span class="stat-block__label">Status</span
+                ><strong class="spp-stat__v">Ada Tunggakan</strong>
+              </div>
+            </div>
+          </div>
+          <div class="section-head spp-gap">
+            <div class="section-head__text"><h2>Daftar Tagihan</h2></div>
+          </div>
+          <div class="table-wrap spp-table">
+            <table class="score-table">
+              <caption class="visually-hidden">
+                Daftar tagihan SPP siswa
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Bulan</th>
+                  <th scope="col">Nominal</th>
+                  <th scope="col">Jatuh Tempo</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-label="Bulan">Juli 2026</td>
+                  <td data-label="Nominal">Rp150.000</td>
+                  <td data-label="Jatuh Tempo">10 Jul 2026</td>
+                  <td data-label="Status">
+                    <span class="spp-badge spp-badge--paid">Lunas</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="Bulan">Agustus 2026</td>
+                  <td data-label="Nominal">Rp150.000</td>
+                  <td data-label="Jatuh Tempo">10 Agu 2026</td>
+                  <td data-label="Status">
+                    <span class="spp-badge spp-badge--pending"
+                      >Menunggu Verifikasi</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="Bulan">September 2026</td>
+                  <td data-label="Nominal">Rp150.000</td>
+                  <td data-label="Jatuh Tempo">10 Sep 2026</td>
+                  <td data-label="Status">
+                    <span class="spp-badge spp-badge--overdue">Menunggak</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="Bulan">Oktober 2026</td>
+                  <td data-label="Nominal">Rp150.000</td>
+                  <td data-label="Jatuh Tempo">10 Okt 2026</td>
+                  <td data-label="Status">
+                    <span class="spp-badge spp-badge--unpaid">Belum Bayar</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="section-head spp-gap">
+            <div class="section-head__text"><h2>Riwayat Pembayaran</h2></div>
+          </div>
+          <div class="table-wrap spp-table">
+            <table class="score-table">
+              <caption class="visually-hidden">
+                Riwayat pembayaran SPP siswa
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Bulan</th>
+                  <th scope="col">Nominal</th>
+                  <th scope="col">Tanggal</th>
+                  <th scope="col">Metode</th>
+                  <th scope="col">No. Transaksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-label="Bulan">Juli 2026</td>
+                  <td data-label="Nominal">Rp150.000</td>
+                  <td data-label="Tanggal">5 Jul 2026</td>
+                  <td data-label="Metode">Tunai</td>
+                  <td data-label="No. Transaksi">SPP-20260705-0001</td>
+                </tr>
+                <tr>
+                  <td data-label="Bulan">Agustus 2026</td>
+                  <td data-label="Nominal">Rp150.000</td>
+                  <td data-label="Tanggal">8 Agu 2026</td>
+                  <td data-label="Metode">QRIS</td>
+                  <td data-label="No. Transaksi">SPP-20260808-0003</td>
+                </tr>
+                <tr>
+                  <td data-label="Bulan">Agustus 2026</td>
+                  <td data-label="Nominal">Rp150.000</td>
+                  <td data-label="Tanggal">2 Agu 2026</td>
+                  <td data-label="Metode">Transfer Bank</td>
+                  <td data-label="No. Transaksi">SPP-20260802-0002</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-top">
+        <div class="footer-brand">
+          <p class="footer-brand__name">SMKN 1 SUKOREJO</p>
+          <p>
+            Mencetak generasi muda yang kompeten, berkarakter, profesional, dan
+            siap menghadapi tantangan industri global.
+          </p>
+          <div class="footer-social">
+            <a href="#" aria-label="Website resmi">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                />
+                <path
+                  d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18z"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                />
+              </svg>
+            </a>
+            <a href="#" aria-label="Bagikan">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="18"
+                  cy="5"
+                  r="2.4"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                />
+                <circle
+                  cx="6"
+                  cy="12"
+                  r="2.4"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                />
+                <circle
+                  cx="18"
+                  cy="19"
+                  r="2.4"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                />
+                <path
+                  d="M8.1 10.8l7.8-4.4M8.1 13.2l7.8 4.4"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h3>Tautan Cepat</h3>
+          <ul>
+            <li><a href="../../profil-sekolah.html">Profil Sekolah</a></li>
+            <li><a href="../../profil-sekolah.html#visi-misi">Visi Misi</a></li>
+            <li><a href="../../agenda.html">Agenda</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Informasi</h3>
+          <ul>
+            <li><a href="../../prestasi.html">Prestasi</a></li>
+            <li><a href="../../cek-kelulusan.html">Lulusan Terbaru</a></li>
+            <li><a href="../../cek-kelulusan.html">Pendaftaran</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-contact">
+          <h3>Kontak Kami</h3>
+          <ul>
+            <li>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                />
+                <circle
+                  cx="12"
+                  cy="10"
+                  r="2.4"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                />
+              </svg>
+              <span>Jl. Raya Sukorejo No. 1, Pasuruan, Jawa Timur</span>
+            </li>
+            <li>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2-1-4-3-5-5l2-2-3-6-4 3z"
+                  stroke="currentColor"
+                  stroke-width="1.4"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <span>(0343) 611234</span>
+            </li>
+            <li>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <rect
+                  x="3"
+                  y="5"
+                  width="18"
+                  height="14"
+                  rx="2"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                />
+                <path
+                  d="M4 6.5l8 6 8-6"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                />
+              </svg>
+              <span>info@smkn1sukorejo.sch.id</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 SMKN 1 SUKOREJO. All rights reserved.
+      </div>
+    </footer>
+
+    <div class="auth-overlay" id="auth-overlay" aria-hidden="true">
+      <div
+        class="auth-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="auth-modal-title"
+      >
+        <button
+          type="button"
+          class="icon-btn auth-modal__close"
+          id="auth-modal-close"
+          aria-label="Tutup"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M6 6l12 12M18 6L6 18"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+
+        <!-- Login panel -->
+        <div class="auth-panel is-active" id="auth-panel-login">
+          <h2 class="auth-modal__title" id="auth-modal-title">Masuk ke Akun</h2>
+          <p class="auth-modal__subtitle">
+            Gunakan email dan kata sandi Anda untuk masuk.
+          </p>
+
+          <form class="auth-form" id="login-form" novalidate>
+            <div class="form-field">
+              <label for="login-email">Email</label>
+              <div class="input-wrap">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <rect
+                    x="3"
+                    y="5"
+                    width="18"
+                    height="14"
+                    rx="2"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                  />
+                  <path
+                    d="M4 7l8 6 8-6"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <input
+                  type="email"
+                  id="login-email"
+                  name="email"
+                  placeholder="Masukkan email"
+                  autocomplete="email"
+                />
+              </div>
+              <p class="form-error" data-error-for="login-email"></p>
+            </div>
+
+            <div class="form-field">
+              <label for="login-password">Kata Sandi</label>
+              <div class="input-wrap">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <rect
+                    x="5"
+                    y="10"
+                    width="14"
+                    height="10"
+                    rx="2"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                  />
+                  <path
+                    d="M8 10V7a4 4 0 018 0v3"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                  />
+                </svg>
+                <input
+                  type="password"
+                  id="login-password"
+                  name="password"
+                  placeholder="Masukkan kata sandi"
+                  autocomplete="current-password"
+                />
+              </div>
+              <p class="form-error" data-error-for="login-password"></p>
+            </div>
+
+            <div class="auth-form__row">
+              <label class="auth-checkbox">
+                <input type="checkbox" id="login-remember" name="remember" />
+                <span>Ingat saya</span>
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+              Masuk
+            </button>
+          </form>
+
+          <div class="auth-success" id="auth-success" hidden>
+            <div class="auth-success__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M5 12.5l4.5 4.5L19 7"
+                  stroke="currentColor"
+                  stroke-width="2.4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <p>Login berhasil!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/script.js" defer></script>
+    <script src="../js/spp-ui.js" defer></script>
+  </body>
+</html>

@@ -28,19 +28,17 @@
         <a href="profil-sekolah.html" >Profil Sekolah</a>
         <a href="agenda.html" >Agenda</a>
         <a href="prestasi.html" >Prestasi</a>
-        <a href="cek-kelulusan.html" >Lulusan Terbaru</a>
+        
         <a href="contact.html">Kontak</a>
       </nav>
       <div class="header-account">
         <button type="button" class="user-chip__trigger" id="account-trigger" aria-haspopup="true" aria-expanded="false">
           <span class="user-chip__avatar" aria-hidden="true">&#128100;</span>
-          <span class="user-chip__name">Portal Siswa</span>
+          <span class="user-chip__name">Login</span>
           <svg class="user-chip__caret" width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <div class="user-chip__menu" id="account-menu">
-          <a href="cek-kelulusan.html" class="user-chip__link">
-            <span aria-hidden="true">&#127891;</span> Portal Kelulusan
-          </a>
+          
           <button type="button" class="user-chip__logout">
             <span aria-hidden="true">&#128682;</span> Keluar
           </button>
@@ -303,8 +301,8 @@
         <h3>Informasi</h3>
         <ul>
           <li><a href="prestasi.html">Prestasi</a></li>
-          <li><a href="cek-kelulusan.html">Lulusan Terbaru</a></li>
-          <li><a href="cek-kelulusan.html">Pendaftaran</a></li>
+          
+          
         </ul>
       </div>
       <div class="footer-col footer-contact">
@@ -337,16 +335,16 @@
       <!-- Login panel -->
       <div class="auth-panel is-active" id="auth-panel-login">
         <h2 class="auth-modal__title" id="auth-modal-title">Masuk ke Akun</h2>
-        <p class="auth-modal__subtitle">Gunakan NISN dan kata sandi Anda untuk masuk.</p>
+        <p class="auth-modal__subtitle">Gunakan email dan kata sandi Anda untuk masuk.</p>
 
         <form class="auth-form" id="login-form" novalidate>
           <div class="form-field">
-            <label for="login-nisn">NISN</label>
+            <label for="login-email">Email</label>
             <div class="input-wrap">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-              <input type="text" id="login-nisn" name="nisn" placeholder="Masukkan NISN" autocomplete="username" />
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <input type="email" id="login-email" name="email" placeholder="Masukkan email" autocomplete="email" />
             </div>
-            <p class="form-error" data-error-for="login-nisn"></p>
+            <p class="form-error" data-error-for="login-email"></p>
           </div>
 
           <div class="form-field">
@@ -366,8 +364,6 @@
           </div>
 
           <button type="submit" class="btn btn-primary btn-block">Masuk</button>
-
-          <p class="auth-form__switch">Belum punya akun? <button type="button" class="auth-link" data-switch-to="register">Daftar</button></p>
         </form>
 
         <div class="auth-success" id="auth-success" hidden>
@@ -378,53 +374,6 @@
         </div>
       </div>
 
-      <!-- Register panel -->
-      <div class="auth-panel" id="auth-panel-register">
-        <h2 class="auth-modal__title">Buat Akun Baru</h2>
-        <p class="auth-modal__subtitle">Lengkapi data diri Anda untuk mendaftar.</p>
-
-        <form class="auth-form" id="register-form" novalidate>
-          <div class="form-field">
-            <label for="register-name">Nama Lengkap</label>
-            <div class="input-wrap">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke="currentColor" stroke-width="1.6"/></svg>
-              <input type="text" id="register-name" name="fullname" placeholder="Masukkan nama lengkap" autocomplete="name" />
-            </div>
-            <p class="form-error" data-error-for="register-name"></p>
-          </div>
-
-          <div class="form-field">
-            <label for="register-nisn">NISN</label>
-            <div class="input-wrap">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-              <input type="text" id="register-nisn" name="nisn" placeholder="Masukkan NISN" autocomplete="username" />
-            </div>
-            <p class="form-error" data-error-for="register-nisn"></p>
-          </div>
-
-          <div class="form-field">
-            <label for="register-password">Kata Sandi</label>
-            <div class="input-wrap">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.6"/></svg>
-              <input type="password" id="register-password" name="password" placeholder="Buat kata sandi" autocomplete="new-password" />
-            </div>
-            <p class="form-error" data-error-for="register-password"></p>
-          </div>
-
-          <div class="form-field">
-            <label for="register-confirm">Konfirmasi Kata Sandi</label>
-            <div class="input-wrap">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.6"/></svg>
-              <input type="password" id="register-confirm" name="confirm" placeholder="Ulangi kata sandi" autocomplete="new-password" />
-            </div>
-            <p class="form-error" data-error-for="register-confirm"></p>
-          </div>
-
-          <button type="submit" class="btn btn-primary btn-block">Daftar</button>
-
-          <p class="auth-form__switch">Sudah punya akun? <button type="button" class="auth-link" data-switch-to="login">Masuk</button></p>
-        </form>
-      </div>
     </div>
   </div>
 
