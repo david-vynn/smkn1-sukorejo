@@ -51,27 +51,18 @@
     say(NOTE);
   });
 
-  // Dropdown jurusan dan kelas
+// Dropdown jurusan dan kelas
 var jurusanSelect = document.getElementById('sw-jurusan');
 var kelasSelect = document.getElementById('sw-kelas');
 
-var daftarKelas = {
-    RPL: 2,
-    KI: 3,
-    TEI: 3,
-    TKR: 4,
-    TAV: 1
-};
-
 if (jurusanSelect && kelasSelect) {
     jurusanSelect.addEventListener('change', function () {
-        var jurusan = this.value;
+        var majorId = this.value;
 
-        // Reset pilihan kelas
         kelasSelect.innerHTML = '';
+        kelasSelect.disabled = true;
 
-        if (!jurusan || !daftarKelas[jurusan]) {
-            kelasSelect.disabled = true;
+        if (!majorId) {
             kelasSelect.add(new Option(
                 'Pilih jurusan terlebih dahulu',
                 ''
@@ -79,24 +70,44 @@ if (jurusanSelect && kelasSelect) {
             return;
         }
 
-        // Aktifkan dropdown kelas
-        kelasSelect.disabled = false;
-        kelasSelect.add(new Option('Pilih kelas', ''));
+        kelasSelect.add(new Option('Memuat kelas...', ''));
 
-        // Buat pilihan kelas X sampai XII
-        var tingkat = ['X', 'XI', 'XII'];
-
-        tingkat.forEach(function (kelas) {
-            for (var i = 1; i <= daftarKelas[jurusan]; i++) {
-                var namaKelas = kelas + ' ' + jurusan;
-
-                if (daftarKelas[jurusan] > 1) {
-                    namaKelas += ' ' + i;
+        fetch('/smkn1-sukorejo/spp/get-classes.php?major_id=' + encodeURIComponent(majorId))            
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Gagal mengambil data kelas');
                 }
 
-                kelasSelect.add(new Option(namaKelas, namaKelas));
-            }
-        });
+                return response.json();
+            })
+            .then(function (classes) {
+                kelasSelect.innerHTML = '';
+                kelasSelect.add(new Option('Pilih kelas', ''));
+
+                console.log('Dropdown kelas menerima:', classes);
+                console.log('Elemen dropdown:', kelasSelect);
+
+                classes.forEach(function (kelas) {
+                    kelasSelect.add(
+                        new Option(kelas.class_name, kelas.id)
+                    );
+                });
+
+                kelasSelect.disabled = classes.length === 0;
+
+                console.log('Jumlah opsi dropdown:', kelasSelect.options.length);
+
+                if (classes.length === 0) {
+                    kelasSelect.innerHTML = '';
+                    kelasSelect.add(new Option('Kelas tidak ditemukan', ''));
+                }
+            })
+            .catch(function (error) {
+                console.error(error);
+
+                kelasSelect.innerHTML = '';
+                kelasSelect.add(new Option('Gagal memuat kelas', ''));
+            });
     });
 }
 

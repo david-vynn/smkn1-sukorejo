@@ -1,3 +1,104 @@
+<?php
+
+require_once __DIR__ . '/../database/config.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'create_student') {
+  $nama = trim($_POST['nama'] ??'');
+  $nisn = trim($_POST['nisn'] ??'');
+  $email = trim($_POST['email'] ??'');
+  $majorId = trim($_POST['jurusan'] ??'');
+  $classId = trim($_POST['kelas'] ??'');
+
+  $errors = [];
+
+  if ($nama === '') {
+    $errors[] = 'Nama wajib diisi';
+  }
+
+  if (!preg_match('/^\d{10}$/', $nisn)) {
+    $errors[] = 'NISN harus terdiri dari 10 digit angka.';
+  }
+
+  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $errors[] = 'Format email tidak valid';
+  }
+
+  if (!ctype_digit((string) $majorId) || (int) $majorId < 1) {
+    $errors[] = 'Jurusan tidak valid';
+  }
+
+  if (!ctype_digit((string) $classId) || (int) $classId < 1) {
+    $errors[] = 'Kelas tidak valid';
+  }
+
+  if (empty($errors)) {
+    $majorId = (int) $majorId;
+    $classId = (int) $classId;
+
+    echo '<pre>';
+    var_dump($majorId, $classId);
+    echo '</pre>';
+    
+    $stmt = mysqli_prepare($conn, "SELECT id FROM classes WHERE id = ? and major_id = ? LIMIT 2");
+
+    mysqli_stmt_bind_param($stmt, 'ii', $classId, $majorId);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    $class = mysqli_fetch_assoc($result);
+
+    if (!$class) {
+      $errors[] = 'Kelas tidak sesuai dengan jurusan yg dipilih';
+    }
+
+        // Cek email
+    $stmt = mysqli_prepare($conn, "SELECT id FROM users WHERE email = ? LIMIT 1");
+    mysqli_stmt_bind_param($stmt, 's', $email);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (mysqli_num_rows($result) > 0) {
+        $errors[] = 'Email sudah digunakan';
+    }
+
+    mysqli_stmt_close($stmt);
+
+
+    // Cek NISN
+    $stmt = mysqli_prepare($conn, "SELECT id FROM students WHERE nisn = ? LIMIT 1");
+    mysqli_stmt_bind_param($stmt, 's', $nisn);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (mysqli_num_rows($result) > 0) {
+        $errors[] = 'NISN sudah terdaftar';
+    }
+
+
+    mysqli_stmt_close($stmt);
+  }
+
+  if (!empty($errors)) {
+    foreach ($errors as $error) {
+      echo htmlspecialchars($error) .' <br>';
+    }
+  } else {
+    echo 'Semua data berhasil divalidasi';
+  }
+
+}
+  
+$sql = mysqli_query($conn, 'SELECT * FROM majors');
+
+if (!$sql) {
+  die('Query gagal: ' . mysqli_error($conn));
+}
+
+?>
+
+
 <!doctype html>
 <html lang="id">
   <head>
@@ -494,7 +595,8 @@
             </div>
             <div class="spp-card">
               <h3 id="sw-title">Tambah Siswa</h3>
-              <form class="spp-form" method="post" data-backend="pending">
+              <form class="spp-form" method="post">
+                <input type="hidden" name="action" value="create_student">
                 <input type="hidden" id="sw-id" name="id" />
                 <div class="form-field">
                   <label for="sw-nama">Nama lengkap</label
@@ -503,6 +605,8 @@
                     id="sw-nama"
                     name="nama"
                     placeholder="Nama lengkap siswa"
+                    required
+                    maxlength="100"
                   />
                   <p class="form-error" data-error-for="sw-nama"></p>
                 </div>
@@ -513,6 +617,8 @@
                     id="sw-nisn"
                     name="nisn"
                     placeholder="10 digit"
+                    required
+                    maxlength="10"
                   />
                   <p class="form-error" data-error-for="sw-nisn"></p>
                 </div>
@@ -523,19 +629,24 @@
                     id="sw-email"
                     name="email"
                     placeholder="email@contoh.com"
+                    required
+                    maxlength="100"
                   />
                   <p class="form-error" data-error-for="sw-email"></p>
                 </div>
                 <div class="form-field">
                   <label for="sw-jurusan">Jurusan</label>
                   <select id="sw-jurusan" name="jurusan" required>
-                    <option>Pilih jurusan</option>
-                    <option value="RPL">Rekayasa Perangkat Lunak</option>
-                    <option value="KI">Kimia Industri</option>
-                    <option value="TEI">Teknik Elektronika Industri</option>
-                    <option value="TKR">Teknik Kendaraan Ringan</option>
-                    <option value="TAV">Teknik Audio Video</option>
+                    <option value="">Pilih Jurusan</option>
+
+                    <?php while ($major = mysqli_fetch_assoc($sql)) : ?>
+                      <option value="<?= htmlspecialchars($major['id']); ?>">
+                        <?= htmlspecialchars($major['name']); ?>
+                      </option>
+                    <?php endwhile; ?>
+
                   </select>
+
                   <p class="form-error" data-error-for="sw-jurusan"></p>
                 </div>
 
