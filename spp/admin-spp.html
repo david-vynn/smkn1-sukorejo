@@ -39,12 +39,11 @@
           SMKN 1 SUKOREJO
         </a>
         <nav class="main-nav" aria-label="Navigasi utama">
-          <a href="../../index.html">Beranda</a>
-          <a href="../../profil-sekolah.html">Profil Sekolah</a>
-          <a href="../../agenda.html">Agenda</a>
-          <a href="../../prestasi.html">Prestasi</a>
-          <a href="../../cek-kelulusan.html">Lulusan Terbaru</a>
-          <a href="../../contact.html">Kontak</a>
+          <a href="../index.html">Beranda</a>
+          <a href="../profil-sekolah.html">Profil Sekolah</a>
+          <a href="../agenda.html">Agenda</a>
+          <a href="../prestasi.html">Prestasi</a>
+          <a href="../contact.html">Kontak</a>
         </nav>
         <div class="header-account">
           <button
@@ -649,99 +648,99 @@
               </div>
             </div>
           </div>
-           <div class="spp-gap" id="kasir-manager">
-          <div class="section-head">
-            <div class="section-head__text">
-              <h2>Manajemen Akun Kasir</h2>
-              <p>
-                Kelola akun petugas kasir yang memiliki akses untuk mencatat
-                pembayaran SPP.
-              </p>
+          <div class="spp-gap" id="kasir-manager">
+            <div class="section-head">
+              <div class="section-head__text">
+                <h2>Manajemen Akun Kasir</h2>
+                <p>
+                  Kelola akun petugas kasir yang memiliki akses untuk mencatat
+                  pembayaran SPP.
+                </p>
+              </div>
+            </div>
+
+            <div class="spp-card">
+              <h3>Tambah Akun Kasir</h3>
+
+              <form class="spp-form" method="post" data-backend="pending">
+                <div class="form-field">
+                  <label for="k-nama">Nama lengkap</label>
+                  <input
+                    type="text"
+                    id="k-nama"
+                    name="nama"
+                    placeholder="Nama petugas kasir"
+                    required
+                  />
+                </div>
+
+                <div class="form-field">
+                  <label for="k-email">Email</label>
+                  <input
+                    type="email"
+                    id="k-email"
+                    name="email"
+                    placeholder="kasir@contoh.com"
+                    required
+                  />
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                  Buat Akun Kasir
+                </button>
+              </form>
+            </div>
+
+            <div class="spp-gap">
+              <div class="table-wrap spp-table">
+                <table class="score-table">
+                  <caption class="visually-hidden">
+                    Daftar akun kasir
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th>Nama</th>
+                      <th>Email</th>
+                      <th>Status</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td data-label="Nama">Kasir Contoh</td>
+                      <td data-label="Email">kasir@contoh.com</td>
+                      <td data-label="Status">
+                        <span class="spp-badge spp-badge--paid">Aktif</span>
+                      </td>
+                      <td data-label="Aksi">
+                        <button
+                          type="button"
+                          class="btn btn-outline-navy btn-sm"
+                          data-action="kasir-edit"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-outline-navy btn-sm"
+                          data-action="kasir-reset"
+                        >
+                          Reset Password
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-outline-navy btn-sm"
+                          data-action="kasir-toggle"
+                        >
+                          Nonaktifkan
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-
-          <div class="spp-card">
-            <h3>Tambah Akun Kasir</h3>
-
-            <form class="spp-form" method="post" data-backend="pending">
-              <div class="form-field">
-                <label for="k-nama">Nama lengkap</label>
-                <input
-                  type="text"
-                  id="k-nama"
-                  name="nama"
-                  placeholder="Nama petugas kasir"
-                  required
-                />
-              </div>
-
-              <div class="form-field">
-                <label for="k-email">Email</label>
-                <input
-                  type="email"
-                  id="k-email"
-                  name="email"
-                  placeholder="kasir@contoh.com"
-                  required
-                />
-              </div>
-
-              <button type="submit" class="btn btn-primary">
-                Buat Akun Kasir
-              </button>
-            </form>
-          </div>
-
-          <div class="spp-gap">
-            <div class="table-wrap spp-table">
-              <table class="score-table">
-                <caption class="visually-hidden">
-                  Daftar akun kasir
-                </caption>
-                <thead>
-                  <tr>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td data-label="Nama">Kasir Contoh</td>
-                    <td data-label="Email">kasir@contoh.com</td>
-                    <td data-label="Status">
-                      <span class="spp-badge spp-badge--paid">Aktif</span>
-                    </td>
-                    <td data-label="Aksi">
-                      <button
-                        type="button"
-                        class="btn btn-outline-navy btn-sm"
-                        data-action="kasir-edit"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-navy btn-sm"
-                        data-action="kasir-reset"
-                      >
-                        Reset Password
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-navy btn-sm"
-                        data-action="kasir-toggle"
-                      >
-                        Nonaktifkan
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
         </div>
       </section>
     </main>
@@ -827,7 +826,7 @@
           <h3>Informasi</h3>
           <ul>
             <li><a href="../../prestasi.html">Prestasi</a></li>
-            <li><a href="../../cek-kelulusan.html">Lulusan Terbaru</a></li>
+            <li><a href="../../cek-kelulusan.html"></a></li>
             <li><a href="../../cek-kelulusan.html">Pendaftaran</a></li>
           </ul>
         </div>
