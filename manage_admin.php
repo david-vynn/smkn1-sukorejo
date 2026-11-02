@@ -72,7 +72,7 @@ if ($pilihan == 1) {
         exit("Username dan Password wajib diisi");
     }
     
-    $check = mysqli_prepare($conn,"SELECT id FROM users WHERE username = ? or admin = 'admin'");
+    $check = mysqli_prepare($conn,"SELECT id FROM users WHERE username = ? AND role = 'admin'");
     
     mysqli_stmt_bind_param($check,"s", $username,);
     mysqli_stmt_execute($check);

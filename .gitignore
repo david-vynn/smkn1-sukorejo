@@ -1,2 +1,18 @@
+# Database credentials
 database/config.php
 .env
+.env.*
+auto-push.log
+
+# Dependencies
+vendor/
+node_modules/
+
+# Temporary files
+*.log
+*.tmp
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
