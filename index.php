@@ -1,26 +1,39 @@
+<?php
+session_start();
+
+$isLoggedIn = isset($_SESSION['user_id']);
+$username = $_SESSION['username'] ?? '';
+$role = $_SESSION['role'] ?? '';
+?>
+
 <!-- INDEX -->
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SMKN 1 Sukorejo — Membentuk Generasi Unggul dan Kompeten</title>
-  <meta name="description" content="SMKN 1 Sukorejo mempersiapkan pendidikan vokasi terbaik dan menyiapkan siswa untuk sukses di dunia industri modern." />
+  <meta name="description"
+    content="SMKN 1 Sukorejo mempersiapkan pendidikan vokasi terbaik dan menyiapkan siswa untuk sukses di dunia industri modern." />
   <link rel="icon" href="assets/logo/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="css/variables.css" />
   <link rel="stylesheet" href="css/reset.css" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
+
+<body data-auth="<?= $isLoggedIn ? 'in' : 'out' ?>">
 
   <header class="site-header">
     <div class="container">
       <a href="index.html" class="brand">
         <svg class="brand__logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M12 3L2 8l10 5 8-4.09V15h2V8L12 3z" fill="currentColor"/>
-          <path d="M6 12.18v3.64C6 18.09 8.69 20 12 20s6-1.91 6-4.18v-3.64l-6 3-6-3z" fill="currentColor"/>
+          <path d="M12 3L2 8l10 5 8-4.09V15h2V8L12 3z" fill="currentColor" />
+          <path d="M6 12.18v3.64C6 18.09 8.69 20 12 20s6-1.91 6-4.18v-3.64l-6 3-6-3z" fill="currentColor" />
         </svg>
         SMKN 1 SUKOREJO
       </a>
@@ -32,16 +45,39 @@
         <a href="contact.html">Kontak</a>
       </nav>
       <div class="header-account">
-        <button type="button" class="user-chip__trigger" id="account-trigger" aria-haspopup="true" aria-expanded="false">
+        <button type="button" class="user-chip__trigger" id="account-trigger" aria-haspopup="true"
+          aria-expanded="false">
           <span class="user-chip__avatar" aria-hidden="true">&#128100;</span>
-          <span class="user-chip__name">Login</span>
-          <svg class="user-chip__caret" width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="user-chip__name">
+            <?= $isLoggedIn ? htmlspecialchars($username) : 'Login'; ?>
+          </span>
+
         </button>
+
         <div class="user-chip__menu" id="account-menu">
-          
-          <button type="button" class="user-chip__logout">
-            <span aria-hidden="true">&#128682;</span> Keluar
-          </button>
+          <?php if ($isLoggedIn): ?>
+
+            <?php
+            $dashboardUrl = match ($role) {
+              'admin' => 'spp/admin-spp.php',
+              'kasir' => 'spp/kasir-spp.html',
+              'siswa' => 'spp/spp.html',
+              default => null
+            };
+            ?>
+
+            <?php if ($dashboardUrl !== null): ?>
+              <a href="<?= htmlspecialchars($dashboardUrl); ?>">
+                Dashboard
+              </a>
+            <?php endif; ?>
+
+            <button type="button" class="user-chip__logout">
+              <span aria-hidden="true">&#128682;</span>
+              Keluar
+            </button>
+
+          <?php endif; ?>
         </div>
       </div>
     </div>
@@ -53,9 +89,10 @@
       <div class="container">
         <div class="hero__content">
           <h1>Membentuk Generasi Unggul dan Kompeten</h1>
-          <p>Selamat datang di SMKN 1 Sukorejo. Kami berkomitmen untuk menyelenggarakan pendidikan vokasi terbaik, mempersiapkan siswa untuk sukses di dunia industri modern.</p>
+          <p>Selamat datang di SMKN 1 Sukorejo. Kami berkomitmen untuk menyelenggarakan pendidikan vokasi terbaik,
+            mempersiapkan siswa untuk sukses di dunia industri modern.</p>
           <div class="hero__actions">
-            
+
             <a href="program-keahlian.html" class="btn btn-outline-light">Jelajahi Program</a>
           </div>
         </div>
@@ -68,7 +105,8 @@
         <div class="video-intro__grid">
           <div class="video-intro__text">
             <h2>&#127909; Jelajahi SMKN 1 Sukorejo</h2>
-            <p>Kenali SMKN 1 Sukorejo lebih dekat melalui video profil singkat yang menampilkan lingkungan sekolah, fasilitas, program akademik, kegiatan ekstrakurikuler, prestasi, hingga keseharian siswa.</p>
+            <p>Kenali SMKN 1 Sukorejo lebih dekat melalui video profil singkat yang menampilkan lingkungan sekolah,
+              fasilitas, program akademik, kegiatan ekstrakurikuler, prestasi, hingga keseharian siswa.</p>
             <span class="video-intro__badge">Video Profil Resmi Sekolah</span>
             <div>
               <a href="profil-sekolah.html" class="btn btn-outline-navy video-intro__cta">Pelajari Lebih Lanjut</a>
@@ -91,7 +129,10 @@
           <img class="sambutan__photo" src="assets/images/profile/pak-jaya.png" alt="" />
           <div class="sambutan__body">
             <h2>Sambutan Kepala Sekolah</h2>
-            <blockquote>&ldquo;Pendidikan vokasi adalah kunci kemajuan bangsa. Di SMKN 1 Sukorejo, kami tidak hanya mentransfer ilmu pengetahuan, tetapi juga membentuk karakter dan keterampilan yang relevan dengan kebutuhan industri masa kini. Mari bergabung dan wujudkan masa depan gemilang bersama kami.&rdquo;</blockquote>
+            <blockquote>&ldquo;Pendidikan vokasi adalah kunci kemajuan bangsa. Di SMKN 1 Sukorejo, kami tidak hanya
+              mentransfer ilmu pengetahuan, tetapi juga membentuk karakter dan keterampilan yang relevan dengan
+              kebutuhan industri masa kini. Mari bergabung dan wujudkan masa depan gemilang bersama kami.&rdquo;
+            </blockquote>
             <p class="sambutan__name">Iskandar Jaya</p>
             <p class="sambutan__role">Kepala SMKN 1 Sukorejo</p>
           </div>
@@ -167,58 +208,83 @@
 
         <div class="program-showcase" id="program-showcase">
           <div class="program-showcase__media">
-            <img class="program-showcase__image is-active" data-major="rpl" src="assets/images/majors/rpl.jpg" alt="Aktivitas praktik siswa Rekayasa Perangkat Lunak" />
-            <img class="program-showcase__image" data-major="ki" src="assets/images/majors/kimia-industri.jpg" alt="Aktivitas praktik siswa Kimia Industri" />
-            <img class="program-showcase__image" data-major="tei" src="assets/images/majors/tei.jpg" alt="Aktivitas praktik siswa Teknik Elektronika Industri" />
-            <img class="program-showcase__image" data-major="tav" src="assets/images/majors/tav.webp" alt="Aktivitas praktik siswa Teknik Audio Video" />
-            <img class="program-showcase__image" data-major="tkr" src="assets/images/majors/tkr.avif" alt="Aktivitas praktik siswa Teknik Kendaraan Ringan" />
+            <img class="program-showcase__image is-active" data-major="rpl" src="assets/images/majors/rpl.jpg"
+              alt="Aktivitas praktik siswa Rekayasa Perangkat Lunak" />
+            <img class="program-showcase__image" data-major="ki" src="assets/images/majors/kimia-industri.jpg"
+              alt="Aktivitas praktik siswa Kimia Industri" />
+            <img class="program-showcase__image" data-major="tei" src="assets/images/majors/tei.jpg"
+              alt="Aktivitas praktik siswa Teknik Elektronika Industri" />
+            <img class="program-showcase__image" data-major="tav" src="assets/images/majors/tav.webp"
+              alt="Aktivitas praktik siswa Teknik Audio Video" />
+            <img class="program-showcase__image" data-major="tkr" src="assets/images/majors/tkr.avif"
+              alt="Aktivitas praktik siswa Teknik Kendaraan Ringan" />
           </div>
 
           <div class="program-carousel" aria-label="Daftar program keahlian">
             <div class="program-carousel__track" id="program-track">
               <div class="program-mini-card is-active" data-major="rpl">
                 <div class="program-mini-card__icon">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 18h6M12 3v12m0 0l-4-4m4 4l4-4" stroke="#f0a90f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M9 18h6M12 3v12m0 0l-4-4m4 4l4-4" stroke="#f0a90f" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg>
                 </div>
                 <h3>Rekayasa Perangkat Lunak</h3>
-                <p>Mempelajari pengembangan perangkat lunak mulai dari perancangan, pemrograman, hingga manajemen kualitas.</p>
+                <p>Mempelajari pengembangan perangkat lunak mulai dari perancangan, pemrograman, hingga manajemen
+                  kualitas.</p>
               </div>
               <div class="program-mini-card" data-major="ki">
                 <div class="program-mini-card__icon">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 3v18M4 8h5M4 16h5M15 3l5 5-5 5" stroke="#f0a90f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M9 3v18M4 8h5M4 16h5M15 3l5 5-5 5" stroke="#f0a90f" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg>
                 </div>
                 <h3>Kimia Industri</h3>
                 <p>Menguasai analisis dan pengendalian mutu bahan baku serta proses produksi pada industri kimia.</p>
               </div>
               <div class="program-mini-card" data-major="tei">
                 <div class="program-mini-card__icon">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10" stroke="#f0a90f" stroke-width="2" stroke-linecap="round"/></svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 6h16M4 12h16M4 18h10" stroke="#f0a90f" stroke-width="2" stroke-linecap="round" />
+                  </svg>
                 </div>
                 <h3>Teknik Elektronika Industri</h3>
                 <p>Menguasai sistem kontrol elektronik dan instrumentasi pada berbagai peralatan industri modern.</p>
               </div>
               <div class="program-mini-card" data-major="tav">
                 <div class="program-mini-card__icon">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5l16 3-6 3 6 3-16 3V5z" stroke="#f0a90f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 5l16 3-6 3 6 3-16 3V5z" stroke="#f0a90f" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg>
                 </div>
                 <h3>Teknik Audio Video</h3>
                 <p>Membentuk tenaga terampil dalam rekayasa, produksi, dan penyiaran multimedia.</p>
               </div>
               <div class="program-mini-card" data-major="tkr">
                 <div class="program-mini-card__icon">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="#f0a90f" stroke-width="2"/><path d="M12 7v5l3 3" stroke="#f0a90f" stroke-width="2" stroke-linecap="round"/></svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <circle cx="12" cy="12" r="9" stroke="#f0a90f" stroke-width="2" />
+                    <path d="M12 7v5l3 3" stroke="#f0a90f" stroke-width="2" stroke-linecap="round" />
+                  </svg>
                 </div>
                 <h3>Teknik Kendaraan Ringan</h3>
-                <p>Membekali siswa dengan keahlian perawatan dan perbaikan kendaraan sesuai standar bengkel industri.</p>
+                <p>Membekali siswa dengan keahlian perawatan dan perbaikan kendaraan sesuai standar bengkel industri.
+                </p>
               </div>
 
               <!-- Clone of the first card, appended so the carousel can loop back to slide 1 without a visible jump -->
               <div class="program-mini-card" data-major="rpl" aria-hidden="true" tabindex="-1">
                 <div class="program-mini-card__icon">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 18h6M12 3v12m0 0l-4-4m4 4l4-4" stroke="#f0a90f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M9 18h6M12 3v12m0 0l-4-4m4 4l4-4" stroke="#f0a90f" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg>
                 </div>
                 <h3>Rekayasa Perangkat Lunak</h3>
-                <p>Mempelajari pengembangan perangkat lunak mulai dari perancangan, pemrograman, hingga manajemen kualitas.</p>
+                <p>Mempelajari pengembangan perangkat lunak mulai dari perancangan, pemrograman, hingga manajemen
+                  kualitas.</p>
               </div>
             </div>
           </div>
@@ -375,7 +441,7 @@
           <article class="staff-card">
             <img class="staff-card__photo" src="assets/images/profile/bu-alfi.png" " />
             <h3>Siti Alfiyah</h3>
-            <p class="staff-card__role">Guru Matematika</p>
+            <p class=" staff-card__role">Guru Matematika</p>
           </article>
           <article class="staff-card">
             <img class="staff-card__photo" src="assets/images/profile/pak-lukman.png" alt="" />
@@ -409,13 +475,22 @@
     <div class="container footer-top">
       <div class="footer-brand">
         <p class="footer-brand__name">SMKN 1 SUKOREJO</p>
-        <p>Mencetak generasi muda yang kompeten, berkarakter, profesional, dan siap menghadapi tantangan industri global.</p>
+        <p>Mencetak generasi muda yang kompeten, berkarakter, profesional, dan siap menghadapi tantangan industri
+          global.</p>
         <div class="footer-social">
           <a href="#" aria-label="Website resmi">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18z" stroke="currentColor" stroke-width="1.6"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" />
+              <path d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18z" stroke="currentColor" stroke-width="1.6" />
+            </svg>
           </a>
           <a href="#" aria-label="Bagikan">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="18" cy="5" r="2.4" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="12" r="2.4" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="19" r="2.4" stroke="currentColor" stroke-width="1.6"/><path d="M8.1 10.8l7.8-4.4M8.1 13.2l7.8 4.4" stroke="currentColor" stroke-width="1.6"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="18" cy="5" r="2.4" stroke="currentColor" stroke-width="1.6" />
+              <circle cx="6" cy="12" r="2.4" stroke="currentColor" stroke-width="1.6" />
+              <circle cx="18" cy="19" r="2.4" stroke="currentColor" stroke-width="1.6" />
+              <path d="M8.1 10.8l7.8-4.4M8.1 13.2l7.8 4.4" stroke="currentColor" stroke-width="1.6" />
+            </svg>
           </a>
         </div>
       </div>
@@ -431,23 +506,32 @@
         <h3>Informasi</h3>
         <ul>
           <li><a href="prestasi.html">Prestasi</a></li>
-          
-          
+
+
         </ul>
       </div>
       <div class="footer-col footer-contact">
         <h3>Kontak Kami</h3>
         <ul>
           <li>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z" stroke="currentColor" stroke-width="1.6" />
+              <circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6" />
+            </svg>
             <span>Jl. Raya Sukorejo No. 1, Pasuruan, Jawa Timur</span>
           </li>
           <li>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2-1-4-3-5-5l2-2-3-6-4 3z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2-1-4-3-5-5l2-2-3-6-4 3z" stroke="currentColor"
+                stroke-width="1.4" stroke-linejoin="round" />
+            </svg>
             <span>(0343) 611234</span>
           </li>
           <li>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 6.5l8 6 8-6" stroke="currentColor" stroke-width="1.6"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6" />
+              <path d="M4 6.5l8 6 8-6" stroke="currentColor" stroke-width="1.6" />
+            </svg>
             <span>info@smkn1sukorejo.sch.id</span>
           </li>
         </ul>
@@ -459,7 +543,9 @@
   <div class="auth-overlay" id="auth-overlay" aria-hidden="true">
     <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
       <button type="button" class="icon-btn auth-modal__close" id="auth-modal-close" aria-label="Tutup">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
       </button>
 
       <!-- Login panel -->
@@ -471,7 +557,11 @@
           <div class="form-field">
             <label for="login-email">Email</label>
             <div class="input-wrap">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6" />
+                <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
               <input type="email" id="login-email" name="email" placeholder="Masukkan email" autocomplete="email" />
             </div>
             <p class="form-error" data-error-for="login-email"></p>
@@ -480,8 +570,12 @@
           <div class="form-field">
             <label for="login-password">Kata Sandi</label>
             <div class="input-wrap">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.6"/></svg>
-              <input type="password" id="login-password" name="password" placeholder="Masukkan kata sandi" autocomplete="current-password" />
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6" />
+                <path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.6" />
+              </svg>
+              <input type="password" id="login-password" name="password" placeholder="Masukkan kata sandi"
+                autocomplete="current-password" />
             </div>
             <p class="form-error" data-error-for="login-password"></p>
           </div>
@@ -498,7 +592,10 @@
 
         <div class="auth-success" id="auth-success" hidden>
           <div class="auth-success__icon" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
           </div>
           <p>Login berhasil!</p>
         </div>
@@ -510,4 +607,5 @@
   <script src="js/main.js" defer></script>
   <script src="js/script.js" defer></script>
 </body>
+
 </html>
