@@ -19,7 +19,7 @@ $studentSuccess = null;
 $tariffSuccess = null;
 $resetSuccess = null;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '' === 'save_tariffs')) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['action'] ?? '') === 'save_tariffs')) {
   $tariffs = [
     'X' => trim($_POST['tarif_x'] ?? ''),
     'XI' => trim($_POST['tarif_xi'] ?? ''),
@@ -45,11 +45,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '' === 'save_t
 
         mysqli_stmt_execute($stmt);
 
-        mysqli_stmt_close($stmt);
-        mysqli_commit($conn);
+        }
+        
+      mysqli_stmt_close($stmt);
+      mysqli_commit($conn);
 
-        $tariffSuccess = 'Tarif SPP berhasil diperbarui.';
-      }
+      $tariffSuccess = 'Tarif SPP berhasil diperbarui.';
     } catch (Throwable $e) {
       mysqli_rollback($conn);
       $errors[] = 'Gaga menyimpan tarif SPP.';
