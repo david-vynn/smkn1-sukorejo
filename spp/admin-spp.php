@@ -37,8 +37,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acton'] ?? '' === 'save_ta
 
     try {
       $stmt = mysqli_prepare($conn, 'INSERT INTO spp_tariffs (grade, amounts) VALUES (?, ?) ON DUPLICATE KEY UPDATE amount = VALUES(amount)');
+
+      foreach ($tariffs as $grade => $amount) {
+        $amount = (float) $amount;
+
+        mysqli_stmt_bind_param( $stmt,'sd', $grade, $amunt);
+
+        mysqli_stmt_execute($stmt);
+
+        mysqli_stmt_close($stmt);
+        mysqli_commit($conn);
+
+        $tariffSuccess = 'Tarif SPP berhasil diperbarui.';
+      } 
+    } catch (Throwable $e) {
+        mysqli_rollback($conn);
+        $errors[] = 'Gaga menyimpan tarif SPP.';
     }
   }
+}
+
+$tariffs = [
+  'X' => 0,
+  'XI' => 0,
+  'XII' => 0
+];
+
+$result = mysqli_query($conn, 'SELECT grade, amount FROM spp_tarrifs');
+
+while ($row = mysqli_fetch_assoc($result)) {
+
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'create_student') {
 
