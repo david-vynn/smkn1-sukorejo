@@ -72,10 +72,10 @@ $role = $_SESSION['role'] ?? '';
               </a>
             <?php endif; ?>
 
-            <button type="button" class="user-chip__logout">
+            <a href="logout.php" class="user-chip__logout">
               <span aria-hidden="true">&#128682;</span>
               Keluar
-            </button>
+            </a>
 
           <?php endif; ?>
         </div>

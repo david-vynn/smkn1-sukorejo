@@ -400,25 +400,11 @@ mysqli_stmt_close($stmt);
         <a href="../contact.html">Kontak</a>
       </nav>
 
-      <div class="header-account">
-        <button type="button" class="user-chip__trigger" id="account-trigger" aria-haspopup="true"
-          aria-expanded="false">
-          <span class="user-chip__avatar" aria-hidden="true">&#128100;</span>
-          <span class="user-chip__name">Portal Siswa</span>
-          <svg class="user-chip__caret" width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
-          </svg>
-        </button>
-
-        <div class="user-chip__menu" id="account-menu">
-          <a href="../../cek-kelulusan.html" class="user-chip__link">
-            <span aria-hidden="true">&#127891;</span> Portal Kelulusan
-          </a>
-          <button type="button" class="user-chip__logout">
-            <span aria-hidden="true">&#128682;</span> Keluar
-          </button>
-        </div>
+      <div class="header-account user-chip_menu" >
+        <a href="../logout.php" class="user-chip__logout">
+          <span aria-hidden="true">&#128682;</span>
+          Keluar
+        </a>
       </div>
     </div>
   </header>
