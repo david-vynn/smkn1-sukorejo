@@ -58,143 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['action'] ?? '') === 'save
   }
 }
 
-
-$invoiceSuccess = null;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['action'] ?? '') === 'generate_invoices')) {
-  $selectedMonth = trim($_POST['month'] ?? 'all');
-  $dueDayInput = filter_var($_POST['due_day'] ?? null, FILTER_VALIDATE_INT);
-
-  if ($selectedMonth !== 'all' && (!ctype_digit($selectedMonth) || (int) $selectedMonth < 1 || (int) $selectedMonth > 12)) {
-    $errors[] = 'Periode tagihan tidak valid.';
-  }
-
-  if ($dueDayInput === false || $dueDayInput < 1 || $dueDayInput > 31) {
-    $errors[] = 'Tanggal jatuh tempo harus antara 1 sampai 31.';
-  }
-
-  if (empty($errors)) {
-    $transactionStarted = false;
-
-    try {
-      $yearResult = mysqli_query(
-        $conn,
-        "SELECT id, name, start_date, end_date
-         FROM academic_years
-         WHERE is_current = 1 AND status = 'active'
-         LIMIT 1"
-      );
-      $academicYear = mysqli_fetch_assoc($yearResult);
-
-      if (!$academicYear) {
-        throw new RuntimeException('Tahun ajaran aktif tidak ditemukan.');
-      }
-
-      $startDate = new DateTimeImmutable($academicYear['start_date']);
-      $endDate = new DateTimeImmutable($academicYear['end_date']);
-      $today = new DateTimeImmutable('today', new DateTimeZone('Asia/Jakarta'));
-
-      if ($selectedMonth === 'all') {
-        $firstPeriod = $today > $startDate
-          ? $today->modify('first day of this month')
-          : $startDate->modify('first day of this month');
-
-        if ($firstPeriod > $endDate) {
-          throw new RuntimeException('Tahun ajaran aktif sudah berakhir. Tidak ada periode yang bisa dibuat.');
-        }
-
-        $periods = [];
-        for ($period = $firstPeriod; $period <= $endDate; $period = $period->modify('+1 month')) {
-          $periods[] = $period;
-        }
-      } else {
-        $periods = [];
-        for ($period = $startDate->modify('first day of this month'); $period <= $endDate; $period = $period->modify('+1 month')) {
-          if ((int) $period->format('n') === (int) $selectedMonth) {
-            $periods[] = $period;
-            break;
-          }
-        }
-
-        if (empty($periods)) {
-          throw new RuntimeException('Bulan yang dipilih tidak termasuk dalam tahun ajaran aktif.');
-        }
-      }
-
-      $studentCountResult = mysqli_query($conn, 'SELECT COUNT(*) AS total FROM students');
-      $studentCountRow = mysqli_fetch_assoc($studentCountResult);
-      $totalStudents = (int) ($studentCountRow['total'] ?? 0);
-
-      $eligibleResult = mysqli_query(
-        $conn,
-        "SELECT COUNT(*) AS total
-         FROM students s
-         INNER JOIN classes c ON c.id = s.class_id
-         INNER JOIN spp_tariffs t ON t.grade = c.grade"
-      );
-      $eligibleRow = mysqli_fetch_assoc($eligibleResult);
-      $eligibleStudents = (int) ($eligibleRow['total'] ?? 0);
-
-      if ($totalStudents === 0) {
-        throw new RuntimeException('Belum ada data siswa untuk dibuatkan tagihan.');
-      }
-
-      if ($eligibleStudents !== $totalStudents) {
-        throw new RuntimeException('Ada siswa yang tingkat kelasnya belum memiliki tarif SPP. Lengkapi Pengaturan Tarif SPP terlebih dahulu.');
-      }
-
-      mysqli_begin_transaction($conn);
-      $transactionStarted = true;
-
-      $stmt = mysqli_prepare(
-        $conn,
-        "INSERT IGNORE INTO spp_invoices
-          (student_id, academic_year_id, period_month, period_year, due_date, amount)
-         SELECT s.id, ?, ?, ?, ?, t.amount
-         FROM students s
-         INNER JOIN classes c ON c.id = s.class_id
-         INNER JOIN spp_tariffs t ON t.grade = c.grade"
-      );
-
-      $createdCount = 0;
-      $skippedCount = 0;
-
-      foreach ($periods as $period) {
-        $month = (int) $period->format('n');
-        $year = (int) $period->format('Y');
-        $actualDueDay = min($dueDayInput, (int) $period->format('t'));
-        $dueDate = $period->setDate($year, $month, $actualDueDay)->format('Y-m-d');
-        $academicYearId = (int) $academicYear['id'];
-
-        mysqli_stmt_bind_param($stmt, 'iiis', $academicYearId, $month, $year, $dueDate);
-        mysqli_stmt_execute($stmt);
-
-        $inserted = mysqli_stmt_affected_rows($stmt);
-        $createdCount += $inserted;
-        $skippedCount += $eligibleStudents - $inserted;
-      }
-
-      mysqli_stmt_close($stmt);
-      mysqli_commit($conn);
-      $transactionStarted = false;
-
-      $invoiceSuccess = [
-        'created' => $createdCount,
-        'skipped' => $skippedCount,
-        'academic_year' => $academicYear['name']
-      ];
-    } catch (Throwable $e) {
-      if ($transactionStarted) {
-        mysqli_rollback($conn);
-      }
-
-      $errors[] = $e instanceof RuntimeException
-        ? $e->getMessage()
-        : 'Gagal membuat tagihan. Tidak ada perubahan yang disimpan.';
-    }
-  }
-}
-
 $tariffs = [
   'X' => 0,
   'XI' => 0,
@@ -616,6 +479,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset
   }
 }
 
+$classes = [];
+
+$sql = "SELECT id, class_name FROM classes ORDER BY FIELD(grade, 'X','XI','XII'), major_id, class_number";
+
+$stmt = mysqli_query($conn, $sql);
+
+while ($row = mysqli_fetch_assoc($stmt)) {
+  $classes[] = $row;
+}
+
 ?>
 
 <!doctype html>
@@ -692,14 +565,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset
               <?= htmlspecialchars($error); ?>
             </p>
           <?php endforeach; ?>
-
-          <?php if ($invoiceSuccess): ?>
-            <p class="form-help">
-              Tagihan tahun ajaran <?= htmlspecialchars($invoiceSuccess['academic_year']); ?> berhasil diproses.
-              <?= (int) $invoiceSuccess['created']; ?> tagihan baru dibuat dan
-              <?= (int) $invoiceSuccess['skipped']; ?> tagihan dilewati karena sudah tersedia.
-            </p>
-          <?php endif; ?>
 
           <?php if ($studentSuccess): ?>
             <p class="form-help">
@@ -792,13 +657,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset
           <div class="spp-card">
             <h3>Generate Tagihan (2026/2027)</h3>
 
-            <form class="spp-form" method="post">
-              <input type="hidden" name="action" value="generate_invoices">
+            <form class="spp-form" method="post" data-backend="pending">
+              <div class="form-field">
+
+                <label for="a-kelas">Kelas</label>
+                <select id="a-kelas" name="kelas">
+                  <option value="">Semua kelas</option>
+
+                  <?php foreach ($classes as $class): ?>
+                    <option value="<?= $class['id'] ?>">
+                      <?= htmlspecialchars($class['class_name']) ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+
+              </div>
 
               <div class="form-field">
-                <label for="a-bln">Periode Tagihan</label>
-                <select id="a-bln" name="month" required>
-                  <option value="all">Semua bulan (bulan ini sampai akhir tahun ajaran)</option>
+                <label for="a-bln">Bulan</label>
+                <select id="a-bln" name="month">
+                  <option value="all">Seluruh tahun ajaran</option>
                   <option value="7">Juli</option>
                   <option value="8">Agustus</option>
                   <option value="9">September</option>
@@ -823,13 +701,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset
               </div>
 
               <div class="form-field">
-                <label for="a-gdue">Tanggal jatuh tempo (1-31)</label>
-                <input type="number" id="a-gdue" name="due_day" value="31" min="1" max="31" required />
-                <p class="form-help">Default akhir bulan. Jika tanggal yang dipilih tidak tersedia pada bulan tertentu, sistem memakai hari terakhir bulan tersebut.</p>
+                <label for="a-gdue">Jatuh tempo tanggal (1-28)</label>
+                <input type="number" id="a-gdue" name="due_day" value="10" min="1" max="28" />
               </div>
 
               <button type="submit" class="btn btn-primary btn-sm">
-                Generate Tagihan Seluruh Siswa
+                Generate
               </button>
             </form>
           </div>
