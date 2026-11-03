@@ -19,6 +19,27 @@ $studentSuccess = null;
 $kasirSuccess = null;
 $resetSuccess = null;
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acton'] ?? '' === 'save_tariffs')) {
+  $tariffs = [
+    'X'=> trim($_POST['tarif_x'] ?? ''),
+    'XI'=> trim($_POST['tarif_xi'] ?? ''),
+    'XII'=> trim($_POST['tarif_xii'] ?? ''),
+  ];
+
+  foreach ($tariffs as $grade => $amount) {
+    if (!is_numeric($amunt) || (float) $amunt < 0) {
+      $errors[] = "Tarif kelas {$grade} tidak valid.";
+    }
+  }
+
+  if (empty($errors)) {
+    mysqli_begin_transaction($conn);
+
+    try {
+      $stmt = mysqli_prepare($conn, 'INSERT INTO spp_tariffs (grade, amounts) VALUES (?, ?) ON DUPLICATE KEY UPDATE amount = VALUES(amount)');
+    }
+  }
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'create_student') {
 
   $nisn = trim($_POST['nisn'] ?? '');
@@ -564,8 +585,10 @@ while ($row = mysqli_fetch_assoc($stmt)) {
           <div class="spp-card">
             <h3>Pengaturan Tarif SPP</h3>
 
-            <form class="spp-form" method="post" data-backend="pending">
+            <form class="spp-form" method="post" >
               <div class="form-field">
+                <input type="hidden" name="action" value="save_tariffs">
+
                 <label for="a-year">Tahun Ajaran</label>
                 <input type="text" id="a-year" name="year" value="2026/2027" />
               </div>
