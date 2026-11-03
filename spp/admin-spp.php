@@ -15,7 +15,8 @@ if (($_SESSION['role'] ?? '') !== 'admin') {
 require_once __DIR__ . '/../database/config.php';
 
 $errors = [];
-$success = null;
+$studentSuccess = null;
+$kasirSuccess = null;
 $resetSuccess = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'create_student') {
@@ -23,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'creat
   $nisn = trim($_POST['nisn'] ?? '');
   $email = trim($_POST['email'] ?? '');
 
-  // Validasi input
   if (!preg_match('/^\d{10}$/', $nisn)) {
     $errors[] = 'NISN harus terdiri dari 10 digit angka.';
   }
@@ -32,21 +32,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'creat
     $errors[] = 'Format email tidak valid.';
   }
 
-  // Cari data siswa
   if (empty($errors)) {
     $stmt = mysqli_prepare(
       $conn,
       "SELECT id, user_id, nisn, nama
-            FROM students
-            WHERE nisn = ?
-            LIMIT 1"
+       FROM students
+       WHERE nisn = ?
+       LIMIT 1"
     );
 
     mysqli_stmt_bind_param($stmt, 's', $nisn);
     mysqli_stmt_execute($stmt);
 
     $result = mysqli_stmt_get_result($stmt);
-
     $student = mysqli_fetch_assoc($result);
 
     mysqli_stmt_close($stmt);
@@ -58,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'creat
     }
   }
 
-  // Periksa email
   if (empty($errors)) {
     $stmt = mysqli_prepare(
       $conn,
@@ -77,10 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'creat
     mysqli_stmt_close($stmt);
   }
 
-  // Buat akun siswa
   if (empty($errors)) {
     $characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-
     $randomPart = '';
 
     for ($i = 0; $i < 6; $i++) {
@@ -88,19 +83,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'creat
     }
 
     $temporaryPassword = 'SPP-' . $randomPart;
-    $hashedPassword = password_hash(
-      $temporaryPassword,
-      PASSWORD_DEFAULT
-    );
+    $hashedPassword = password_hash($temporaryPassword, PASSWORD_DEFAULT);
 
     mysqli_begin_transaction($conn);
 
     try {
-      // Simpan akun ke tabel users
       $stmt = mysqli_prepare(
         $conn,
         "INSERT INTO users (username, email, password, role)
-                VALUES (?, ?, ?, 'siswa')"
+         VALUES (?, ?, ?, 'siswa')"
       );
 
       mysqli_stmt_bind_param(
@@ -116,7 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'creat
 
       mysqli_stmt_close($stmt);
 
-      // Hubungkan akun dengan data siswa
       $stmt = mysqli_prepare(
         $conn,
         "UPDATE students SET user_id = ? WHERE id = ?"
@@ -130,12 +120,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'creat
       );
 
       mysqli_stmt_execute($stmt);
-
       mysqli_stmt_close($stmt);
 
       mysqli_commit($conn);
 
-      $success = [
+      $studentSuccess = [
         'nama' => $student['nama'],
         'nisn' => $nisn,
         'email' => $email,
@@ -151,21 +140,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'creat
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset_student_password') {
 
-  $debugMessage = 'Handler reset password terpanggil!';
-
   $userId = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
 
   if (!$userId || $userId <= 0) {
     $errors[] = 'ID akun tidak valid.';
   }
 
-  // Proses reset password akan kita isi di sini.
-
-  // Periksa apakah akun benar-benar milik siswa
   if (empty($errors)) {
     $stmt = mysqli_prepare(
       $conn,
-      "SELECT id FROM users WHERE id = ? AND role = 'siswa' LIMIT 1"
+      "SELECT id FROM users
+       WHERE id = ? AND role = 'siswa'
+       LIMIT 1"
     );
 
     mysqli_stmt_bind_param($stmt, 'i', $userId);
@@ -185,9 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset
       $randomPart = '';
 
       for ($i = 0; $i < 6; $i++) {
-        $randomPart .= $characters[
-          random_int(0, strlen($characters) - 1)
-        ];
+        $randomPart .= $characters[random_int(0, strlen($characters) - 1)];
       }
 
       $temporaryPassword = 'SPP-' . $randomPart;
@@ -195,7 +179,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset
 
       $stmt = mysqli_prepare(
         $conn,
-        "UPDATE users SET password = ? WHERE id = ? AND role = 'siswa'"
+        "UPDATE users
+         SET password = ?
+         WHERE id = ? AND role = 'siswa'"
       );
 
       mysqli_stmt_bind_param(
@@ -221,32 +207,159 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset
   }
 }
 
+// Ambil kata kunci pencarian siswa
+$studentSearch = trim($_GET['student_q'] ?? '');
+
+
 // Ambil daftar akun siswa
 $studentAccounts = [];
 
 $sql = "
-    SELECT
-        users.id AS user_id,
-        students.nama,
-        students.nisn,
-        users.email,
-        classes.class_name
-    FROM students
-    INNER JOIN users ON students.user_id = users.id
-    INNER JOIN classes ON students.class_id = classes.id
-    ORDER BY students.nama ASC";
+  SELECT
+    users.id AS user_id,
+    students.nama,
+    students.nisn,
+    users.email,
+    classes.class_name
+  FROM students
+  INNER JOIN users ON students.user_id = users.id
+  INNER JOIN classes ON students.class_id = classes.id
+";
 
-$result = mysqli_query($conn, $sql);
+if ($studentSearch !== '') {
+  $sql .= "
+    WHERE
+      students.nama LIKE ?
+      OR students.nisn LIKE ?
+      OR users.email LIKE ?
+  ";
+}
+
+$sql .= " ORDER BY students.nama ASC";
+
+$stmt = mysqli_prepare($conn, $sql);
+
+if ($studentSearch !== '') {
+  $keyword = "%{$studentSearch}%";
+
+  mysqli_stmt_bind_param(
+    $stmt,
+    'sss',
+    $keyword,
+    $keyword,
+    $keyword
+  );
+}
+
+mysqli_stmt_execute($stmt);
+
+$result = mysqli_stmt_get_result($stmt);
 
 if ($result) {
   while ($row = mysqli_fetch_assoc($result)) {
     $studentAccounts[] = $row;
   }
+
+  mysqli_free_result($result);
 }
 
+mysqli_stmt_close($stmt);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'create_kasir') {
+  $nama = trim($_POST['nama'] ?? '');
+  $email = trim($_POST['email'] ?? '');
+
+  if ($nama === '') {
+    $errors[] = 'Nama kasir wajib diisi.';
+  }
+
+  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $errors[] = 'Format email tidak valid.';
+  }
+
+  if (empty($errors)) {
+    $characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    $randomPart = '';
+
+    for ($i = 0; $i < 6; $i++) {
+      $randomPart .= $characters[random_int(0, strlen($characters) - 1)];
+    }
+
+    $temporaryPassword = 'KSR-' . $randomPart;
+    $hashedPassword = password_hash($temporaryPassword, PASSWORD_DEFAULT);
+
+    try {
+      $stmt = mysqli_prepare(
+        $conn,
+        "INSERT INTO users (username, email, password, role)
+         VALUES (?, ?, ?, 'kasir')"
+      );
+
+      mysqli_stmt_bind_param(
+        $stmt,
+        'sss',
+        $nama,
+        $email,
+        $hashedPassword
+      );
+
+      mysqli_stmt_execute($stmt);
+      mysqli_stmt_close($stmt);
+
+      $kasirSuccess = [
+        'nama' => $nama,
+        'email' => $email,
+        'password' => $temporaryPassword
+      ];
+
+    } catch (mysqli_sql_exception $e) {
+      if ($e->getCode() === 1062) {
+        $errors[] = 'Username atau email sudah digunakan.';
+      } else {
+        $errors[] = 'Gagal membuat akun kasir.';
+      }
+    }
+  }
+}
+
+// AMbil kata kunci pencarian kasir
+$kasirSearch = trim($_GET['kasir_q'] ?? '');
+$keyword = "%{$kasirSearch}%";
+
+$kasirAccounts = [];
+
+$sql = "
+    SELECT id AS user_id, username AS name, email
+    FROM users
+    WHERE role = 'kasir'
+";
+
+if ($kasirSearch !== '') {
+  $sql .= " AND (username LIKE ? OR email LIKE ?)";
+}
+
+$sql .= " ORDER BY username ASC";
+
+$stmt = mysqli_prepare($conn, $sql);
+
+if ($kasirSearch !== '') {
+  mysqli_stmt_bind_param($stmt, 'ss', $keyword, $keyword);
+}
+
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+
+if ($result) {
+  while ($row = mysqli_fetch_assoc($result)) {
+    $kasirAccounts[] = $row;
+  }
+
+  mysqli_free_result($result);
+}
+
+mysqli_stmt_close($stmt);
+
 ?>
-
-
 
 <!doctype html>
 <html lang="id">
@@ -278,6 +391,7 @@ if ($result) {
         </svg>
         SMKN 1 SUKOREJO
       </a>
+
       <nav class="main-nav" aria-label="Navigasi utama">
         <a href="../index.html">Beranda</a>
         <a href="../profil-sekolah.html">Profil Sekolah</a>
@@ -285,6 +399,7 @@ if ($result) {
         <a href="../prestasi.html">Prestasi</a>
         <a href="../contact.html">Kontak</a>
       </nav>
+
       <div class="header-account">
         <button type="button" class="user-chip__trigger" id="account-trigger" aria-haspopup="true"
           aria-expanded="false">
@@ -295,6 +410,7 @@ if ($result) {
               stroke-linejoin="round" />
           </svg>
         </button>
+
         <div class="user-chip__menu" id="account-menu">
           <a href="../../cek-kelulusan.html" class="user-chip__link">
             <span aria-hidden="true">&#127891;</span> Portal Kelulusan
@@ -314,15 +430,19 @@ if ($result) {
         <p>Kelola tagihan dan pantau pembayaran SPP.</p>
       </div>
     </div>
+
     <section class="spp-section">
       <div class="container">
+
         <p class="form-help spp-demo-note" role="note">
           <strong>Tampilan contoh.</strong> Semua data di halaman ini adalah
           placeholder untuk demonstrasi UI dan belum terhubung ke backend.
-          Pratinjau peran: <a href="spp.html">Siswa</a> ·
+          Pratinjau peran:
+          <a href="spp.html">Siswa</a> ·
           <a href="kasir-spp.html">Kasir</a> ·
           <a href="admin-spp.html">Admin</a>.
         </p>
+
         <div id="spp-msg" class="form-help" role="status" aria-live="polite">
           <?php foreach ($errors as $error): ?>
             <p class="form-error">
@@ -330,13 +450,14 @@ if ($result) {
             </p>
           <?php endforeach; ?>
 
-          <?php if ($success): ?>
+          <?php if ($studentSuccess): ?>
             <p class="form-help">
               Akun siswa berhasil dibuat untuk
-              <strong><?= htmlspecialchars($success['nama']); ?></strong>.
+              <strong><?= htmlspecialchars($studentSuccess['nama']); ?></strong>.
             </p>
           <?php endif; ?>
         </div>
+
         <div class="spp-stats">
           <div class="spp-card spp-stat">
             <span class="stat-block__label">Total Siswa</span>
@@ -367,11 +488,13 @@ if ($result) {
             <strong class="spp-stat__v">210</strong>
           </div>
         </div>
+
         <div class="section-head spp-gap">
           <div class="section-head__text">
             <h2>Manajemen SPP</h2>
           </div>
         </div>
+
         <div class="spp-grid">
           <div class="spp-card">
             <h3>Pengaturan Tarif SPP</h3>
@@ -402,19 +525,24 @@ if ($result) {
               </button>
             </form>
           </div>
+
           <div class="spp-card">
             <h3>Generate Tagihan (2026/2027)</h3>
+
             <form class="spp-form" method="post" data-backend="pending">
               <div class="form-field">
-                <label for="a-kelas">Kelas</label><select id="a-kelas" name="kelas">
+                <label for="a-kelas">Kelas</label>
+                <select id="a-kelas" name="kelas">
                   <option value="">Semua kelas</option>
                   <option value="X RPL 1">X RPL 1</option>
                   <option value="XI RPL 1">XI RPL 1</option>
                   <option value="XII RPL 1">XII RPL 1</option>
                 </select>
               </div>
+
               <div class="form-field">
-                <label for="a-bln">Bulan</label><select id="a-bln" name="month">
+                <label for="a-bln">Bulan</label>
+                <select id="a-bln" name="month">
                   <option value="all">Seluruh tahun ajaran</option>
                   <option value="1">Januari</option>
                   <option value="2">Februari</option>
@@ -430,100 +558,60 @@ if ($result) {
                   <option value="12">Desember</option>
                 </select>
               </div>
+
               <div class="form-field">
                 <label>Nominal Tagihan</label>
                 <p class="form-help">
                   Sistem menggunakan tarif sesuai tingkat kelas siswa.
                 </p>
               </div>
+
               <div class="form-field">
-                <label for="a-gdue">Jatuh tempo tanggal (1-28)</label><input type="number" id="a-gdue" name="due_day"
-                  value="10" min="1" max="28" />
+                <label for="a-gdue">Jatuh tempo tanggal (1-28)</label>
+                <input type="number" id="a-gdue" name="due_day" value="10" min="1" max="28" />
               </div>
+
               <button type="submit" class="btn btn-primary btn-sm">
                 Generate
               </button>
             </form>
           </div>
         </div>
+
+        <!-- Daftar Tagihan Siswa -->
         <div class="section-head spp-gap">
           <div class="section-head__text">
-            <h2>Kelola Tagihan Siswa</h2>
+            <h2>Daftar Tagihan Siswa</h2>
             <p>
-              Buat tagihan per siswa dengan nominal dan jatuh tempo sendiri.
-              Tagihan yang sudah diajukan/dibayar tidak dapat diubah.
+              Lihat daftar tagihan dan status pembayaran seluruh siswa.
             </p>
           </div>
         </div>
-        <div class="spp-card">
-          <h3 id="b-title">Buat Tagihan</h3>
-          <form class="spp-form" method="post" data-backend="pending">
-            <input type="hidden" id="b-id" name="bill_id" />
-            <div class="form-field">
-              <label for="b-student">Siswa</label><select id="b-student" name="student_id">
-                <option value="">— Pilih siswa —</option>
-                <option value="1">
-                  Siswa Contoh — 0000000001 (XI RPL 1)
-                </option>
-              </select>
-              <p class="form-error" data-error-for="b-student"></p>
-            </div>
-            <div class="form-field">
-              <label for="b-year">Tahun ajaran</label><input type="text" id="b-year" name="academic_year"
-                value="2026/2027" />
-              <p class="form-error" data-error-for="b-year"></p>
-            </div>
-            <div class="form-field">
-              <label for="b-month">Bulan</label><select id="b-month" name="month">
-                <option value="1">Januari</option>
-                <option value="2">Februari</option>
-                <option value="3">Maret</option>
-                <option value="4">April</option>
-                <option value="5">Mei</option>
-                <option value="6">Juni</option>
-                <option value="7">Juli</option>
-                <option value="8">Agustus</option>
-                <option value="9">September</option>
-                <option value="10" selected>Oktober</option>
-                <option value="11">November</option>
-                <option value="12">Desember</option>
-              </select>
-              <p class="form-error" data-error-for="b-month"></p>
-            </div>
-            <div class="form-field">
-              <label for="b-amount">Nominal</label><input type="number" id="b-amount" name="amount" value="150000" />
-              <p class="form-error" data-error-for="b-amount"></p>
-            </div>
-            <div class="form-field">
-              <label for="b-due">Jatuh tempo</label><input type="date" id="b-due" name="due_date" />
-              <p class="form-error" data-error-for="b-due"></p>
-            </div>
-            <div class="spp-row">
-              <button type="submit" class="btn btn-primary" id="b-save">
-                Simpan Tagihan</button><button type="button" class="btn btn-outline-navy" data-action="b-cancel"
-                id="b-cancel" hidden>
-                Batal edit
-              </button>
-            </div>
-          </form>
-        </div>
+
         <form class="spp-row spp-gap" role="search" method="get" data-backend="pending">
-          <label class="visually-hidden" for="b-q">Cari nama / NISN</label><input type="search" id="b-q" name="q"
-            placeholder="Cari nama / NISN" /><label class="visually-hidden" for="b-fstatus">Filter status</label><select
-            id="b-fstatus" name="status">
+          <label class="visually-hidden" for="b-q">Cari nama / NISN</label>
+          <input type="search" id="b-q" name="q" placeholder="Cari nama / NISN" />
+
+          <label class="visually-hidden" for="b-fstatus">Filter status</label>
+          <select id="b-fstatus" name="status">
             <option value="">Semua status</option>
             <option value="unpaid">Belum Bayar</option>
             <option value="overdue">Menunggak</option>
             <option value="paid">Lunas</option>
-            <option value="inactive">Nonaktif</option>
-          </select><button type="submit" class="btn btn-primary btn-sm">Cari</button>
+          </select>
+
+          <button type="submit" class="btn btn-primary btn-sm">
+            Cari
+          </button>
         </form>
+
         <div class="spp-gap">
           <div class="table-wrap spp-table">
             <table class="score-table">
               <caption class="visually-hidden">
                 Daftar tagihan semua siswa
               </caption>
+
               <thead>
                 <tr>
                   <th scope="col">Siswa</th>
@@ -531,13 +619,14 @@ if ($result) {
                   <th scope="col">Nominal</th>
                   <th scope="col">Jatuh Tempo</th>
                   <th scope="col">Status</th>
-                  <th scope="col">Aksi</th>
                 </tr>
               </thead>
+
               <tbody>
                 <tr>
                   <td data-label="Siswa">
-                    Siswa Contoh<br /><small>0000000001 · XI RPL 1</small>
+                    Siswa Contoh<br />
+                    <small>0000000001 · XI RPL 1</small>
                   </td>
                   <td data-label="Bulan">Oktober 2026</td>
                   <td data-label="Nominal">Rp150.000</td>
@@ -545,18 +634,12 @@ if ($result) {
                   <td data-label="Status">
                     <span class="spp-badge spp-badge--unpaid">Belum Bayar</span>
                   </td>
-                  <td data-label="Aksi">
-                    <button type="button" class="btn btn-outline-navy btn-sm" data-action="b-edit">
-                      Edit
-                    </button>
-                    <button type="button" class="btn btn-outline-navy btn-sm" data-action="b-toggle">
-                      Nonaktifkan
-                    </button>
-                  </td>
                 </tr>
+
                 <tr>
                   <td data-label="Siswa">
-                    Siswa Contoh<br /><small>0000000001 · XI RPL 1</small>
+                    Siswa Contoh<br />
+                    <small>0000000001 · XI RPL 1</small>
                   </td>
                   <td data-label="Bulan">Juli 2026</td>
                   <td data-label="Nominal">Rp150.000</td>
@@ -564,48 +647,64 @@ if ($result) {
                   <td data-label="Status">
                     <span class="spp-badge spp-badge--paid">Lunas</span>
                   </td>
-                  <td data-label="Aksi">-</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
+
+        <!-- Laporan SPP -->
         <div class="section-head spp-gap">
           <div class="section-head__text">
             <h2>Laporan SPP</h2>
           </div>
         </div>
+
         <form class="spp-row" method="get" data-backend="pending">
-          <label class="visually-hidden" for="a-period">Periode</label><select id="a-period" name="period">
+          <label class="visually-hidden" for="a-period">Periode</label>
+          <select id="a-period" name="period">
             <option value="all">Semua waktu</option>
             <option value="today">Hari ini</option>
             <option value="week">Minggu ini</option>
             <option value="month">Bulan ini</option>
             <option value="year">Tahun ini</option>
-          </select><label class="visually-hidden" for="a-rkelas">Kelas</label><select id="a-rkelas" name="kelas">
+          </select>
+
+          <label class="visually-hidden" for="a-rkelas">Kelas</label>
+          <select id="a-rkelas" name="kelas">
             <option value="">Semua kelas</option>
             <option value="X RPL 1">X RPL 1</option>
             <option value="XI RPL 1">XI RPL 1</option>
             <option value="XII RPL 1">XII RPL 1</option>
-          </select><label class="visually-hidden" for="a-status">Status</label>
+          </select>
+
+          <label class="visually-hidden" for="a-status">Status</label>
           <select id="a-status" name="status">
             <option value="">Semua status</option>
             <option value="success">Berhasil</option>
-          </select><button type="submit" class="btn btn-primary btn-sm">
-            Tampilkan</button><button type="button" class="btn btn-outline-navy btn-sm" data-action="a-csv">
+          </select>
+
+          <button type="submit" class="btn btn-primary btn-sm">
+            Tampilkan
+          </button>
+
+          <button type="button" class="btn btn-outline-navy btn-sm" data-action="a-csv">
             Export CSV
           </button>
         </form>
+
         <div class="spp-gap">
           <p class="form-help">
             Total transaksi: <strong>2</strong> · Total pemasukan (berhasil):
             <strong>Rp150.000</strong>
           </p>
+
           <div class="table-wrap spp-table">
             <table class="score-table">
               <caption class="visually-hidden">
                 Laporan transaksi SPP
               </caption>
+
               <thead>
                 <tr>
                   <th scope="col">No. Transaksi</th>
@@ -616,6 +715,7 @@ if ($result) {
                   <th scope="col">Tanggal</th>
                 </tr>
               </thead>
+
               <tbody>
                 <tr>
                   <td data-label="No. Transaksi">SPP-20260705-0001</td>
@@ -625,6 +725,7 @@ if ($result) {
                   <td data-label="Nominal">Rp150.000</td>
                   <td data-label="Tanggal">5 Jul 2026</td>
                 </tr>
+
                 <tr>
                   <td data-label="No. Transaksi">SPP-20260808-0003</td>
                   <td data-label="Siswa">Siswa Contoh</td>
@@ -637,14 +738,18 @@ if ($result) {
             </table>
           </div>
         </div>
+
+        <!-- Manajemen Akun Siswa -->
         <div class="spp-gap" id="siswa-manager">
           <div class="section-head">
             <div class="section-head__text">
               <h2>Tambah Akun Siswa</h2>
             </div>
           </div>
+
           <div class="spp-card">
             <h3 id="sw-title">Tambah Siswa</h3>
+
             <form class="spp-form" method="post">
               <input type="hidden" name="action" value="create_student">
 
@@ -667,29 +772,30 @@ if ($result) {
                 </button>
               </div>
             </form>
-            <?php if ($success): ?>
+
+            <?php if ($studentSuccess): ?>
               <div id="sw-cred" class="spp-gap spp-row">
                 <div class="spp-card">
                   <strong>
                     Akun siswa berhasil dibuat untuk
-                    <?= htmlspecialchars($success['nama']); ?>
+                    <?= htmlspecialchars($studentSuccess['nama']); ?>
                   </strong>
 
                   <dl class="info-list">
                     <div class="info-list__row">
                       <dt>Username</dt>
-                      <dd><?= htmlspecialchars($success['nisn']); ?></dd>
+                      <dd><?= htmlspecialchars($studentSuccess['nisn']); ?></dd>
                     </div>
 
                     <div class="info-list__row">
                       <dt>Email</dt>
-                      <dd><?= htmlspecialchars($success['email']); ?></dd>
+                      <dd><?= htmlspecialchars($studentSuccess['email']); ?></dd>
                     </div>
 
                     <div class="info-list__row">
                       <dt>Password</dt>
                       <dd>
-                        <code><?= htmlspecialchars($success['password']); ?></code>
+                        <code><?= htmlspecialchars($studentSuccess['password']); ?></code>
                       </dd>
                     </div>
                   </dl>
@@ -702,9 +808,22 @@ if ($result) {
               </div>
             <?php endif; ?>
           </div>
-          <form class="spp-row spp-gap" role="search" method="get" data-backend="pending">
-            <label class="visually-hidden" for="sw-q">Cari siswa</label><input type="search" id="sw-q" name="q"
-              placeholder="Cari nama / NISN / email" />
+
+          <form class="spp-row spp-gap" role="search" method="get">
+            <label class="visually-hidden" for="sw-q">Cari siswa</label>
+
+            <input type="search" id="sw-q" name="student_q" placeholder="Cari nama / NISN / email"
+              value="<?= htmlspecialchars($studentSearch); ?>" />
+
+            <button type="submit" class="btn btn-primary btn-sm">
+              Cari
+            </button>
+
+            <?php if ($studentSearch !== ''): ?>
+              <a href="admin-spp.php#siswa-manager" class="btn btn-outline-navy btn-sm">
+                Reset
+              </a>
+            <?php endif; ?>
           </form>
           <div class="spp-gap">
 
@@ -733,22 +852,30 @@ if ($result) {
                 <caption class="visually-hidden">
                   Daftar akun siswa
                 </caption>
+
                 <thead>
                   <tr>
                     <th scope="col">Nama</th>
                     <th scope="col">NISN</th>
                     <th scope="col">Email</th>
                     <th scope="col">Kelas</th>
-                    <th scope="col">Status</th>
                     <th scope="col">Aksi</th>
                   </tr>
                 </thead>
+
                 <tbody>
                   <?php if (empty($studentAccounts)): ?>
+
                     <tr>
-                      <td colspan="6">Belum ada akun siswa.</td>
+                      <td colspan="6">
+                        <?= $studentSearch !== ''
+                          ? 'Siswa tidak ditemukan.'
+                          : 'Belum ada akun siswa.'; ?>
+                      </td>
                     </tr>
+
                   <?php else: ?>
+
                     <?php foreach ($studentAccounts as $account): ?>
                       <tr>
                         <td data-label="Nama">
@@ -767,10 +894,6 @@ if ($result) {
                           <?= htmlspecialchars($account['class_name']); ?>
                         </td>
 
-                        <td data-label="Status">
-                          <span class="spp-badge spp-badge--paid">Aktif</span>
-                        </td>
-
                         <td data-label="Aksi">
                           <form method="post" class="reset-password-form">
                             <input type="hidden" name="action" value="reset_student_password">
@@ -779,21 +902,19 @@ if ($result) {
                             <button type="submit" class="btn btn-outline-navy btn-sm">
                               Reset Password
                             </button>
-
                           </form>
-
-                          <button type="button" class="btn btn-outline-navy btn-sm">
-                            Nonaktifkan
-                          </button>
                         </td>
                       </tr>
                     <?php endforeach; ?>
+
                   <?php endif; ?>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
+
+        <!-- Manajemen Akun Kasir -->
         <div class="spp-gap" id="kasir-manager">
           <div class="section-head">
             <div class="section-head__text">
@@ -808,7 +929,9 @@ if ($result) {
           <div class="spp-card">
             <h3>Tambah Akun Kasir</h3>
 
-            <form class="spp-form" method="post" data-backend="pending">
+            <form class="spp-form" method="post">
+              <input type="hidden" name="action" value="create_kasir">
+
               <div class="form-field">
                 <label for="k-nama">Nama lengkap</label>
                 <input type="text" id="k-nama" name="nama" placeholder="Nama petugas kasir" required />
@@ -823,6 +946,51 @@ if ($result) {
                 Buat Akun Kasir
               </button>
             </form>
+
+            <?php if ($kasirSuccess): ?>
+              <div id="sw-cred" class="spp-gap spp-row">
+                <div class="spp-card">
+                  <strong>
+                    Akun kasir berhasil dibuat untuk
+                    <?= htmlspecialchars($kasirSuccess['nama']); ?>
+                  </strong>
+
+                  <div class="info-list__row">
+                    <dt>Email</dt>
+                    <dd><?= htmlspecialchars($kasirSuccess['email']); ?></dd>
+                  </div>
+
+                  <div class="info-list__row">
+                    <dt>Password</dt>
+                    <dd>
+                      <code><?= htmlspecialchars($kasirSuccess['password']); ?></code>
+                    </dd>
+                  </div>
+                  </dl>
+
+                  <p class="form-help">
+                    Catat dan berikan informasi login ini kepada kasir.
+                    Password hanya ditampilkan pada hasil pembuatan akun ini.
+                  </p>
+                </div>
+              </div>
+            <?php endif; ?>
+            <form class="spp-row spp-gap" role="search" method="get">
+              <label class="visually-hidden" for="sw-q">Cari siswa</label>
+
+              <input type="search" id="sw-q" name="kasir_q" placeholder="Cari nama / email"
+                value="<?= htmlspecialchars($kasirSearch); ?>" />
+
+              <button type="submit" class="btn btn-primary btn-sm">
+                Cari
+              </button>
+
+              <?php if ($kasirSearch !== ''): ?>
+                <a href="admin-spp.php#siswa-manager" class="btn btn-outline-navy btn-sm">
+                  Reset
+                </a>
+              <?php endif; ?>
+            </form>
           </div>
 
           <div class="spp-gap">
@@ -831,38 +999,56 @@ if ($result) {
                 <caption class="visually-hidden">
                   Daftar akun kasir
                 </caption>
+
                 <thead>
                   <tr>
                     <th>Nama</th>
                     <th>Email</th>
-                    <th>Status</th>
                     <th>Aksi</th>
                   </tr>
                 </thead>
+
                 <tbody>
-                  <tr>
-                    <td data-label="Nama">Kasir Contoh</td>
-                    <td data-label="Email">kasir@contoh.com</td>
-                    <td data-label="Status">
-                      <span class="spp-badge spp-badge--paid">Aktif</span>
-                    </td>
-                    <td data-label="Aksi">
-                      <button type="button" class="btn btn-outline-navy btn-sm" data-action="kasir-edit">
-                        Edit
-                      </button>
-                      <button type="button" class="btn btn-outline-navy btn-sm" data-action="kasir-reset">
-                        Reset Password
-                      </button>
-                      <button type="button" class="btn btn-outline-navy btn-sm" data-action="kasir-toggle">
-                        Nonaktifkan
-                      </button>
-                    </td>
-                  </tr>
+                  <?php if (empty($kasirAccounts)): ?>
+
+                    <tr>
+                      <td colspan="6">
+                        <?= $kasirSearch !== '' ? 'Kasir tidak ditemukan.' : 'Belum ada akun siswa.'; ?>
+                      </td>
+                    </tr>
+
+                  <?php else: ?>
+
+                    <?php foreach ($kasirAccounts as $account): ?>
+                      <tr>
+                        <td data-label="Nama">
+                          <?= htmlspecialchars($account['name']); ?>
+                        </td>
+
+                        <td data-label="Email">
+                          <?= htmlspecialchars($account['email']); ?>
+                        </td>
+
+                        <td data-label="Aksi">
+                          <form method="post" class="reset-password-form">
+                            <input type="hidden" name="action" value="reset_student_password">
+                            <input type="hidden" name="user_id" value="<?= (int) $account['user_id']; ?>">
+
+                            <button type="submit" class="btn btn-outline-navy btn-sm">
+                              Reset Password
+                            </button>
+                          </form>
+                        </td>
+                      </tr>
+                    <?php endforeach; ?>
+
+                  <?php endif; ?>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
+
       </div>
     </section>
   </main>
@@ -875,6 +1061,7 @@ if ($result) {
           Mencetak generasi muda yang kompeten, berkarakter, profesional, dan
           siap menghadapi tantangan industri global.
         </p>
+
         <div class="footer-social">
           <a href="#" aria-label="Website resmi">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -882,6 +1069,7 @@ if ($result) {
               <path d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18z" stroke="currentColor" stroke-width="1.6" />
             </svg>
           </a>
+
           <a href="#" aria-label="Bagikan">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <circle cx="18" cy="5" r="2.4" stroke="currentColor" stroke-width="1.6" />
@@ -892,6 +1080,7 @@ if ($result) {
           </a>
         </div>
       </div>
+
       <div class="footer-col">
         <h3>Tautan Cepat</h3>
         <ul>
@@ -900,6 +1089,7 @@ if ($result) {
           <li><a href="../../agenda.html">Agenda</a></li>
         </ul>
       </div>
+
       <div class="footer-col">
         <h3>Informasi</h3>
         <ul>
@@ -908,6 +1098,7 @@ if ($result) {
           <li><a href="../../cek-kelulusan.html">Pendaftaran</a></li>
         </ul>
       </div>
+
       <div class="footer-col footer-contact">
         <h3>Kontak Kami</h3>
         <ul>
@@ -918,6 +1109,7 @@ if ($result) {
             </svg>
             <span>Jl. Raya Sukorejo No. 1, Pasuruan, Jawa Timur</span>
           </li>
+
           <li>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2-1-4-3-5-5l2-2-3-6-4 3z" stroke="currentColor"
@@ -925,6 +1117,7 @@ if ($result) {
             </svg>
             <span>(0343) 611234</span>
           </li>
+
           <li>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6" />
@@ -935,6 +1128,7 @@ if ($result) {
         </ul>
       </div>
     </div>
+
     <div class="footer-bottom">
       &copy; 2026 SMKN 1 SUKOREJO. All rights reserved.
     </div>
@@ -948,7 +1142,6 @@ if ($result) {
         </svg>
       </button>
 
-      <!-- Login panel -->
       <div class="auth-panel is-active" id="auth-panel-login">
         <h2 class="auth-modal__title" id="auth-modal-title">Masuk ke Akun</h2>
         <p class="auth-modal__subtitle">

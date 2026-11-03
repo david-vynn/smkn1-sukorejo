@@ -37,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'kasir':
                 header('Location: spp/kasir-spp.php');
                 exit;
-
             case 'siswa':
                 header('Location: spp/spp.php');
                 exit;
