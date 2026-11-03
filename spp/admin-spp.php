@@ -359,6 +359,77 @@ if ($result) {
 
 mysqli_stmt_close($stmt);
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset_kasir_password') {
+
+  $userId = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
+
+  if (!$userId || $userId <= 0) {
+    $errors[] = 'ID akun tidak valid.';
+  }
+
+  if (empty($errors)) {
+    $stmt = mysqli_prepare(
+      $conn,
+      "SELECT id FROM users
+       WHERE id = ? AND role = 'kasir'
+       LIMIT 1"
+    );
+
+    mysqli_stmt_bind_param($stmt, 'i', $userId);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    $account = mysqli_fetch_assoc($result);
+
+    mysqli_stmt_close($stmt);
+
+    if (!$account) {
+      $errors[] = 'Akun kasir tidak ditemukan.';
+    }
+
+    if (empty($errors)) {
+      $characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      $randomPart = '';
+
+      for ($i = 0; $i < 6; $i++) {
+        $randomPart .= $characters[random_int(0, strlen($characters) - 1)];
+      }
+
+      $temporaryPassword = 'SPP-' . $randomPart;
+      $hashedPassword = password_hash($temporaryPassword, PASSWORD_DEFAULT);
+
+      $stmt = mysqli_prepare(
+        $conn,
+        "UPDATE users
+         SET password = ?
+         WHERE id = ? AND role = 'siswa'"
+      );
+
+      mysqli_stmt_bind_param(
+        $stmt,
+        'si',
+        $hashedPassword,
+        $userId
+      );
+
+      $executeResult = mysqli_stmt_execute($stmt);
+      $affectedRows = mysqli_stmt_affected_rows($stmt);
+
+      mysqli_stmt_close($stmt);
+
+      if ($executeResult && $affectedRows > 0) {
+        $resetSuccess = [
+          'password' => $temporaryPassword
+        ];
+      } else {
+        $errors[] = 'Password gagal diperbarui.';
+      }
+    }
+  }
+}
+
+
+
 ?>
 
 <!doctype html>
@@ -1017,7 +1088,7 @@ mysqli_stmt_close($stmt);
 
                         <td data-label="Aksi">
                           <form method="post" class="reset-password-form">
-                            <input type="hidden" name="action" value="reset_student_password">
+                            <input type="hidden" name="action" value="reset_kasir_password">
                             <input type="hidden" name="user_id" value="<?= (int) $account['user_id']; ?>">
 
                             <button type="submit" class="btn btn-outline-navy btn-sm">
