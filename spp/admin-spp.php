@@ -428,7 +428,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset
   }
 }
 
+$classes = [];
 
+$sql = "SELECT id, class_name FROM classes ORDER BY FIELD(grade, 'X','XI','XII'), major_id, class_number";
+
+$stmt = mysqli_query($conn, $sql);
+
+while ($row = mysqli_fetch_assoc($stmt)) {
+  $classes[] = $row;
+}
 
 ?>
 
@@ -588,13 +596,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset
 
             <form class="spp-form" method="post" data-backend="pending">
               <div class="form-field">
+
                 <label for="a-kelas">Kelas</label>
                 <select id="a-kelas" name="kelas">
                   <option value="">Semua kelas</option>
-                  <option value="X RPL 1">X RPL 1</option>
-                  <option value="XI RPL 1">XI RPL 1</option>
-                  <option value="XII RPL 1">XII RPL 1</option>
+
+                  <?php foreach ($classes as $class): ?>
+                    <option value="<?= $class['id'] ?>">
+                      <?= htmlspecialchars($class['class_name']) ?>
+                    </option>
+                  <?php endforeach; ?>
                 </select>
+
               </div>
 
               <div class="form-field">
