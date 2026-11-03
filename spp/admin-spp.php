@@ -16,18 +16,18 @@ require_once __DIR__ . '/../database/config.php';
 
 $errors = [];
 $studentSuccess = null;
-$kasirSuccess = null;
+$tariffSuccess = null;
 $resetSuccess = null;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acton'] ?? '' === 'save_tariffs')) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '' === 'save_tariffs')) {
   $tariffs = [
-    'X'=> trim($_POST['tarif_x'] ?? ''),
-    'XI'=> trim($_POST['tarif_xi'] ?? ''),
-    'XII'=> trim($_POST['tarif_xii'] ?? ''),
+    'X' => trim($_POST['tarif_x'] ?? ''),
+    'XI' => trim($_POST['tarif_xi'] ?? ''),
+    'XII' => trim($_POST['tarif_xii'] ?? ''),
   ];
 
   foreach ($tariffs as $grade => $amount) {
-    if (!is_numeric($amunt) || (float) $amunt < 0) {
+    if (!is_numeric($amount) || (float) $amount < 0) {
       $errors[] = "Tarif kelas {$grade} tidak valid.";
     }
   }
@@ -36,12 +36,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acton'] ?? '' === 'save_ta
     mysqli_begin_transaction($conn);
 
     try {
-      $stmt = mysqli_prepare($conn, 'INSERT INTO spp_tariffs (grade, amounts) VALUES (?, ?) ON DUPLICATE KEY UPDATE amount = VALUES(amount)');
+      $stmt = mysqli_prepare($conn, 'INSERT INTO spp_tariffs (grade, amount) VALUES (?, ?) ON DUPLICATE KEY UPDATE amount = VALUES(amount)');
 
       foreach ($tariffs as $grade => $amount) {
         $amount = (float) $amount;
 
-        mysqli_stmt_bind_param( $stmt,'sd', $grade, $amunt);
+        mysqli_stmt_bind_param($stmt, 'sd', $grade, $amount);
 
         mysqli_stmt_execute($stmt);
 
@@ -49,10 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acton'] ?? '' === 'save_ta
         mysqli_commit($conn);
 
         $tariffSuccess = 'Tarif SPP berhasil diperbarui.';
-      } 
+      }
     } catch (Throwable $e) {
-        mysqli_rollback($conn);
-        $errors[] = 'Gaga menyimpan tarif SPP.';
+      mysqli_rollback($conn);
+      $errors[] = 'Gaga menyimpan tarif SPP.';
     }
   }
 }
@@ -63,10 +63,10 @@ $tariffs = [
   'XII' => 0
 ];
 
-$result = mysqli_query($conn, 'SELECT grade, amount FROM spp_tarrifs');
+$result = mysqli_query($conn, 'SELECT grade, amount FROM spp_tariffs');
 
 while ($row = mysqli_fetch_assoc($result)) {
-
+  $tariffs[$row['grade']] = $row['amount'];
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'create_student') {
@@ -571,6 +571,13 @@ while ($row = mysqli_fetch_assoc($stmt)) {
               <strong><?= htmlspecialchars($studentSuccess['nama']); ?></strong>.
             </p>
           <?php endif; ?>
+
+          <?php if ($tariffSuccess): ?>
+            <p class="form-hwlp">
+              <?php htmlspecialchars($tariffSuccess); ?>
+            </p>
+          <?php endif; ?>
+          
         </div>
 
         <div class="spp-stats">
@@ -614,27 +621,30 @@ while ($row = mysqli_fetch_assoc($stmt)) {
           <div class="spp-card">
             <h3>Pengaturan Tarif SPP</h3>
 
-            <form class="spp-form" method="post" >
-              <div class="form-field">
-                <input type="hidden" name="action" value="save_tariffs">
+            <form class="spp-form" method="post">
+              <input type="hidden" name="action" value="save_tariffs">
 
+              <div class="form-field">
                 <label for="a-year">Tahun Ajaran</label>
-                <input type="text" id="a-year" name="year" value="2026/2027" />
+                <input type="text" id="a-year" value="2026/2027" readonly>
               </div>
 
               <div class="form-field">
                 <label for="tarif-x">Tarif Kelas X</label>
-                <input type="number" id="tarif-x" name="tarif_x" value="150000" min="0" />
+                <input type="number" id="tarif-x" name="tarif_x"
+                  value="<?= htmlspecialchars((string) $tariffs['X']); ?>" min="0" step="0.01" required>
               </div>
 
               <div class="form-field">
                 <label for="tarif-xi">Tarif Kelas XI</label>
-                <input type="number" id="tarif-xi" name="tarif_xi" value="175000" min="0" />
+                <input type="number" id="tarif-xi" name="tarif_xi"
+                  value="<?= htmlspecialchars((string) $tariffs['XI']); ?>" min="0" step="0.01" required>
               </div>
 
               <div class="form-field">
                 <label for="tarif-xii">Tarif Kelas XII</label>
-                <input type="number" id="tarif-xii" name="tarif_xii" value="200000" min="0" />
+                <input type="number" id="tarif-xii" name="tarif_xii"
+                  value="<?= htmlspecialchars((string) $tariffs['XII']); ?>" min="0" step="0.01" required>
               </div>
 
               <button type="submit" class="btn btn-primary btn-sm">
