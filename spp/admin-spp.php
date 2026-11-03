@@ -19,42 +19,216 @@ $studentSuccess = null;
 $tariffSuccess = null;
 $resetSuccess = null;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['action'] ?? '') === 'save_tariffs')) {
-  $tariffs = [
-    'X' => trim($_POST['tarif_x'] ?? ''),
-    'XI' => trim($_POST['tarif_xi'] ?? ''),
-    'XII' => trim($_POST['tarif_xii'] ?? ''),
-  ];
+// Ambil tahun ajaran yg sedang aktif
+$sql = '
+  SELECT ID, name, start_date, end_date FROM academic_years WHERE is_current = 1 AND status = "active" LIMIT 1
+';
 
-  foreach ($tariffs as $grade => $amount) {
-    if (!is_numeric($amount) || (float) $amount < 0) {
-      $errors[] = "Tarif kelas {$grade} tidak valid.";
+$result = mysqli_query($conn, $sql);
+
+$academicYear = mysqli_fetch_assoc($result);
+
+if (!$academicYear) {
+  $errors[] = 'Tahun ajaran tidak ditemukan';
+}
+
+$periods = [];
+
+$selectedMonth = $_POST['month'] ?? 'all';
+
+if ($academicYear) {
+  $academicYearStart = new DateTime($academicYear['start_date']);
+  $academicYearEnd = new DateTime($academicYear['end_date']);
+
+  $today = new DateTime('today');
+
+  $periodEnd = clone $academicYearEnd;
+  $periodEnd->modify('First day of this month');
+
+  if ($selectedMonth === 'all') {
+
+    // Mulai dari bulan sekarang
+    $periodStart = clone $today;
+    $periodStart->modify('First day of this month');
+
+    // Pastikan tidak melewati awal tahun ajaran
+    if ($periodStart < $academicYearStart) {
+      $periodStart = clone $academicYearStart;
+      $periodStart->modify('First day of this month');
+    }
+
+    // Batas akhir tahun ajaran
+
+    // Masukkan semua bulan ke dalam array
+    while ($periodStart <= $periodEnd) {
+
+      $periods[] = [
+        'month' => (int) $periodStart->Format('n'),
+        'year' => (int) $periodStart->Format('Y'),
+      ];
+
+      $periodStart->modify('+1 month');
+
+    }
+  } else {
+
+    // Validasi pilihan bulan
+    $monthNumber = filter_var($selectedMonth, FILTER_VALIDATE_INT);
+
+    if ($monthNumber === false || $monthNumber < 1 || $monthNumber > 12) {
+      $errors[] = 'Pilihan bulan tidak valid';
+    } else {
+
+      // Cari tahun yang sesuai dengan bulan pilihan
+      $periodCursor = clone $academicYearStart;
+      $periodCursor->modify('First day of this month');
+
+      while ($periodCursor <= $periodEnd) {
+
+        if ((int) $periodCursor->Format('n') === $monthNumber) {
+          $periods[] = [
+            'month' => $monthNumber,
+            'year' => (int) $periodCursor->Format("Y"),
+          ];
+
+          break;
+        }
+
+        $periodCursor->modify("+1 month");
+      }
+
+      if (empty($periods)) {
+        $errors[] = "Bulan tidak ditemukan dalam tahun ajaran aktif";
+
+      }
+
     }
   }
 
-  if (empty($errors)) {
-    mysqli_begin_transaction($conn);
+  $student = [];
 
-    try {
-      $stmt = mysqli_prepare($conn, 'INSERT INTO spp_tariffs (grade, amount) VALUES (?, ?) ON DUPLICATE KEY UPDATE amount = VALUES(amount)');
+  $sql = '
+    SELECT
+      s.id AS student_id,
+      s.nisn,
+      s.nama,
+      c.grade,
+      c.class_name,
+      t.amount AS tariff_amount
+    FROM students s
+    INNER JOIN classes c
+      ON c.id = s.class_id
+    LEFT JOIN spp_tariffs t
+      ON t.grade = c.grade
+    ORDER BY c.grade, c.class_name, s.nama 
+  ';
 
-      foreach ($tariffs as $grade => $amount) {
-        $amount = (float) $amount;
 
-        mysqli_stmt_bind_param($stmt, 'sd', $grade, $amount);
+  if ($academicYear && !empty($periods) && empty($errors)) {
+    $studentResult = mysqli_query($conn, $sql);
 
-        mysqli_stmt_execute($stmt);
+    if (!$studentResult) {
+      $errors[] = 'Gagal mengambil data siswa';
+    } else {
+      while ($student = mysqli_fetch_assoc($studentResult)) {
+
+        if ($student['tariff_amount'] === null) {
+          $errors[] = 'Tarif SPP untuk kelas ' . $student['grade'] . 'belum tersedia';
+          continue;
+        }
+
+        $students[] = $student;
+
+
+      }
+    }
+  }
+
+  $totalStudents = count($students);
+  $totalPeriods = count($periods);
+
+  $totalInvoices = $totalStudents * $totalPeriods;
+
+  $existingInvoices = [];
+
+  $sql = '
+    SELECT
+      student_id,
+      period_month,
+      period_year
+    FROM spp_invoices
+    WHERE academic_year_id = ?  
+  ';
+
+  $stmt = mysqli_prepare($conn, $sql);
+
+  if (!$stmt) {
+    $errors[] = 'Gagal menyiapkan pengecekan tagihan';
+  } else {
+    echo '<pre>';
+    var_dump($academicYear);
+    echo '<pre>';
+
+    mysqli_stmt_bind_param($stmt, 'i', $academicYear['ID']);
+
+    if (!mysqli_stmt_execute($stmt)) {
+      $errors[] = 'Gagal mengambil tagihan yang sudah ada';
+    } else {
+      mysqli_stmt_bind_result(
+        $stmt,
+        $existingStudentId,
+        $existingMonth,
+        $existingYear
+      );
+
+      while (mysqli_stmt_fetch($stmt)) {
+        $key = $existingStudentId . '-' . $existingMonth . '-' . $existingYear;
+
+        $existingInvoices[$key] = true;
+      }
+    }
+
+    mysqli_stmt_close($stmt);
+  }
+
+  if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['action'] ?? '') === 'save_tariffs')) {
+    $tariffs = [
+      'X' => trim($_POST['tarif_x'] ?? ''),
+      'XI' => trim($_POST['tarif_xi'] ?? ''),
+      'XII' => trim($_POST['tarif_xii'] ?? ''),
+    ];
+
+    foreach ($tariffs as $grade => $amount) {
+      if (!is_numeric($amount) || (float) $amount < 0) {
+        $errors[] = "Tarif kelas {$grade} tidak valid.";
+      }
+    }
+
+    if (empty($errors)) {
+      mysqli_begin_transaction($conn);
+
+      try {
+        $stmt = mysqli_prepare($conn, 'INSERT INTO spp_tariffs (grade, amount) VALUES (?, ?) ON DUPLICATE KEY UPDATE amount = VALUES(amount)');
+
+        foreach ($tariffs as $grade => $amount) {
+          $amount = (float) $amount;
+
+          mysqli_stmt_bind_param($stmt, 'sd', $grade, $amount);
+
+          mysqli_stmt_execute($stmt);
 
         }
 
-      mysqli_stmt_close($stmt);
-      mysqli_commit($conn);
+        mysqli_stmt_close($stmt);
+        mysqli_commit($conn);
 
-      $tariffSuccess = 'Tarif SPP berhasil diperbarui.';
-    } catch (Throwable $e) {
-      mysqli_rollback($conn);
-      $errors[] = 'Gaga menyimpan tarif SPP.';
+        $tariffSuccess = 'Tarif SPP berhasil diperbarui.';
+      } catch (Throwable $e) {
+        mysqli_rollback($conn);
+        $errors[] = 'Gaga menyimpan tarif SPP.';
+      }
     }
+
   }
 }
 
@@ -578,7 +752,7 @@ while ($row = mysqli_fetch_assoc($stmt)) {
               <?php htmlspecialchars($tariffSuccess); ?>
             </p>
           <?php endif; ?>
-          
+
         </div>
 
         <div class="spp-stats">
@@ -632,8 +806,8 @@ while ($row = mysqli_fetch_assoc($stmt)) {
 
               <div class="form-field">
                 <label for="tarif-x">Tarif Kelas X</label>
-                <input type="number" id="tarif-x" name="tarif_x"
-                  value="<?= htmlspecialchars((int) $tariffs['X']); ?>" min="1" step="1" required>
+                <input type="number" id="tarif-x" name="tarif_x" value="<?= htmlspecialchars((int) $tariffs['X']); ?>"
+                  min="1" step="1" required>
               </div>
 
               <div class="form-field">
@@ -657,26 +831,12 @@ while ($row = mysqli_fetch_assoc($stmt)) {
           <div class="spp-card">
             <h3>Generate Tagihan (2026/2027)</h3>
 
-            <form class="spp-form" method="post" data-backend="pending">
-              <div class="form-field">
-
-                <label for="a-kelas">Kelas</label>
-                <select id="a-kelas" name="kelas">
-                  <option value="">Semua kelas</option>
-
-                  <?php foreach ($classes as $class): ?>
-                    <option value="<?= $class['id'] ?>">
-                      <?= htmlspecialchars($class['class_name']) ?>
-                    </option>
-                  <?php endforeach; ?>
-                </select>
-
-              </div>
+            <form class="spp-form" method="post">
 
               <div class="form-field">
                 <label for="a-bln">Bulan</label>
                 <select id="a-bln" name="month">
-                  <option value="all">Seluruh tahun ajaran</option>
+                  <option value="all">Semua Bulan</option>
                   <option value="7">Juli</option>
                   <option value="8">Agustus</option>
                   <option value="9">September</option>
@@ -701,8 +861,8 @@ while ($row = mysqli_fetch_assoc($stmt)) {
               </div>
 
               <div class="form-field">
-                <label for="a-gdue">Jatuh tempo tanggal (1-28)</label>
-                <input type="number" id="a-gdue" name="due_day" value="10" min="1" max="28" />
+                <label for="a-gdue">Jatuh tempo tanggal (1-31)</label>
+                <input type="number" id="a-gdue" name="due_day" value="31" min="1" max="31" />
               </div>
 
               <button type="submit" class="btn btn-primary btn-sm">
