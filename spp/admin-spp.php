@@ -105,7 +105,7 @@ if ($academicYear) {
     }
   }
 
-  $student = [];
+  $students = [];
 
   $sql = '
     SELECT
@@ -147,6 +147,8 @@ if ($academicYear) {
   $totalStudents = count($students);
   $totalPeriods = count($periods);
 
+  $dueDay = (int) ($_POST['due_day'] ?? 31);
+
   $totalInvoices = $totalStudents * $totalPeriods;
 
   $existingInvoices = [];
@@ -165,9 +167,6 @@ if ($academicYear) {
   if (!$stmt) {
     $errors[] = 'Gagal menyiapkan pengecekan tagihan';
   } else {
-    echo '<pre>';
-    var_dump($academicYear);
-    echo '<pre>';
 
     mysqli_stmt_bind_param($stmt, 'i', $academicYear['ID']);
 
@@ -190,6 +189,123 @@ if ($academicYear) {
 
     mysqli_stmt_close($stmt);
   }
+
+  $newInvoices = [];
+  $skippedInvoices = 0;
+
+  foreach ($students as $student) {
+    foreach ($periods as $period) {
+
+      $key = $student['student_id'] . '-' . $period['month'] . '-' . $period['year'];
+
+      if (isset($existingInvoices[$key])) {
+        $skippedInvoices++;
+        continue;
+      }
+
+      $year = (int) $period['year'];
+      $month = (int) $period['month'];
+
+      $lastDay = (int) (new DateTime(
+        sprintf('%04d-%02d-01', $year, $month)
+      ))->format('t');
+
+      $actualDueDay = min($dueDay, $lastDay);
+
+      $dueDate = sprintf(
+        '%04d-%02d-%02d',
+        $year,
+        $month,
+        $actualDueDay
+      );
+
+      $newInvoices[] = [
+        'student_id' => (int) $student['student_id'],
+        'academic_year_id' => (int) $academicYear['ID'],
+        'period_month' => (int) $period['month'],
+        'period_year' => (int) $period['year'],
+        'amount' => (int) $student['tariff_amount'],
+        'due_date' => $dueDate
+      ];
+
+    }
+
+  }
+
+  $totalNewInvoices = count($newInvoices);
+
+  if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['action'] ?? '') === 'generate-invoices') && empty($errors)) {
+
+
+    if (empty($newInvoices)) {
+      $successMessage = 'Tidak ada tagihan baru yang perlu dibuat.';
+    } else {
+
+      mysqli_begin_transaction($conn);
+
+      try {
+        $sql = '
+        INSERT INTO spp_invoices (
+          student_id,
+          academic_year_id,
+          period_month,
+          period_year,
+          due_date,
+          amount
+        ) VALUES (?, ?, ?, ?, ?, ?)
+      ';
+
+        $stmt = mysqli_prepare($conn, $sql);
+
+        if (!$stmt) {
+          throw new Exception('Gagal menyiapkan query INSERT');
+        }
+
+        foreach ($newInvoices as $invoice) {
+
+          $studentId = (int) $invoice['student_id'];
+          $academicYearId = (int) $invoice['academic_year_id'];
+          $periodMonth = (int) $invoice['period_month'];
+          $periodYear = (int) $invoice['period_year'];
+          $dueDate = $invoice['due_date'];
+          $amount = (float) $invoice['amount'];
+
+          mysqli_stmt_bind_param(
+            $stmt,
+            'iiiisd',
+            $studentId,
+            $academicYearId,
+            $periodMonth,
+            $periodYear,
+            $dueDate,
+            $amount
+          );
+
+          if (!mysqli_stmt_execute($stmt)) {
+            throw new Exception('Gagal menyimpan tagihan.');
+          }
+
+        }
+
+
+        mysqli_stmt_close($stmt);
+        mysqli_commit($conn);
+
+        $successMessage = "Berhasil membuat {$totalNewInvoices} tagihan. {$skippedInvoices} tagihan dilewati karena sudah ada.";
+
+      } catch (Throwable $e) {
+        mysqli_rollback($conn);
+
+        if (isset($stmt) && $stmt) {
+          mysqli_stmt_close($stmt);
+        }
+
+        $errors[] = 'Gagal membuat tagihan SPP: ' . $e->getMessage();
+      }
+
+    }
+  }
+
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['action'] ?? '') === 'save_tariffs')) {
     $tariffs = [
@@ -832,6 +948,7 @@ while ($row = mysqli_fetch_assoc($stmt)) {
             <h3>Generate Tagihan (2026/2027)</h3>
 
             <form class="spp-form" method="post">
+              <input type="hidden" name="action" value="generate-invoices">
 
               <div class="form-field">
                 <label for="a-bln">Bulan</label>
@@ -869,6 +986,12 @@ while ($row = mysqli_fetch_assoc($stmt)) {
                 Generate
               </button>
             </form>
+
+            <?php if (!empty($successMessage)): ?>
+              <div class="alert alert-success">
+                <?= htmlspecialchars($successMessage) ?>
+              </div>
+            <?php endif; ?>
           </div>
         </div>
 
