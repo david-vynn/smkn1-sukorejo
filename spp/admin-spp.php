@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['action'] ?? '') === 'save
         mysqli_stmt_execute($stmt);
 
         }
-        
+
       mysqli_stmt_close($stmt);
       mysqli_commit($conn);
 
@@ -633,19 +633,19 @@ while ($row = mysqli_fetch_assoc($stmt)) {
               <div class="form-field">
                 <label for="tarif-x">Tarif Kelas X</label>
                 <input type="number" id="tarif-x" name="tarif_x"
-                  value="<?= htmlspecialchars((string) $tariffs['X']); ?>" min="0" step="0.01" required>
+                  value="<?= htmlspecialchars((int) $tariffs['X']); ?>" min="1" step="1" required>
               </div>
 
               <div class="form-field">
                 <label for="tarif-xi">Tarif Kelas XI</label>
                 <input type="number" id="tarif-xi" name="tarif_xi"
-                  value="<?= htmlspecialchars((string) $tariffs['XI']); ?>" min="0" step="0.01" required>
+                  value="<?= htmlspecialchars((int) $tariffs['XI']); ?>" min="1" step="1" required>
               </div>
 
               <div class="form-field">
                 <label for="tarif-xii">Tarif Kelas XII</label>
                 <input type="number" id="tarif-xii" name="tarif_xii"
-                  value="<?= htmlspecialchars((string) $tariffs['XII']); ?>" min="0" step="0.01" required>
+                  value="<?= htmlspecialchars((int) $tariffs['XII']); ?>" min="1" step="1" required>
               </div>
 
               <button type="submit" class="btn btn-primary btn-sm">
