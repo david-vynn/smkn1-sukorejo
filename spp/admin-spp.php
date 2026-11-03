@@ -395,14 +395,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset
         $randomPart .= $characters[random_int(0, strlen($characters) - 1)];
       }
 
-      $temporaryPassword = 'SPP-' . $randomPart;
+      $temporaryPassword = 'KSR-' . $randomPart;
       $hashedPassword = password_hash($temporaryPassword, PASSWORD_DEFAULT);
 
       $stmt = mysqli_prepare(
         $conn,
         "UPDATE users
          SET password = ?
-         WHERE id = ? AND role = 'siswa'"
+         WHERE id = ? AND role = 'kasir'"
       );
 
       mysqli_stmt_bind_param(
@@ -471,7 +471,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset
         <a href="../contact.html">Kontak</a>
       </nav>
 
-      <div class="header-account user-chip_menu" >
+      <div class="header-account user-chip_menu">
         <a href="../logout.php" class="user-chip__logout">
           <span aria-hidden="true">&#128682;</span>
           Keluar
@@ -1048,65 +1048,88 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset
                 </a>
               <?php endif; ?>
             </form>
-          </div>
 
-          <div class="spp-gap">
-            <div class="table-wrap spp-table">
-              <table class="score-table">
-                <caption class="visually-hidden">
-                  Daftar akun kasir
-                </caption>
+            <div class="spp-gap">
 
-                <thead>
-                  <tr>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>Aksi</th>
-                  </tr>
-                </thead>
+              <?php if ($resetSuccess): ?>
+                <div class="spp-card">
+                  <strong>Password kasir berhasil di-reset!</strong>
 
-                <tbody>
-                  <?php if (empty($kasirAccounts)): ?>
+                  <dl class="info-list">
+                    <div class="info-list__row">
+                      <dt>Password baru</dt>
+                      <dd>
+                        <code><?= htmlspecialchars($resetSuccess['password']); ?></code>
+                      </dd>
+                    </div>
+                  </dl>
 
+                  <p class="form-help">
+                    Catat dan berikan password baru ini kepada kasir.
+                    Password hanya ditampilkan pada hasil reset ini.
+                  </p>
+                </div>
+              <?php endif; ?>
+
+            </div>
+
+            <div class="spp-gap">
+              <div class="table-wrap spp-table">
+                <table class="score-table">
+                  <caption class="visually-hidden">
+                    Daftar akun kasir
+                  </caption>
+
+                  <thead>
                     <tr>
-                      <td colspan="6">
-                        <?= $kasirSearch !== '' ? 'Kasir tidak ditemukan.' : 'Belum ada akun siswa.'; ?>
-                      </td>
+                      <th>Nama</th>
+                      <th>Email</th>
+                      <th>Aksi</th>
                     </tr>
+                  </thead>
 
-                  <?php else: ?>
+                  <tbody>
+                    <?php if (empty($kasirAccounts)): ?>
 
-                    <?php foreach ($kasirAccounts as $account): ?>
                       <tr>
-                        <td data-label="Nama">
-                          <?= htmlspecialchars($account['name']); ?>
-                        </td>
-
-                        <td data-label="Email">
-                          <?= htmlspecialchars($account['email']); ?>
-                        </td>
-
-                        <td data-label="Aksi">
-                          <form method="post" class="reset-password-form">
-                            <input type="hidden" name="action" value="reset_kasir_password">
-                            <input type="hidden" name="user_id" value="<?= (int) $account['user_id']; ?>">
-
-                            <button type="submit" class="btn btn-outline-navy btn-sm">
-                              Reset Password
-                            </button>
-                          </form>
+                        <td colspan="6">
+                          <?= $kasirSearch !== '' ? 'Kasir tidak ditemukan.' : 'Belum ada akun siswa.'; ?>
                         </td>
                       </tr>
-                    <?php endforeach; ?>
 
-                  <?php endif; ?>
-                </tbody>
-              </table>
+                    <?php else: ?>
+
+                      <?php foreach ($kasirAccounts as $account): ?>
+                        <tr>
+                          <td data-label="Nama">
+                            <?= htmlspecialchars($account['name']); ?>
+                          </td>
+
+                          <td data-label="Email">
+                            <?= htmlspecialchars($account['email']); ?>
+                          </td>
+
+                          <td data-label="Aksi">
+                            <form method="post" class="reset-password-form">
+                              <input type="hidden" name="action" value="reset_kasir_password">
+                              <input type="hidden" name="user_id" value="<?= (int) $account['user_id']; ?>">
+
+                              <button type="submit" class="btn btn-outline-navy btn-sm">
+                                Reset Password
+                              </button>
+                            </form>
+                          </td>
+                        </tr>
+                      <?php endforeach; ?>
+
+                    <?php endif; ?>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
 
-      </div>
+        </div>
     </section>
   </main>
 
