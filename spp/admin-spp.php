@@ -1100,12 +1100,12 @@ if (!$stmt) {
                         <?= htmlspecialchars($invoice['nama'])?><br />
                         <small>
                           <?= htmlspecialchars($invoice['nisn'])?><br />
-                          .
-                          <?= htmlspecialchars($invoice['grade'] . ' '. $invoice['class_name'])?><br />
+                          
+                          <?= htmlspecialchars($invoice['class_name'])?><br />
                         </small>
                       </td>
                       <td data-label="Bulan">
-                        <?= htmlspecialchars($invoice['period_month'] . ' ' . $invoice['period_year']) ?>
+                        <?= htmlspecialchars($invoice['period_month'] . '-' . $invoice['period_year']) ?>
                       </td>
                       <td data-label="Nominal">
                         Rp<?= number_format((float) $invoice['amount'], 0, ',', '.') ?>
@@ -1124,7 +1124,7 @@ if (!$stmt) {
                           $status = $invoice['status'];
                           $statusLabels = $statusLabels[$status] ?? 'Tidak diketahui';
                         ?>
-                        <span class="spp-badge spp-badge--unpaid">
+                        <span class="spp-badge spp-badge--<?= htmlspecialchars($status) ?>">
                           <?= htmlspecialchars($statusLabels) ?>
                         </span>
                       </td>
