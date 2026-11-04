@@ -783,13 +783,13 @@ $sql = "
   UPDATE spp_invoices
   SET status = 'overdue'
   WHERE academic_year_id = ?
-    AND status = 'unpaid
+    AND status = 'unpaid'
     AND due_date < CURDATE()
 ";
 
 $stmt = mysqli_prepare($conn, $sql);
 
-if(!$stmt) {
+if (!$stmt) {
   $errors[] = "Gagal menyiapkan pembaruan status tagihan";
 } else {
   mysqli_stmt_bind_param($stmt, 'i', $academicYear['ID']);
@@ -799,6 +799,15 @@ if(!$stmt) {
   }
 
   mysqli_stmt_close($stmt);
+}
+
+$search = trim($_GET['q'] ?? '');
+$statusFilter = $_GET['status'] ?? '';
+
+$allowedStatuses = ['unpaid', 'overdue', 'paid'];
+
+if (!in_array($statusFilter, $allowedStatuses, true)) {
+  $statusFilter = '';
 }
 
 $invoices = [];
@@ -821,6 +830,15 @@ $sql = "
   INNER JOIN classes c
     ON c.id = s.class_id
   WHERE i.academic_year_id = ?
+    AND (
+      ? = ''
+      OR s.nama LIKE CONCAT('%', ?, '%')
+      OR s.nisn LIKE CONCAT('%', ?, '%')
+    )
+    AND (
+      ? = ''
+      OR i.status = ?
+    )
   ORDER BY
     i.period_year DESC,
     i.period_month,
@@ -834,7 +852,16 @@ $stmt = mysqli_prepare($conn, $sql);
 if (!$stmt) {
   $errors[] = "Gagal menyiapkan query daftar tagihan";
 } else {
-  mysqli_stmt_bind_param($stmt, 'i', $academicYear['ID']);
+  mysqli_stmt_bind_param(
+    $stmt,
+    'isssss',
+    $academicYear['ID'],
+    $search,
+    $search,
+    $search,
+    $statusFilter,
+    $statusFilter
+  );
 
   if (!mysqli_stmt_execute($stmt)) {
     $errors[] = 'Gagal mengambil daftar tagihan';
@@ -1075,7 +1102,7 @@ if (!$stmt) {
           </div>
         </div>
 
-        <form class="spp-row spp-gap" role="search" method="get" data-backend="pending">
+        <form class="spp-row spp-gap" role="search" method="get">
           <label class="visually-hidden" for="b-q">Cari nama / NISN</label>
           <input type="search" id="b-q" name="q" placeholder="Cari nama / NISN" />
 
@@ -1113,17 +1140,29 @@ if (!$stmt) {
 
                 <?php if (empty($invoices)): ?>
                   <tr>
-                    <td coldspan="5">Belum ada tagihan.</td>
+                    <td colspan="5">
+                      <?php if ($search !== ''): ?>
+                        Siswa atau tagihan tidak ditemukan.
+                      <?php elseif ($statusFilter === 'overdue'): ?>
+                        Tidak ada tagihan yang menunggak.
+                      <?php elseif ($statusFilter === 'unpaid'): ?>
+                        Tidak ada tagihan yang belum dibayar.
+                      <?php elseif ($statusFilter === 'paid'): ?>
+                        Belum ada tagihan yang lunas.
+                      <?php else: ?>
+                        Belum ada tagihan.
+                      <?php endif; ?>
+                    </td>
                   </tr>
                 <?php else: ?>
                   <?php foreach ($invoices as $invoice): ?>
                     <tr>
                       <td data-label="Siswa">
-                        <?= htmlspecialchars($invoice['nama'])?><br />
+                        <?= htmlspecialchars($invoice['nama']) ?><br />
                         <small>
-                          <?= htmlspecialchars($invoice['nisn'])?><br />
-                          
-                          <?= htmlspecialchars($invoice['class_name'])?><br />
+                          <?= htmlspecialchars($invoice['nisn']) ?><br />
+
+                          <?= htmlspecialchars($invoice['class_name']) ?><br />
                         </small>
                       </td>
                       <td data-label="Bulan">
@@ -1137,14 +1176,14 @@ if (!$stmt) {
                       </td>
                       <td data-label="Status">
                         <?php
-                          $statusLabels = [
-                            'unpaid' => 'Belum Bayar',
-                            'overdue' => 'Menunggak',
-                            'paid' => 'Lunas'
-                          ];
+                        $statusLabels = [
+                          'unpaid' => 'Belum Bayar',
+                          'overdue' => 'Menunggak',
+                          'paid' => 'Lunas'
+                        ];
 
-                          $status = $invoice['status'];
-                          $statusLabels = $statusLabels[$status] ?? 'Tidak diketahui';
+                        $status = $invoice['status'];
+                        $statusLabels = $statusLabels[$status] ?? 'Tidak diketahui';
                         ?>
                         <span class="spp-badge spp-badge--<?= htmlspecialchars($status) ?>">
                           <?= htmlspecialchars($statusLabels) ?>
@@ -1152,7 +1191,7 @@ if (!$stmt) {
                       </td>
                     </tr>
                   <?php endforeach; ?>
-                <?php endif; ?>  
+                <?php endif; ?>
               </tbody>
             </table>
           </div>
