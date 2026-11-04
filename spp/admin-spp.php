@@ -779,6 +779,54 @@ while ($row = mysqli_fetch_assoc($stmt)) {
   $classes[] = $row;
 }
 
+$invoices = [];
+
+$sql = "
+  SELECT  
+    i.id AS invoice_id,
+    s.nama,
+    s.nisn,
+    c.grade,
+    c.class_name,
+    i.period_month,
+    i.period_year,
+    i.amount,
+    i.due_date,
+    i.status
+  FROM spp_invoices i
+  INNER JOIN students s
+    ON s.id = i.student_id
+  INNER JOIN classes c
+    ON c.id = s.class_id
+  WHERE i.academic_year_id = ?
+  ORDER BY
+    i.period_year DESC,
+    i.period_month,
+    c.grade,
+    c.class_name,
+    s.nama
+";
+
+$stmt = mysqli_prepare($conn, $sql);
+
+if (!$stmt) {
+  $errors[] = "Gagal menyiapkan query daftar tagihan";
+} else {
+  mysqli_stmt_bind_param($stmt, 'i', $academicYear['ID']);
+
+  if (!mysqli_stmt_execute($stmt)) {
+    $errors[] = 'Gagal mengambil daftar tagihan';
+  } else {
+    $result = mysqli_stmt_get_result($stmt);
+
+    while ($row = mysqli_fetch_assoc($result)) {
+      $invoices[] = $row;
+    }
+  }
+
+  mysqli_stmt_close($stmt);
+}
+
 ?>
 
 <!doctype html>
@@ -1040,31 +1088,49 @@ while ($row = mysqli_fetch_assoc($stmt)) {
               </thead>
 
               <tbody>
-                <tr>
-                  <td data-label="Siswa">
-                    Siswa Contoh<br />
-                    <small>0000000001 · XI RPL 1</small>
-                  </td>
-                  <td data-label="Bulan">Oktober 2026</td>
-                  <td data-label="Nominal">Rp150.000</td>
-                  <td data-label="Jatuh Tempo">10 Okt 2026</td>
-                  <td data-label="Status">
-                    <span class="spp-badge spp-badge--unpaid">Belum Bayar</span>
-                  </td>
-                </tr>
 
-                <tr>
-                  <td data-label="Siswa">
-                    Siswa Contoh<br />
-                    <small>0000000001 · XI RPL 1</small>
-                  </td>
-                  <td data-label="Bulan">Juli 2026</td>
-                  <td data-label="Nominal">Rp150.000</td>
-                  <td data-label="Jatuh Tempo">10 Jul 2026</td>
-                  <td data-label="Status">
-                    <span class="spp-badge spp-badge--paid">Lunas</span>
-                  </td>
-                </tr>
+                <?php if (empty($invoices)): ?>
+                  <tr>
+                    <td coldspan="5">Belum ada tagihan.</td>
+                  </tr>
+                <?php else: ?>
+                  <?php foreach ($invoices as $invoice): ?>
+                    <tr>
+                      <td data-label="Siswa">
+                        <?= htmlspecialchars($invoice['nama'])?><br />
+                        <small>
+                          <?= htmlspecialchars($invoice['nisn'])?><br />
+                          .
+                          <?= htmlspecialchars($invoice['grade'] . ' '. $invoice['class_name'])?><br />
+                        </small>
+                      </td>
+                      <td data-label="Bulan">
+                        <?= htmlspecialchars($invoice['period_month'] . ' ' . $invoice['period_year']) ?>
+                      </td>
+                      <td data-label="Nominal">
+                        Rp<?= number_format((float) $invoice['amount'], 0, ',', '.') ?>
+                      </td>
+                      <td data-label="Jatuh Tempo">
+                        <?= date('d M Y', strtotime($invoice['due_date'])) ?>
+                      </td>
+                      <td data-label="Status">
+                        <?php
+                          $statusLabels = [
+                            'unpaid' => 'Belum Bayar',
+                            'overdue' => 'Menunggak',
+                            'paid' => 'Lunas'
+                          ];
+
+                          $status = $invoice['status'];
+                          $statusLabels = $statusLabels[$status] ?? 'Tidak diketahui';
+                        ?>
+                        <span class="spp-badge spp-badge--unpaid">
+                          <?= htmlspecialchars($statusLabels) ?>
+                        </span>
+                      </td>
+                    </tr>
+                  <?php endforeach; ?>
+                <?php endif; ?>  
               </tbody>
             </table>
           </div>
