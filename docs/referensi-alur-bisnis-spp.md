@@ -9,7 +9,7 @@ Cara mengimplementasikannya (struktur tabel, query, session) adalah keputusan An
 |Peran|Halaman UI|Boleh melakukan|
 |-|-|-|
 |Siswa (`user`)|`pages/spp/spp.html`|Melihat tagihan sendiri, mengajukan pembayaran online, membatalkan pengajuan yang masih menunggu, melihat riwayat dan bukti.|
-|Kasir (`kasir`)|`pages/spp/kasir-spp.html`|Mencari siswa, mencatat pembayaran langsung (termasuk tunai), menyetujui/menolak pengajuan online, melihat statistik harian/bulanan.|
+|Kasir (`kasir`)|`pages/spp/kasir-spp.php`|Mencari siswa, mencatat pembayaran langsung (termasuk tunai), menyetujui/menolak pengajuan online, melihat statistik harian/bulanan.|
 |Admin (`admin`)|`pages/spp/admin-spp.html`|Mengatur nominal dan tahun ajaran, membuat/mengubah tagihan, laporan + ekspor CSV, mengelola akun siswa.|
 
 Prinsip dari sistem lama: **peran dan identitas selalu ditentukan di server**, bukan dari

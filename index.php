@@ -60,7 +60,7 @@ $role = $_SESSION['role'] ?? '';
             <?php
             $dashboardUrl = match ($role) {
               'admin' => 'spp/admin-spp.php',
-              'kasir' => 'spp/kasir-spp.html',
+              'kasir' => 'spp/kasir-spp.php',
               'siswa' => 'spp/spp.html',
               default => null
             };

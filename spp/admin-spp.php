@@ -942,7 +942,7 @@ if (!$stmt) {
           placeholder untuk demonstrasi UI dan belum terhubung ke backend.
           Pratinjau peran:
           <a href="spp.html">Siswa</a> ·
-          <a href="kasir-spp.html">Kasir</a> ·
+          <a href="kasir-spp.php">Kasir</a> ·
           <a href="admin-spp.html">Admin</a>.
         </p>
 

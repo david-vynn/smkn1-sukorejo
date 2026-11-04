@@ -17,7 +17,7 @@ Font memakai Google Fonts, jadi tampilan terbaik saat ada internet.
 │   staf-pengajar.html, agenda.html, prestasi.html, contact.html   ← website profil
 ├── pages/spp/
 │   ├── spp.html          ← dashboard siswa
-│   ├── kasir-spp.html    ← dashboard kasir
+│   ├── kasir-spp.php    ← dashboard kasir
 │   └── admin-spp.html    ← dashboard admin (tagihan, laporan, data siswa)
 ├── css/   variables.css, reset.css, style.css, spp.css
 ├── js/    main.js, contact.js, script.js (modal login + menu akun), spp-ui.js

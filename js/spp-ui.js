@@ -138,4 +138,30 @@ billCheckboxes.forEach(function (checkbox) {
 
 hitungTotal();
 
+// Mengambil semua checkbox tagihan
+const billCheckboxes = document.querySelectorAll(
+  'input[name="bill_ids[]"]'
+);
+
+// Mengambil input total pembayaran
+const totalInput = document.getElementById('k-amt');
+
+// Fungsi menghitung total pembayaran
+function calculateTotal() {
+  let total = 0;
+
+  billCheckboxes.forEach((checkbox) => {
+    if (checkbox.checked) {
+      total += Number(checkbox.dataset.amount);
+    }
+  });
+
+  totalInput.value = 'Rp' + total.toLocaleString('id-ID');
+}
+
+// Menjalankan perhitungan ketika checkbox berubah
+billCheckboxes.forEach((checkbox) => {
+  checkbox.addEventListener('change', calculateTotal);
+});
+
 })();
