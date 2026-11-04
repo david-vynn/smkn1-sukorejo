@@ -779,6 +779,28 @@ while ($row = mysqli_fetch_assoc($stmt)) {
   $classes[] = $row;
 }
 
+$sql = "
+  UPDATE spp_invoices
+  SET status = 'overdue'
+  WHERE academic_year_id = ?
+    AND status = 'unpaid
+    AND due_date < CURDATE()
+";
+
+$stmt = mysqli_prepare($conn, $sql);
+
+if(!$stmt) {
+  $errors[] = "Gagal menyiapkan pembaruan status tagihan";
+} else {
+  mysqli_stmt_bind_param($stmt, 'i', $academicYear['ID']);
+
+  if (!mysqli_stmt_execute($stmt)) {
+    $errors[] = 'Gagal menjalankan status tagihan';
+  }
+
+  mysqli_stmt_close($stmt);
+}
+
 $invoices = [];
 
 $sql = "
