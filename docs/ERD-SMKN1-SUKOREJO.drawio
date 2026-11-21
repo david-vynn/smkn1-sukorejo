@@ -1,0 +1,236 @@
+<mxfile host="65bd71144e">
+    <diagram name="Page-1" id="07lbej7DG4haFKu2EnYf">
+        <mxGraphModel dx="1512" dy="1053" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" adaptiveColors="auto">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;strokeColor=none;fillColor=none;" value="ERD — Sistem Informasi Pembayaran SPP" vertex="1">
+                    <mxGeometry height="40" width="700" x="350" y="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="majors" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;horizontal=1;startSize=26;collapsible=0;html=1;fontSize=14;" value="majors" vertex="1">
+                    <mxGeometry height="130" width="220" x="40" y="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="majors_field0" parent="majors" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="PK id : int" vertex="1">
+                    <mxGeometry height="26" width="220" y="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="majors_field1" parent="majors" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="code : varchar(10) UNIQUE" vertex="1">
+                    <mxGeometry height="26" width="220" y="52" as="geometry"/>
+                </mxCell>
+                <mxCell id="majors_field2" parent="majors" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="name : varchar(100)" vertex="1">
+                    <mxGeometry height="26" width="220" y="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="majors_field3" parent="majors" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="created_at : timestamp" vertex="1">
+                    <mxGeometry height="26" width="220" y="104" as="geometry"/>
+                </mxCell>
+                <mxCell id="classes" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;horizontal=1;startSize=26;collapsible=0;html=1;fontSize=14;" value="classes" vertex="1">
+                    <mxGeometry height="156" width="220" x="330" y="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="classes_field0" parent="classes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="PK id : int" vertex="1">
+                    <mxGeometry height="26" width="220" y="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="classes_field1" parent="classes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="FK major_id : int" vertex="1">
+                    <mxGeometry height="26" width="220" y="52" as="geometry"/>
+                </mxCell>
+                <mxCell id="classes_field2" parent="classes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="grade : enum(X, XI, XII)" vertex="1">
+                    <mxGeometry height="26" width="220" y="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="classes_field3" parent="classes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="class_number : tinyint" vertex="1">
+                    <mxGeometry height="26" width="220" y="104" as="geometry"/>
+                </mxCell>
+                <mxCell id="classes_field4" parent="classes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="class_name : varchar(30) UNIQUE" vertex="1">
+                    <mxGeometry height="26" width="220" y="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="students" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;horizontal=1;startSize=26;collapsible=0;html=1;fontSize=14;" value="students" vertex="1">
+                    <mxGeometry height="182" width="220" x="620" y="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="students_field0" parent="students" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="PK id : int" vertex="1">
+                    <mxGeometry height="26" width="220" y="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="students_field1" parent="students" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="FK user_id : int NULL UNIQUE" vertex="1">
+                    <mxGeometry height="26" width="220" y="52" as="geometry"/>
+                </mxCell>
+                <mxCell id="students_field2" parent="students" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="FK class_id : int" vertex="1">
+                    <mxGeometry height="26" width="220" y="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="students_field3" parent="students" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="nisn : varchar(10) UNIQUE" vertex="1">
+                    <mxGeometry height="26" width="220" y="104" as="geometry"/>
+                </mxCell>
+                <mxCell id="students_field4" parent="students" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="nama : varchar(100)" vertex="1">
+                    <mxGeometry height="26" width="220" y="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="students_field5" parent="students" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="created_at : timestamp" vertex="1">
+                    <mxGeometry height="26" width="220" y="156" as="geometry"/>
+                </mxCell>
+                <mxCell id="spp_invoices" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;horizontal=1;startSize=26;collapsible=0;html=1;fontSize=14;" value="spp_invoices" vertex="1">
+                    <mxGeometry height="234" width="220" x="930" y="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="spp_invoices_field0" parent="spp_invoices" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="PK ID : int" vertex="1">
+                    <mxGeometry height="26" width="220" y="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="spp_invoices_field1" parent="spp_invoices" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="FK student_id : int" vertex="1">
+                    <mxGeometry height="26" width="220" y="52" as="geometry"/>
+                </mxCell>
+                <mxCell id="spp_invoices_field2" parent="spp_invoices" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="FK academic_year_id : int" vertex="1">
+                    <mxGeometry height="26" width="220" y="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="spp_invoices_field3" parent="spp_invoices" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="period_month : tinyint" vertex="1">
+                    <mxGeometry height="26" width="220" y="104" as="geometry"/>
+                </mxCell>
+                <mxCell id="spp_invoices_field4" parent="spp_invoices" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="period_year : year" vertex="1">
+                    <mxGeometry height="26" width="220" y="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="spp_invoices_field5" parent="spp_invoices" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="due_date : date" vertex="1">
+                    <mxGeometry height="26" width="220" y="156" as="geometry"/>
+                </mxCell>
+                <mxCell id="spp_invoices_field6" parent="spp_invoices" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="amount : decimal(12,2)" vertex="1">
+                    <mxGeometry height="26" width="220" y="182" as="geometry"/>
+                </mxCell>
+                <mxCell id="spp_invoices_field7" parent="spp_invoices" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="status : enum(unpaid, overdue, paid)" vertex="1">
+                    <mxGeometry height="26" width="220" y="208" as="geometry"/>
+                </mxCell>
+                <mxCell id="payments" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;horizontal=1;startSize=26;collapsible=0;html=1;fontSize=14;" value="payments" vertex="1">
+                    <mxGeometry height="208" width="240" x="1240" y="103" as="geometry"/>
+                </mxCell>
+                <mxCell id="payments_field0" parent="payments" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="PK id : int" vertex="1">
+                    <mxGeometry height="26" width="240" y="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="payments_field1" parent="payments" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="FK invoice_id : int" vertex="1">
+                    <mxGeometry height="26" width="240" y="52" as="geometry"/>
+                </mxCell>
+                <mxCell id="payments_field2" parent="payments" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="FK cashier_id : int" vertex="1">
+                    <mxGeometry height="26" width="240" y="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="payments_field3" parent="payments" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="amount : decimal(12,2)" vertex="1">
+                    <mxGeometry height="26" width="240" y="104" as="geometry"/>
+                </mxCell>
+                <mxCell id="payments_field4" parent="payments" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="payment_date : datetime" vertex="1">
+                    <mxGeometry height="26" width="240" y="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="payments_field5" parent="payments" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="status : enum(pending, success, failed)" vertex="1">
+                    <mxGeometry height="26" width="240" y="156" as="geometry"/>
+                </mxCell>
+                <mxCell id="payments_field6" parent="payments" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="transaction_code : varchar(40)" vertex="1">
+                    <mxGeometry height="26" width="240" y="182" as="geometry"/>
+                </mxCell>
+                <mxCell id="spp_tariffs" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;horizontal=1;startSize=26;collapsible=0;html=1;fontSize=14;" value="spp_tariffs" vertex="1">
+                    <mxGeometry height="130" width="220" x="299" y="394" as="geometry"/>
+                </mxCell>
+                <mxCell id="spp_tariffs_field0" parent="spp_tariffs" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="PK id : int" vertex="1">
+                    <mxGeometry height="26" width="220" y="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="spp_tariffs_field1" parent="spp_tariffs" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="grade : enum(X, XI, XII) UNIQUE" vertex="1">
+                    <mxGeometry height="26" width="220" y="52" as="geometry"/>
+                </mxCell>
+                <mxCell id="spp_tariffs_field2" parent="spp_tariffs" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="amount : decimal(12,2)" vertex="1">
+                    <mxGeometry height="26" width="220" y="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="spp_tariffs_field3" parent="spp_tariffs" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="created_at : timestamp" vertex="1">
+                    <mxGeometry height="26" width="220" y="104" as="geometry"/>
+                </mxCell>
+                <mxCell id="users" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;horizontal=1;startSize=26;collapsible=0;html=1;fontSize=14;" value="users" vertex="1">
+                    <mxGeometry height="182" width="220" x="620" y="453" as="geometry"/>
+                </mxCell>
+                <mxCell id="users_field0" parent="users" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="PK id : int" vertex="1">
+                    <mxGeometry height="26" width="220" y="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="users_field1" parent="users" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="username : varchar(50) UNIQUE" vertex="1">
+                    <mxGeometry height="26" width="220" y="52" as="geometry"/>
+                </mxCell>
+                <mxCell id="users_field2" parent="users" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="email : varchar(100) UNIQUE" vertex="1">
+                    <mxGeometry height="26" width="220" y="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="users_field3" parent="users" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="password : varchar(255)" vertex="1">
+                    <mxGeometry height="26" width="220" y="104" as="geometry"/>
+                </mxCell>
+                <mxCell id="users_field4" parent="users" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="role : enum(admin, kasir, siswa)" vertex="1">
+                    <mxGeometry height="26" width="220" y="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="users_field5" parent="users" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="created_at : timestamp" vertex="1">
+                    <mxGeometry height="26" width="220" y="156" as="geometry"/>
+                </mxCell>
+                <mxCell id="academic_years" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;horizontal=1;startSize=26;collapsible=0;html=1;fontSize=14;" value="academic_years" vertex="1">
+                    <mxGeometry height="208" width="220" x="930" y="453" as="geometry"/>
+                </mxCell>
+                <mxCell id="academic_years_field0" parent="academic_years" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="PK id : int" vertex="1">
+                    <mxGeometry height="26" width="220" y="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="academic_years_field1" parent="academic_years" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="name : varchar(9) UNIQUE" vertex="1">
+                    <mxGeometry height="26" width="220" y="52" as="geometry"/>
+                </mxCell>
+                <mxCell id="academic_years_field2" parent="academic_years" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="start_date : date" vertex="1">
+                    <mxGeometry height="26" width="220" y="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="academic_years_field3" parent="academic_years" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="end_date : date" vertex="1">
+                    <mxGeometry height="26" width="220" y="104" as="geometry"/>
+                </mxCell>
+                <mxCell id="academic_years_field4" parent="academic_years" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="status : enum(draft, active, completed)" vertex="1">
+                    <mxGeometry height="26" width="220" y="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="academic_years_field5" parent="academic_years" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="is_current : tinyint(1)" vertex="1">
+                    <mxGeometry height="26" width="220" y="156" as="geometry"/>
+                </mxCell>
+                <mxCell id="academic_years_field6" parent="academic_years" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="created_at : timestamp" vertex="1">
+                    <mxGeometry height="26" width="220" y="182" as="geometry"/>
+                </mxCell>
+                <mxCell id="r_major_classes" edge="1" parent="1" source="classes_field1" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;orthogonalLoop=1;jettySize=auto;startArrow=ERmandOne;endArrow=ERmany;labelBackgroundColor=default;defaultLabelBackgroundColor=page;libavoidRouting=1;" target="majors_field0">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="295" y="165"/>
+                            <mxPoint x="295" y="139"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r_class_students" edge="1" parent="1" source="students_field2" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;orthogonalLoop=1;jettySize=auto;startArrow=ERmandOne;endArrow=ERmany;labelBackgroundColor=default;defaultLabelBackgroundColor=page;libavoidRouting=1;" target="classes_field0">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="585" y="191"/>
+                            <mxPoint x="585" y="139"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r_students_invoice" edge="1" parent="1" source="spp_invoices_field1" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;orthogonalLoop=1;jettySize=auto;startArrow=ERmandOne;endArrow=ERmany;labelBackgroundColor=default;defaultLabelBackgroundColor=page;libavoidRouting=1;" target="students_field0">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="885" y="165"/>
+                            <mxPoint x="885" y="139"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r_invoice_payments" edge="1" parent="1" source="payments_field1" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;orthogonalLoop=1;jettySize=auto;startArrow=ERmandOne;endArrow=ERmany;labelBackgroundColor=default;defaultLabelBackgroundColor=page;libavoidRouting=1;" target="spp_invoices_field0">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1195" y="168"/>
+                            <mxPoint x="1195" y="139"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r_users_students" edge="1" parent="1" source="students_field1" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;orthogonalLoop=1;jettySize=auto;startArrow=ERmandOne;endArrow=ERmany;labelBackgroundColor=default;defaultLabelBackgroundColor=page;libavoidRouting=1;" target="users_field0">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="856" y="165"/>
+                            <mxPoint x="856" y="492"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r_users_payments" edge="1" parent="1" source="payments_field2" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;orthogonalLoop=1;jettySize=auto;startArrow=ERmandOne;endArrow=ERmany;labelBackgroundColor=default;defaultLabelBackgroundColor=page;" target="users_field0" value="x">
+                    <mxGeometry relative="1" x="0.1384" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1195" y="194"/>
+                            <mxPoint x="1195" y="392"/>
+                            <mxPoint x="903.3" y="392"/>
+                            <mxPoint x="903.3" y="492"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r_year_invoice" edge="1" parent="1" source="spp_invoices_field2" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;orthogonalLoop=1;jettySize=auto;startArrow=ERmandOne;endArrow=ERmany;labelBackgroundColor=default;defaultLabelBackgroundColor=page;libavoidRouting=1;" target="academic_years_field0">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1166" y="191"/>
+                            <mxPoint x="1166" y="492"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
