@@ -1,9 +1,11 @@
 <?php
 
+// Memulai session dan mengatur zona waktu
 session_start();
 
 date_default_timezone_set('Asia/Jakarta');
 
+// Memeriksa autentikasi dan hak akses kasir
 if (!isset($_SESSION['user_id'])) {
   header('Location: ../index.php');
   exit;
@@ -16,7 +18,7 @@ if (($_SESSION['role'] ?? '') !== 'kasir') {
 
 require_once __DIR__ . '/../database/config.php';
 
-// Statistik transaksi hari ini
+// Mengambil statistik transaksi dan pembayaran kasir
 $sql = "
   SELECT COUNT(*) AS total_transaksi
   FROM payments
@@ -73,6 +75,7 @@ $stats_income_month =  $result->fetch_assoc();
 $total_income_month = $stats_income_month["total_pemasukan"];
 
 
+// Inisialisasi pesan, data kasir, dan data siswa
 $success = '';
 $errors = [];
 
@@ -81,6 +84,7 @@ $cashier_id = $_SESSION['user_id'];
 $students = [];
 $keyword = '';
 
+// Mencari siswa berdasarkan nama atau NISN
 if (isset($_GET['q'])) {
   $keyword = trim($_GET['q']);
 
@@ -114,6 +118,7 @@ if (isset($_GET['q'])) {
   }
 }
 
+// Menyiapkan data siswa terpilih dan daftar tagihannya
 $selected_student = null;
 $invoices = [];
 $paid_invoices = [];
@@ -173,10 +178,11 @@ if (isset($_GET['student_id']) || isset($_POST['student_id'])) {
 
 }
 
+// Memproses pembayaran tagihan siswa
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $selected_bill_ids = $_POST['bill_ids'] ?? [];
 
-  // Validasi minimal satu tagihan dipilih
+  // Memvalidasi pilihan tagihan sebelum pembayaran diproses
   if (empty($selected_bill_ids)) {
     $errors[] = 'Pilih minimal satu tagihan';
   } else {
@@ -194,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     }
 
-    // Menghitung ulang total berdasarkan database
+    // Menghitung ulang total pembayaran berdasarkan data database
     if (empty($errors)) {
 
       $total_payments = 0;
@@ -211,12 +217,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       if (empty($errors)) {
 
+        // Membuat kode transaksi dan memulai transaksi database
         $transaction_code = 'SPP-' . date('Ymd') . '-' . strtoupper(bin2hex(random_bytes(3)));
         
         $conn->begin_transaction();
 
         try {
 
+          // Memeriksa dan memproses setiap tagihan yang dipilih
           foreach ($selected_bill_ids as $bill_id) {
 
             $sql = "
@@ -241,7 +249,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               throw new Exception("Tagihan siswa tidak valid atau sudah lunas");
             }
 
-            // Menyimpan ke database
+            // Mencatat pembayaran ke database
             $sql = "
               INSERT INTO payments (
                 invoice_id,
@@ -265,7 +273,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
             $stmt->close();
 
-            // Mengubah status taihan menjadi lunas
+            // Mengubah status tagihan menjadi lunas
             $sql = "
               UPDATE spp_invoices
               SET STATUS = 'paid'
@@ -292,17 +300,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           }
 
 
+          // Menyelesaikan transaksi database jika semua pembayaran berhasil
           $conn->commit();
 
           $success = 'Pembayaran berhasil diproses';
 
-          // Menyimpan daftar invoice untuk bukti pembayaran
+          // Menyiapkan daftar tagihan yang dibayar untuk bukti pembayaran
           foreach ($invoices as $invoice) {
             if(in_array((int) $invoice['ID'], $selected_bill_ids, true)) {
               $paid_invoices[] = $invoice;
             }
           }
 
+        // Membatalkan seluruh perubahan jika proses pembayaran gagal
         } catch (Throwable $e) {
           $conn->rollback();
 
@@ -394,6 +404,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <a href="admin-spp.php">Admin</a>.
         </p>
         <div id="spp-msg" class="form-help" role="status" aria-live="polite"></div>
+        <!-- Statistik pembayaran kasir -->
         <div class="spp-stats spp-stats--4">
           <div class="spp-card spp-stat">
             <span class="stat-block__label">Transaksi Hari Ini</span>
@@ -422,6 +433,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         
+        <!-- Pencarian dan pemilihan siswa -->
         <div class="section-head spp-gap">
           <div class="section-head__text">
             <h2>Transaksi Pembayaran</h2>
@@ -487,6 +499,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <?php endif; ?>
           </h3>
+          <!-- Pemilihan tagihan dan formulir pembayaran -->
           <form class="spp-form" method="post">
             <input type="hidden" name="student_id" value="<?= (int) $selected_student['id'] ?>">
 
@@ -562,6 +575,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <?php endif; ?>
 
           <div class="spp-gap">
+            <!-- Bukti pembayaran -->
             <div class="spp-card spp-receipt" id="receipt">
               <h3>Bukti Pembayaran SPP</h3>
               <dl class="info-list">
