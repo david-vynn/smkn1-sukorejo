@@ -383,7 +383,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <section class="spp-section">
       <div class="container">
-        react<div id="spp-msg" class="form-help" role="status" aria-live="polite"></div>
+        <div id="spp-msg" class="form-help" role="status" aria-live="polite"></div>
         <!-- Statistik pembayaran kasir -->
         <div class="spp-stats spp-stats--4">
           <div class="spp-card spp-stat">
