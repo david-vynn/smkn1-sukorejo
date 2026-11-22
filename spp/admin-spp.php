@@ -1063,7 +1063,7 @@ if ($reportStmt) {
 
 ?>
 
-<!doctype html
+<!doctype html>
 <html lang="id">
 
 <head>
