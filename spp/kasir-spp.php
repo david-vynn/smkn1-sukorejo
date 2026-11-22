@@ -574,8 +574,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </p>
           <?php endif; ?>
 
-          <div class="spp-gap">
-            <!-- Bukti pembayaran -->
+          <?php if ($success !== '' && !empty($paid_invoices)): ?>
+            <div class="spp-gap">
+              <!-- Bukti pembayaran -->
             <div class="spp-card spp-receipt" id="receipt">
               <h3>Bukti Pembayaran SPP</h3>
               <dl class="info-list">
@@ -623,8 +624,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   Cetak Bukti Pembayaran
                 </button>
               </div>
+              </div>
             </div>
-          </div>
+          <?php endif; ?>
         </div>
     </section>
   </main>
