@@ -1,0 +1,252 @@
+<?php
+session_start();
+
+$isLoggedIn = isset($_SESSION['user_id']);
+$username = $_SESSION['username'] ?? '';
+$role = $_SESSION['role'] ?? '';
+
+$dashboardUrl = match ($role) {
+  'admin' => 'spp/admin-spp.php',
+  'kasir' => 'spp/kasir-spp.php',
+  'siswa' => 'spp/spp.php',
+  default => null
+};
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Staf Pengajar — SMKN 1 Sukorejo</title>
+  <meta name="description" content="Profil staf pengajar profesional SMKN 1 Sukorejo." />
+  <link rel="icon" href="assets/logo/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-auth="<?= $isLoggedIn ? 'in' : 'out' ?>">
+
+  <header class="site-header">
+    <div class="container">
+      <a href="index.php" class="brand">
+        <svg class="brand__logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 3L2 8l10 5 8-4.09V15h2V8L12 3z" fill="currentColor"/>
+          <path d="M6 12.18v3.64C6 18.09 8.69 20 12 20s6-1.91 6-4.18v-3.64l-6 3-6-3z" fill="currentColor"/>
+        </svg>
+        SMKN 1 SUKOREJO
+      </a>
+      <nav class="main-nav" aria-label="Navigasi utama">
+        <a href="index.php" aria-current="page">Beranda</a>
+        <a href="profil-sekolah.php" >Profil Sekolah</a>
+        <a href="agenda.php" >Agenda</a>
+        <a href="prestasi.php" >Prestasi</a>
+        
+        <a href="contact.php">Kontak</a>
+      </nav>
+      <div class="header-account">
+        <button type="button" class="user-chip__trigger" id="account-trigger" aria-haspopup="true" aria-expanded="false">
+          <span class="user-chip__avatar" aria-hidden="true">&#128100;</span>
+          <span class="user-chip__name"><?= $isLoggedIn ? htmlspecialchars($username) : 'Login'; ?></span>
+          <svg class="user-chip__caret" width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="user-chip__menu" id="account-menu">
+          <?php if ($isLoggedIn): ?>
+            <?php if ($dashboardUrl !== null): ?>
+              <a href="<?= htmlspecialchars($dashboardUrl); ?>">Dashboard</a>
+            <?php endif; ?>
+            <a href="logout.php" class="user-chip__logout">
+              <span aria-hidden="true">&#128682;</span> Keluar
+            </a>
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header page-header--center">
+      <div class="container">
+        <h1>Staf Pengajar</h1>
+        <p>Mengenal lebih dekat para pendidik profesional dan berdedikasi tinggi di SMKN 1 Sukorejo yang siap membimbing siswa menuju kesuksesan karir.</p>
+      </div>
+    </div>
+
+    <section class="section--alt">
+      <div class="container">
+        <div class="staff-grid staff-grid--3col">
+
+          <article class="staff-card">
+            <img class="staff-card__photo" src="assets/images/profile/bu-ririk.png" alt="" />
+            <h3>Ririk Suryawati S.Pd M.Pd</h3>
+            <p class="staff-card__role">Guru Produktif TEI</p>
+            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
+          </article>
+
+          <article class="staff-card">
+            <img class="staff-card__photo" src="assets/images/profile/bu-rully.png" alt="" />
+            <h3>Rully Mustikaningrum S.Pd</h3>
+            <p class="staff-card__role">Guru Bahasa Inggris</p>
+            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
+          </article>
+
+          <article class="staff-card">
+            <img class="staff-card__photo" src="assets/images/profile/bu-alfi.png" alt="" />
+            <h3>Siti Alfiyah S.Pd</h3>
+            <p class="staff-card__role">Guru Matematika</p>
+            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
+          </article>
+
+          <article class="staff-card">
+            <img class="staff-card__photo" src="assets/images/profile/pak-lukman.png" alt="" />
+            <h3>Muhammad Lukman Hadi S.Pd. Gr.</h3>
+            <p class="staff-card__role">Guru Produktif TEI</p>
+            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
+          </article>
+
+          <article class="staff-card">
+            <img class="staff-card__photo" src="assets/images/profile/bu-rani.png" alt="" />
+            <h3>Rani Gayatri S.T.</h3>
+            <p class="staff-card__role">---</p>
+            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
+          </article>
+
+          <article class="staff-card">
+            <img class="staff-card__photo" src="assets/images/profile/pak-zuhal.png" alt="" />
+            <h3>M. Zuhal Munsif, S.Thl</h3>
+            <p class="staff-card__role">---</p>
+            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
+          </article>
+
+          <article class="staff-card">
+            <img class="staff-card__photo" src="assets/images/profile/pak-dian.png" alt="" />
+            <h3>Dian Syah Kurniawan, S.Si.</h3>
+            <p class="staff-card__role">---</p>
+            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
+          </article>
+
+          <article class="staff-card">
+            <img class="staff-card__photo" src="assets/images/profile/pak-rudi.png" alt="" />
+            <h3>Rudi Trisantoso S.Pd., M.Pd</h3>
+            <p class="staff-card__role">---</p>
+            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
+          </article>
+
+          <article class="staff-card">
+            <img class="staff-card__photo" src="assets/images/profile/bu-nisful.png" alt="" />
+            <h3>Dr. Nisful Laily, S.Pd., M.Pd</h3>
+            <p class="staff-card__role">---</p>
+            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
+          </article>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <div class="footer-brand">
+        <p class="footer-brand__name">SMKN 1 SUKOREJO</p>
+        <p>Mencetak generasi muda yang kompeten, berkarakter, profesional, dan siap menghadapi tantangan industri global.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Website resmi">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18z" stroke="currentColor" stroke-width="1.6"/></svg>
+          </a>
+          <a href="#" aria-label="Bagikan">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="18" cy="5" r="2.4" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="12" r="2.4" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="19" r="2.4" stroke="currentColor" stroke-width="1.6"/><path d="M8.1 10.8l7.8-4.4M8.1 13.2l7.8 4.4" stroke="currentColor" stroke-width="1.6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h3>Tautan Cepat</h3>
+        <ul>
+          <li><a href="profil-sekolah.php">Profil Sekolah</a></li>
+          <li><a href="profil-sekolah.php#visi-misi">Visi Misi</a></li>
+          <li><a href="agenda.php">Agenda</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Informasi</h3>
+        <ul>
+          <li><a href="prestasi.php">Prestasi</a></li>
+          
+          
+        </ul>
+      </div>
+      <div class="footer-col footer-contact">
+        <h3>Kontak Kami</h3>
+        <ul>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg>
+            <span>Jl. Raya Sukorejo No. 1, Pasuruan, Jawa Timur</span>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2-1-4-3-5-5l2-2-3-6-4 3z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            <span>(0343) 611234</span>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 6.5l8 6 8-6" stroke="currentColor" stroke-width="1.6"/></svg>
+            <span>info@smkn1sukorejo.sch.id</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 SMKN 1 SUKOREJO. All rights reserved.</div>
+  </footer>
+
+  <div class="auth-overlay" id="auth-overlay" aria-hidden="true">
+    <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+      <button type="button" class="icon-btn auth-modal__close" id="auth-modal-close" aria-label="Tutup">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+
+      <!-- Login panel -->
+      <div class="auth-panel is-active" id="auth-panel-login">
+        <h2 class="auth-modal__title" id="auth-modal-title">Masuk ke Akun</h2>
+        <p class="auth-modal__subtitle">Gunakan email dan kata sandi Anda untuk masuk.</p>
+
+        <form class="auth-form" id="login-form" novalidate>
+          <div class="form-field">
+            <label for="login-email">Email</label>
+            <div class="input-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <input type="email" id="login-email" name="email" placeholder="Masukkan email" autocomplete="email" />
+            </div>
+            <p class="form-error" data-error-for="login-email"></p>
+          </div>
+
+          <div class="form-field">
+            <label for="login-password">Kata Sandi</label>
+            <div class="input-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.6"/></svg>
+              <input type="password" id="login-password" name="password" placeholder="Masukkan kata sandi" autocomplete="current-password" />
+            </div>
+            <p class="form-error" data-error-for="login-password"></p>
+          </div>
+
+          <div class="auth-form__row">
+            <label class="auth-checkbox">
+              <input type="checkbox" id="login-remember" name="remember" />
+              <span>Ingat saya</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Masuk</button>
+        </form>
+
+        <div class="auth-success" id="auth-success" hidden>
+          <div class="auth-success__icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <p>Login berhasil!</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/script.js" defer></script>
+</body>
+</html>
