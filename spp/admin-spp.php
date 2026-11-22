@@ -1856,8 +1856,6 @@ if ($reportStmt) {
         <h3>Informasi</h3>
         <ul>
           <li><a href="../prestasi.php">Prestasi</a></li>
-          <li><a href="../../cek-kelulusan.html"></a></li>
-          <li><a href="../../cek-kelulusan.html">Pendaftaran</a></li>
         </ul>
       </div>
 
