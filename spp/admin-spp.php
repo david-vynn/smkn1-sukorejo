@@ -792,27 +792,17 @@ while ($row = mysqli_fetch_assoc($stmt)) {
   $classes[] = $row;
 }
 
-// Memperbarui status tagihan yang melewati tanggal jatuh tempo
+// Memperbarui status seluruh tagihan yang melewati tanggal jatuh tempo,
+// termasuk tagihan dari tahun ajaran sebelumnya.
 $sql = "
   UPDATE spp_invoices
   SET status = 'overdue'
-  WHERE academic_year_id = ?
-    AND status = 'unpaid'
+  WHERE status = 'unpaid'
     AND due_date < CURDATE()
 ";
 
-$stmt = mysqli_prepare($conn, $sql);
-
-if (!$stmt) {
-  $errors[] = "Gagal menyiapkan pembaruan status tagihan";
-} else {
-  mysqli_stmt_bind_param($stmt, 'i', $academicYear['ID']);
-
-  if (!mysqli_stmt_execute($stmt)) {
-    $errors[] = 'Gagal menjalankan status tagihan';
-  }
-
-  mysqli_stmt_close($stmt);
+if (!mysqli_query($conn, $sql)) {
+  $errors[] = 'Gagal memperbarui status tagihan yang melewati jatuh tempo.';
 }
 
 // Menyiapkan filter dan mengambil daftar tagihan siswa
