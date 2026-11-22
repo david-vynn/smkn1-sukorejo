@@ -81,8 +81,6 @@ $cashier_id = $_SESSION['user_id'];
 $students = [];
 $keyword = '';
 
-echo date('Y-m-d H:i:s');
-
 if (isset($_GET['q'])) {
   $keyword = trim($_GET['q']);
 

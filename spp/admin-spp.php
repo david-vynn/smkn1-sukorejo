@@ -18,6 +18,7 @@ $errors = [];
 $studentSuccess = null;
 $tariffSuccess = null;
 $resetSuccess = null;
+$kasirSuccess = null;
 
 // Ambil tahun ajaran yg sedang aktif
 $sql = '
