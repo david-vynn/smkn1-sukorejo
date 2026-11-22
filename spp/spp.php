@@ -46,7 +46,14 @@ $totalOutstanding = 0;
 $sql = "
     SELECT
         COALESCE(SUM(amount), 0) AS total_tagihan,
-        COALESCE(SUM(CASE WHEN status IN ('unpaid', 'overdue') THEN amount ELSE 0 END), 0) AS total_tunggakan
+        COALESCE(SUM(CASE
+            WHEN status IN ('unpaid', 'overdue') AND due_date < CURDATE()
+            THEN amount ELSE 0
+        END), 0) AS total_tunggakan,
+        COALESCE(SUM(CASE
+            WHEN status IN ('unpaid', 'overdue')
+            THEN 1 ELSE 0
+        END), 0) AS jumlah_belum_lunas
     FROM spp_invoices
     WHERE student_id = ?
 ";
@@ -130,8 +137,18 @@ $formatDate = static function ($value) use ($shortMonths) {
     return date('d', $time) . ' ' . $shortMonths[(int) date('n', $time)] . ' ' . date('Y', $time);
 };
 
-// Status belum ditentukan jika siswa belum memiliki tagihan sama sekali.
-$statusText = !$invoices ? '—' : ($totalOutstanding > 0 ? 'Ada Tunggakan' : 'Lunas');
+// Status membedakan tagihan yang belum lunas dan tagihan yang sudah melewati jatuh tempo.
+$unpaidInvoiceCount = (int) $summary['jumlah_belum_lunas'];
+
+if (!$invoices) {
+    $statusText = '—';
+} elseif ($totalOutstanding > 0) {
+    $statusText = 'Ada Tunggakan';
+} elseif ($unpaidInvoiceCount > 0) {
+    $statusText = 'Belum Lunas';
+} else {
+    $statusText = 'Lunas';
+}
 ?>
 <!doctype html>
 <html lang="id">
