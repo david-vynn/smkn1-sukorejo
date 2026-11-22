@@ -365,21 +365,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="../prestasi.php">Prestasi</a>
         <a href="../contact.php">Kontak</a>
       </nav>
-      <div class="header-account">
-        <button type="button" class="user-chip__trigger" id="account-trigger" aria-haspopup="true"
-          aria-expanded="false">
-          <span class="user-chip__avatar" aria-hidden="true">&#128100;</span>
-          <span class="user-chip__name">Portal Kasir</span>
-          <svg class="user-chip__caret" width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
-          </svg>
-        </button>
-        <div class="user-chip__menu" id="account-menu">
-          <button type="button" class="user-chip__logout">
-            <span aria-hidden="true">&#128682;</span> Keluar
-          </button>
-        </div>
+      <div class="header-account user-chip_menu">
+        <a href="../logout.php" class="user-chip__logout">
+          <span aria-hidden="true">&#128682;</span>
+          Keluar
+        </a>
       </div>
     </div>
   </header>
@@ -393,14 +383,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <section class="spp-section">
       <div class="container">
-        <p class="form-help spp-demo-note" role="note">
-          <strong>Tampilan contoh.</strong> Semua data di halaman ini adalah
-          placeholder untuk demonstrasi UI dan belum terhubung ke backend.
-          Pratinjau peran: <a href="spp.php">Siswa</a> ·
-          <a href="kasir-spp.php">Kasir</a> ·
-          <a href="admin-spp.php">Admin</a>.
-        </p>
-        <div id="spp-msg" class="form-help" role="status" aria-live="polite"></div>
+        react<div id="spp-msg" class="form-help" role="status" aria-live="polite"></div>
         <!-- Statistik pembayaran kasir -->
         <div class="spp-stats spp-stats--4">
           <div class="spp-card spp-stat">
@@ -739,13 +722,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 autocomplete="current-password" />
             </div>
             <p class="form-error" data-error-for="login-password"></p>
-          </div>
-
-          <div class="auth-form__row">
-            <label class="auth-checkbox">
-              <input type="checkbox" id="login-remember" name="remember" />
-              <span>Ingat saya</span>
-            </label>
           </div>
 
           <button type="submit" class="btn btn-primary btn-block">

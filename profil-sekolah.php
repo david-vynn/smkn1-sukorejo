@@ -99,7 +99,7 @@ $dashboardUrl = match ($role) {
             <blockquote>&ldquo;Menciptakan peserta didik yang berakhlak, berkarya, dan berprestasi.&rdquo;</blockquote>
           </div>
           <div class="misi-card">
-            <h2>Misi Institusi</h2>
+            <h2>Misi</h2>
             <div class="misi-list">
               <div class="misi-item">
                 <span class="misi-item__icon">
@@ -156,7 +156,6 @@ $dashboardUrl = match ($role) {
     <section>
       <div class="container">
         <div class="section-intro">
-          <span class="eyebrow">Dinamika Kampus</span>
           <h2>Aktivitas Program Keahlian</h2>
           <p>Melihat lebih dekat bagaimana siswa kami mempraktikkan teori secara langsung dalam lingkungan berstandar industri.</p>
         </div>
@@ -416,13 +415,6 @@ $dashboardUrl = match ($role) {
               <input type="password" id="login-password" name="password" placeholder="Masukkan kata sandi" autocomplete="current-password" />
             </div>
             <p class="form-error" data-error-for="login-password"></p>
-          </div>
-
-          <div class="auth-form__row">
-            <label class="auth-checkbox">
-              <input type="checkbox" id="login-remember" name="remember" />
-              <span>Ingat saya</span>
-            </label>
           </div>
 
           <button type="submit" class="btn btn-primary btn-block">Masuk</button>

@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = mysqli_prepare($conn, $sql);
 
     if (!$stmt) {
-        die('Query gagal disiapkan: ' . mysqli_error($conn));
+        die('Query gagal di siapkan: ' . mysqli_error($conn));
     }
 
     mysqli_stmt_bind_param($stmt,'s', $email);

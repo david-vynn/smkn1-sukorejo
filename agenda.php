@@ -89,7 +89,6 @@ $dashboardUrl = match ($role) {
               <p class="agenda-card__desc">Sumatif Akhir Semester Genap untuk seluruh siswa kelas X dan XI.</p>
               <div class="agenda-card__footer">
                 <span class="agenda-card__meta" style="font-size:.8rem;">12 &ndash; 20 Jun 2026</span>
-                <a href="#" class="link-arrow">Detail &rarr;</a>
               </div>
             </div>
           </article>
@@ -106,7 +105,6 @@ $dashboardUrl = match ($role) {
               <p class="agenda-card__desc">Pembagian hasil belajar siswa semester genap tahun ajaran 2025/2026.</p>
               <div class="agenda-card__footer">
                 <span class="agenda-card__meta" style="font-size:.8rem;">26 Jun 2026</span>
-                <a href="#" class="link-arrow">Detail &rarr;</a>
               </div>
             </div>
           </article>
@@ -123,7 +121,6 @@ $dashboardUrl = match ($role) {
               <p class="agenda-card__desc">Upacara pelepasan siswa kelas XI yang akan melaksanakan Praktik Kerja Lapangan.</p>
               <div class="agenda-card__footer">
                 <span class="agenda-card__meta" style="font-size:.8rem;">01 Jul 2026</span>
-                <a href="#" class="link-arrow">Detail &rarr;</a>
               </div>
             </div>
           </article>
@@ -140,7 +137,6 @@ $dashboardUrl = match ($role) {
               <p class="agenda-card__desc">Masa Pengenalan Lingkungan Sekolah bagi siswa kelas X tahun ajaran baru.</p>
               <div class="agenda-card__footer">
                 <span class="agenda-card__meta" style="font-size:.8rem;">13 &ndash; 15 Jul 2026</span>
-                <a href="#" class="link-arrow">Detail &rarr;</a>
               </div>
             </div>
           </article>
@@ -174,7 +170,6 @@ $dashboardUrl = match ($role) {
               <p class="agenda-card__desc">Persiapan Asesmen Nasional Berbasis Komputer untuk siswa kelas XI yang terpilih.</p>
               <div class="agenda-card__footer">
                 <span class="agenda-card__meta" style="font-size:.8rem;">24 &ndash; 25 Agu 2026</span>
-                <a href="#" class="link-arrow">Detail &rarr;</a>
               </div>
             </div>
           </article>
@@ -191,7 +186,6 @@ $dashboardUrl = match ($role) {
               <p class="agenda-card__desc">Penilaian Tengah Semester Ganjil tahun ajaran 2026/2027.</p>
               <div class="agenda-card__footer">
                 <span class="agenda-card__meta" style="font-size:.8rem;">21 &ndash; 26 Sep 2026</span>
-                <a href="#" class="link-arrow">Detail &rarr;</a>
               </div>
             </div>
           </article>
@@ -208,7 +202,6 @@ $dashboardUrl = match ($role) {
               <p class="agenda-card__desc">Acara apresiasi dan perayaan untuk seluruh pendidik dan tenaga kependidikan.</p>
               <div class="agenda-card__footer">
                 <span class="agenda-card__meta" style="font-size:.8rem;">25 Nov 2026</span>
-                <a href="#" class="link-arrow">Detail &rarr;</a>
               </div>
             </div>
           </article>
@@ -225,7 +218,6 @@ $dashboardUrl = match ($role) {
               <p class="agenda-card__desc">Sumatif Akhir Semester Ganjil menjelang libur pergantian tahun.</p>
               <div class="agenda-card__footer">
                 <span class="agenda-card__meta" style="font-size:.8rem;">07 &ndash; 15 Des 2026</span>
-                <a href="#" class="link-arrow">Detail &rarr;</a>
               </div>
             </div>
           </article>
@@ -233,7 +225,6 @@ $dashboardUrl = match ($role) {
         </div>
 
         <div class="load-more-wrap">
-          <button class="btn btn-outline-navy">Muat Lebih Banyak</button>
         </div>
       </div>
     </section>
@@ -318,13 +309,6 @@ $dashboardUrl = match ($role) {
               <input type="password" id="login-password" name="password" placeholder="Masukkan kata sandi" autocomplete="current-password" />
             </div>
             <p class="form-error" data-error-for="login-password"></p>
-          </div>
-
-          <div class="auth-form__row">
-            <label class="auth-checkbox">
-              <input type="checkbox" id="login-remember" name="remember" />
-              <span>Ingat saya</span>
-            </label>
           </div>
 
           <button type="submit" class="btn btn-primary btn-block">Masuk</button>

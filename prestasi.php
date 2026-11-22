@@ -84,7 +84,6 @@ $dashboardUrl = match ($role) {
             </div>
             <h3>Juara 3 LKS Dikmen se-Kabupaten Pasuruan Tahun 2026. Bidang lomba Industrial Control</h3>
             <p>Aldiansyah Eka Prasetya</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
           <article class="prestasi-card">
@@ -94,7 +93,6 @@ $dashboardUrl = match ($role) {
             </div>
             <h3>Siswa SMKN 1 Sukorejo Terpilih Sebagai Calon Paskibra Kabupaten Pasuruan Tahun 2026</h3>
             <p>Amelia Susmita Wardani</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
           <article class="prestasi-card">
@@ -104,7 +102,6 @@ $dashboardUrl = match ($role) {
             </div>
             <h3>Lolos Seleksi Jalur Prestasi Olahraga UNIVERSITAS NEGERI SURABAYA, S1 Pendidikan Kepelatihan Olahraga</h3>
             <p>Muhammad Girindra Dhamar Panuluh</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
           <article class="prestasi-card">
@@ -114,7 +111,6 @@ $dashboardUrl = match ($role) {
             </div>
             <h3>Juara 2 Lomba Konten Kreatif Tingkat Nasional</h3>
             <p>Dwi Ernasari</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
           <article class="prestasi-card">
@@ -124,7 +120,6 @@ $dashboardUrl = match ($role) {
             </div>
             <h3>Pelajar SMKN 1 Sukorejo lolos PTN JALUR SELEKSI NASIONAL BERBASIS TES(SNBT) 2026</h3>
             <p>Pelajar SMKN 1 Sukorejo</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
           <article class="prestasi-card">
@@ -134,7 +129,6 @@ $dashboardUrl = match ($role) {
             </div>
             <h3>Juara 1 LKS Dikmen Kabupaten Pasuruan Bidang WEB TECHNOLOGIES tahun 2026</h3>
             <p>Moh. Novel Chandra D.</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
           <article class="prestasi-card">
@@ -144,7 +138,6 @@ $dashboardUrl = match ($role) {
             </div>
             <h3>Siswa-Siswi SMKN 1 Sukorejo Juara Umum KEJUARAAN PENCAK SILAT PASURUAN 2026</h3>
             <p>Anggota Perisai Diri</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
           <article class="prestasi-card">
@@ -154,7 +147,6 @@ $dashboardUrl = match ($role) {
             </div>
             <h3>Juara 2 Lomba Saka Bakti Husada (SBH) Tingkat Kabupaten Pasuruan</h3>
             <p>Anggota Pramuka</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
           <article class="prestasi-card">
@@ -164,7 +156,6 @@ $dashboardUrl = match ($role) {
             </div>
             <h3>Juara 3 LKD Dikmen Kabupaten Pasuruan Tahun 2026. Bidang Lomba ELECTRONICS</h3>
             <p>Sony Kurniawan Fals</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
         </div>
@@ -251,13 +242,6 @@ $dashboardUrl = match ($role) {
               <input type="password" id="login-password" name="password" placeholder="Masukkan kata sandi" autocomplete="current-password" />
             </div>
             <p class="form-error" data-error-for="login-password"></p>
-          </div>
-
-          <div class="auth-form__row">
-            <label class="auth-checkbox">
-              <input type="checkbox" id="login-remember" name="remember" />
-              <span>Ingat saya</span>
-            </label>
           </div>
 
           <button type="submit" class="btn btn-primary btn-block">Masuk</button>

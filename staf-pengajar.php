@@ -81,63 +81,54 @@ $dashboardUrl = match ($role) {
             <img class="staff-card__photo" src="assets/images/profile/bu-ririk.png" alt="" />
             <h3>Ririk Suryawati S.Pd M.Pd</h3>
             <p class="staff-card__role">Guru Produktif TEI</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
           <article class="staff-card">
             <img class="staff-card__photo" src="assets/images/profile/bu-rully.png" alt="" />
             <h3>Rully Mustikaningrum S.Pd</h3>
             <p class="staff-card__role">Guru Bahasa Inggris</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
           <article class="staff-card">
             <img class="staff-card__photo" src="assets/images/profile/bu-alfi.png" alt="" />
             <h3>Siti Alfiyah S.Pd</h3>
             <p class="staff-card__role">Guru Matematika</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
           <article class="staff-card">
             <img class="staff-card__photo" src="assets/images/profile/pak-lukman.png" alt="" />
             <h3>Muhammad Lukman Hadi S.Pd. Gr.</h3>
             <p class="staff-card__role">Guru Produktif TEI</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
           <article class="staff-card">
             <img class="staff-card__photo" src="assets/images/profile/bu-rani.png" alt="" />
             <h3>Rani Gayatri S.T.</h3>
             <p class="staff-card__role">---</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
           <article class="staff-card">
             <img class="staff-card__photo" src="assets/images/profile/pak-zuhal.png" alt="" />
             <h3>M. Zuhal Munsif, S.Thl</h3>
             <p class="staff-card__role">---</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
           <article class="staff-card">
             <img class="staff-card__photo" src="assets/images/profile/pak-dian.png" alt="" />
             <h3>Dian Syah Kurniawan, S.Si.</h3>
             <p class="staff-card__role">---</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
           <article class="staff-card">
             <img class="staff-card__photo" src="assets/images/profile/pak-rudi.png" alt="" />
             <h3>Rudi Trisantoso S.Pd., M.Pd</h3>
             <p class="staff-card__role">---</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
           <article class="staff-card">
             <img class="staff-card__photo" src="assets/images/profile/bu-nisful.png" alt="" />
             <h3>Dr. Nisful Laily, S.Pd., M.Pd</h3>
             <p class="staff-card__role">---</p>
-            <button class="btn btn-outline-navy btn-sm">Selengkapnya</button>
           </article>
 
         </div>
@@ -224,13 +215,6 @@ $dashboardUrl = match ($role) {
               <input type="password" id="login-password" name="password" placeholder="Masukkan kata sandi" autocomplete="current-password" />
             </div>
             <p class="form-error" data-error-for="login-password"></p>
-          </div>
-
-          <div class="auth-form__row">
-            <label class="auth-checkbox">
-              <input type="checkbox" id="login-remember" name="remember" />
-              <span>Ingat saya</span>
-            </label>
           </div>
 
           <button type="submit" class="btn btn-primary btn-block">Masuk</button>

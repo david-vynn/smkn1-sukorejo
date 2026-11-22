@@ -1433,11 +1433,6 @@ if ($reportStmt) {
         </form>
 
         <div class="spp-gap">
-          <p class="form-help">
-            Total transaksi: <strong><?= number_format($reportSummary['total_transactions'], 0, ',', '.') ?></strong>
-            · Total pemasukan (berhasil):
-            <strong>Rp<?= number_format($reportSummary['total_income'], 0, ',', '.') ?></strong>
-          </p>
 
           <div class="table-wrap spp-table">
             <table class="score-table">
@@ -1933,13 +1928,6 @@ if ($reportStmt) {
                 autocomplete="current-password" />
             </div>
             <p class="form-error" data-error-for="login-password"></p>
-          </div>
-
-          <div class="auth-form__row">
-            <label class="auth-checkbox">
-              <input type="checkbox" id="login-remember" name="remember" />
-              <span>Ingat saya</span>
-            </label>
           </div>
 
           <button type="submit" class="btn btn-primary btn-block">

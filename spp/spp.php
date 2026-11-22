@@ -144,8 +144,10 @@ $statusText = $totalOutstanding > 0 ? 'Ada Tunggakan' : 'Lunas';
       <a href="../contact.php">Kontak</a>
     </nav>
     <div class="header-account">
-      <span class="user-chip__name"><?= htmlspecialchars($_SESSION['username'] ?? $student['nama'], ENT_QUOTES, 'UTF-8') ?></span>
-      <a href="../logout.php" class="user-chip__link">Keluar</a>
+      <a href="../logout.php" class="user-chip__link">
+        <span aria-hidden="true">&#128682;</span>
+        Keluar
+      </a>
     </div>
   </div>
 </header>

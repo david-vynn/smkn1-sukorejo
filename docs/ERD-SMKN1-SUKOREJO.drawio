@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram name="Page-1" id="07lbej7DG4haFKu2EnYf">
-        <mxGraphModel dx="1512" dy="1053" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" adaptiveColors="auto">
+        <mxGraphModel dx="1475" dy="873" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" adaptiveColors="auto">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -37,7 +37,7 @@
                 <mxCell id="classes_field3" parent="classes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="class_number : tinyint" vertex="1">
                     <mxGeometry height="26" width="220" y="104" as="geometry"/>
                 </mxCell>
-                <mxCell id="classes_field4" parent="classes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="class_name : varchar(30) UNIQUE" vertex="1">
+                <mxCell id="classes_field4" parent="classes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="class_name : varchar(30)&amp;nbsp;" vertex="1">
                     <mxGeometry height="26" width="220" y="130" as="geometry"/>
                 </mxCell>
                 <mxCell id="students" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;horizontal=1;startSize=26;collapsible=0;html=1;fontSize=14;" value="students" vertex="1">
@@ -106,7 +106,7 @@
                 <mxCell id="payments_field4" parent="payments" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="payment_date : datetime" vertex="1">
                     <mxGeometry height="26" width="240" y="130" as="geometry"/>
                 </mxCell>
-                <mxCell id="payments_field5" parent="payments" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="status : enum(pending, success, failed)" vertex="1">
+                <mxCell id="payments_field5" parent="payments" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="status : enum(success, failed)" vertex="1">
                     <mxGeometry height="26" width="240" y="156" as="geometry"/>
                 </mxCell>
                 <mxCell id="payments_field6" parent="payments" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;html=1;fontSize=13;" value="transaction_code : varchar(40)" vertex="1">

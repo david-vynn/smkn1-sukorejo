@@ -320,13 +320,6 @@ $dashboardUrl = match ($role) {
             <p class="form-error" data-error-for="login-password"></p>
           </div>
 
-          <div class="auth-form__row">
-            <label class="auth-checkbox">
-              <input type="checkbox" id="login-remember" name="remember" />
-              <span>Ingat saya</span>
-            </label>
-          </div>
-
           <button type="submit" class="btn btn-primary btn-block">Masuk</button>
         </form>
 

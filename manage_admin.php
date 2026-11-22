@@ -11,9 +11,9 @@ function hiddenPassword($prompt)
     return rtrim(shell_exec($command));
 }
 
-echo'=== ADMIN MANAGER ===\n';
-echo'1. Buat akun admin\n';
-echo'2. Ganti password admin\n';
+echo"=== ADMIN MANAGER ===\n";
+echo"1. Buat akun admin\n";
+echo"2. Ganti password admin\n";
 
 $pilihan = readline("PIlih menu : ");
 
