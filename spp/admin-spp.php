@@ -14,13 +14,14 @@ if (($_SESSION['role'] ?? '') !== 'admin') {
 
 require_once __DIR__ . '/../database/config.php';
 
+// Inisialisasi variabel dan pesan halaman
 $errors = [];
 $studentSuccess = null;
 $tariffSuccess = null;
 $resetSuccess = null;
 $kasirSuccess = null;
 
-// Ambil tahun ajaran yg sedang aktif
+// Mengambil tahun ajaran aktif
 $sql = '
   SELECT ID, name, start_date, end_date FROM academic_years WHERE is_current = 1 AND status = "active" LIMIT 1
 ';
@@ -33,6 +34,7 @@ if (!$academicYear) {
   $errors[] = 'Tahun ajaran tidak ditemukan';
 }
 
+// Menentukan periode tagihan berdasarkan pilihan bulan
 $periods = [];
 
 $selectedMonth = $_POST['month'] ?? 'all';
@@ -106,6 +108,7 @@ if ($academicYear) {
     }
   }
 
+  // Mengambil data siswa dan tarif berdasarkan tingkat kelas
   $students = [];
 
   $sql = '
@@ -152,6 +155,7 @@ if ($academicYear) {
 
   $totalInvoices = $totalStudents * $totalPeriods;
 
+  // Memeriksa tagihan yang sudah tersedia
   $existingInvoices = [];
 
   $sql = '
@@ -235,6 +239,7 @@ if ($academicYear) {
 
   $totalNewInvoices = count($newInvoices);
 
+  // Menyimpan tagihan baru ke database
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['action'] ?? '') === 'generate-invoices') && empty($errors)) {
 
 
@@ -308,6 +313,7 @@ if ($academicYear) {
   }
 
 
+  // Memproses perubahan tarif SPP
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['action'] ?? '') === 'save_tariffs')) {
     $tariffs = [
       'X' => trim($_POST['tarif_x'] ?? ''),
@@ -349,6 +355,7 @@ if ($academicYear) {
   }
 }
 
+// Mengambil tarif SPP untuk ditampilkan
 $tariffs = [
   'X' => 0,
   'XI' => 0,
@@ -361,6 +368,7 @@ while ($row = mysqli_fetch_assoc($result)) {
   $tariffs[$row['grade']] = $row['amount'];
 }
 
+// Memproses pembuatan akun siswa
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'create_student') {
 
   $nisn = trim($_POST['nisn'] ?? '');
@@ -480,6 +488,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'creat
   }
 }
 
+// Memproses reset password akun siswa
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset_student_password') {
 
   $userId = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
@@ -549,7 +558,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset
   }
 }
 
-// Ambil kata kunci pencarian siswa
+// Menyiapkan pencarian dan daftar akun siswa
 $studentSearch = trim($_GET['student_q'] ?? '');
 
 
@@ -607,6 +616,7 @@ if ($result) {
 
 mysqli_stmt_close($stmt);
 
+// Memproses pembuatan akun kasir
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'create_kasir') {
   $nama = trim($_POST['nama'] ?? '');
   $email = trim($_POST['email'] ?? '');
@@ -664,7 +674,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'creat
   }
 }
 
-// AMbil kata kunci pencarian kasir
+// Menyiapkan pencarian dan daftar akun kasir
 $kasirSearch = trim($_GET['kasir_q'] ?? '');
 $keyword = "%{$kasirSearch}%";
 
@@ -701,6 +711,7 @@ if ($result) {
 
 mysqli_stmt_close($stmt);
 
+// Memproses reset password akun kasir
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset_kasir_password') {
 
   $userId = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
@@ -770,6 +781,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reset
   }
 }
 
+// Mengambil daftar kelas untuk kebutuhan filter
 $classes = [];
 
 $sql = "SELECT id, class_name FROM classes ORDER BY FIELD(grade, 'X','XI','XII'), major_id, class_number";
@@ -780,6 +792,7 @@ while ($row = mysqli_fetch_assoc($stmt)) {
   $classes[] = $row;
 }
 
+// Memperbarui status tagihan yang melewati tanggal jatuh tempo
 $sql = "
   UPDATE spp_invoices
   SET status = 'overdue'
@@ -802,6 +815,7 @@ if (!$stmt) {
   mysqli_stmt_close($stmt);
 }
 
+// Menyiapkan filter dan mengambil daftar tagihan siswa
 $search = trim($_GET['q'] ?? '');
 $statusFilter = $_GET['status'] ?? '';
 
@@ -877,7 +891,7 @@ if (!$stmt) {
   mysqli_stmt_close($stmt);
 }
 
-// Statistik dashboard admin
+// Menghitung statistik dashboard admin
 $academicYearId = (int) ($academicYear['ID'] ?? 0);
 
 $statsSql = "
@@ -947,7 +961,7 @@ $dashboardStats = [
   'total_transactions' => (int) ($statsRow['total_transactions'] ?? 0)
 ];
 
-// Filter dan data laporan transaksi
+// Menyiapkan filter dan mengambil data laporan transaksi
 $reportPeriod = $_GET['report_period'] ?? 'all';
 $allowedReportPeriods = ['all', 'today', 'week', 'month', 'year'];
 
