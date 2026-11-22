@@ -399,7 +399,7 @@ $dashboardUrl = match ($role) {
         <h2 class="auth-modal__title" id="auth-modal-title">Masuk ke Akun</h2>
         <p class="auth-modal__subtitle">Gunakan email dan kata sandi Anda untuk masuk.</p>
 
-        <form class="auth-form" id="login-form" novalidate>
+        <form class="auth-form" id="login-form" novalidate action="login.php">
           <div class="form-field">
             <label for="login-email">Email</label>
             <div class="input-wrap">
