@@ -376,9 +376,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </svg>
         </button>
         <div class="user-chip__menu" id="account-menu">
-          <a href="../../cek-kelulusan.html" class="user-chip__link">
-            <span aria-hidden="true">&#127891;</span> Portal Kelulusan
-          </a>
           <button type="button" class="user-chip__logout">
             <span aria-hidden="true">&#128682;</span> Keluar
           </button>
@@ -668,8 +665,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h3>Informasi</h3>
         <ul>
           <li><a href="../prestasi.php">Prestasi</a></li>
-          <li><a href="../../cek-kelulusan.html"></a></li>
-          <li><a href="../../cek-kelulusan.html">Pendaftaran</a></li>
         </ul>
       </div>
       <div class="footer-col footer-contact">
