@@ -157,7 +157,7 @@
       // Bila action sudah Anda isi, form dikirim secara normal.
     });
 
-    // index.html?login=1 membuka modal login otomatis.
+    // index.php?login=1 membuka modal login otomatis.
     if (/[?&]login=1/.test(window.location.search)) openModal();
 
     // Hapus pesan error begitu kolom diedit.
