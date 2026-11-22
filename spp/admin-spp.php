@@ -1233,7 +1233,7 @@ if ($reportStmt) {
           </div>
 
           <div class="spp-card">
-            <h3>Generate Tagihan (2026/2027)</h3>
+            <h3>Generate Tagihan (<?= htmlspecialchars($academicYear['name'] ?? 'Tidak tersedia', ENT_QUOTES, 'UTF-8') ?>)</h3>
 
             <form class="spp-form" method="post">
               <input type="hidden" name="action" value="generate-invoices">
