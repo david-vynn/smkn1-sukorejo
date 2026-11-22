@@ -265,7 +265,7 @@ ALTER TABLE `majors`
 
 --
 -- Indexes for table `payments`
---
+---
 ALTER TABLE `payments`
   ADD PRIMARY KEY (`id`),
   ADD KEY `invoice_id` (`invoice_id`),
