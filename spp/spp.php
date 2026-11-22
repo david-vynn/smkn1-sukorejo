@@ -129,7 +129,9 @@ $formatDate = static function ($value) use ($shortMonths) {
     $time = strtotime($value);
     return date('d', $time) . ' ' . $shortMonths[(int) date('n', $time)] . ' ' . date('Y', $time);
 };
-$statusText = $totalOutstanding > 0 ? 'Ada Tunggakan' : 'Lunas';
+
+// Status belum ditentukan jika siswa belum memiliki tagihan sama sekali.
+$statusText = !$invoices ? '—' : ($totalOutstanding > 0 ? 'Ada Tunggakan' : 'Lunas');
 ?>
 <!doctype html>
 <html lang="id">
