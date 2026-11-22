@@ -1101,7 +1101,7 @@ if ($reportStmt) {
 <body>
   <header class="site-header">
     <div class="container">
-      <a href="../../index.html" class="brand">
+      <a href="../index.php" class="brand">
         <svg class="brand__logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M12 3L2 8l10 5 8-4.09V15h2V8L12 3z" fill="currentColor" />
           <path d="M6 12.18v3.64C6 18.09 8.69 20 12 20s6-1.91 6-4.18v-3.64l-6 3-6-3z" fill="currentColor" />
@@ -1110,11 +1110,11 @@ if ($reportStmt) {
       </a>
 
       <nav class="main-nav" aria-label="Navigasi utama">
-        <a href="../index.html">Beranda</a>
-        <a href="../profil-sekolah.html">Profil Sekolah</a>
-        <a href="../agenda.html">Agenda</a>
-        <a href="../prestasi.html">Prestasi</a>
-        <a href="../contact.html">Kontak</a>
+        <a href="../index.php">Beranda</a>
+        <a href="../profil-sekolah.php">Profil Sekolah</a>
+        <a href="../agenda.php">Agenda</a>
+        <a href="../prestasi.php">Prestasi</a>
+        <a href="../contact.php">Kontak</a>
       </nav>
 
       <div class="header-account user-chip_menu">
@@ -1846,16 +1846,16 @@ if ($reportStmt) {
       <div class="footer-col">
         <h3>Tautan Cepat</h3>
         <ul>
-          <li><a href="../../profil-sekolah.html">Profil Sekolah</a></li>
-          <li><a href="../../profil-sekolah.html#visi-misi">Visi Misi</a></li>
-          <li><a href="../../agenda.html">Agenda</a></li>
+          <li><a href="../profil-sekolah.php">Profil Sekolah</a></li>
+          <li><a href="../profil-sekolah.php#visi-misi">Visi Misi</a></li>
+          <li><a href="../agenda.php">Agenda</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
         <h3>Informasi</h3>
         <ul>
-          <li><a href="../../prestasi.html">Prestasi</a></li>
+          <li><a href="../prestasi.php">Prestasi</a></li>
           <li><a href="../../cek-kelulusan.html"></a></li>
           <li><a href="../../cek-kelulusan.html">Pendaftaran</a></li>
         </ul>
