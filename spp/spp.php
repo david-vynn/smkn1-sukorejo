@@ -42,57 +42,70 @@ $totalInvoices = 0;
 $totalPayments = 0;
 $totalOutstanding = 0;
 
-if ($academicYearId !== null) {
-    // Menghitung total tagihan dan tunggakan pada tahun ajaran aktif.
-    $sql = "
-        SELECT
-            COALESCE(SUM(amount), 0) AS total_tagihan,
-            COALESCE(SUM(CASE WHEN status IN ('unpaid', 'overdue') THEN amount ELSE 0 END), 0) AS total_tunggakan
-        FROM spp_invoices
-        WHERE student_id = ? AND academic_year_id = ?
-    ";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('ii', $studentId, $academicYearId);
-    $stmt->execute();
-    $summary = $stmt->get_result()->fetch_assoc();
-    $stmt->close();
-
-    $totalInvoices = (float) $summary['total_tagihan'];
-    $totalOutstanding = (float) $summary['total_tunggakan'];
-
-    // Mengambil seluruh tagihan pada tahun ajaran aktif.
-    $sql = "
-        SELECT ID, period_month, period_year, due_date, amount, status
-        FROM spp_invoices
-        WHERE student_id = ? AND academic_year_id = ?
-        ORDER BY period_year ASC, period_month ASC
-    ";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('ii', $studentId, $academicYearId);
-    $stmt->execute();
-    $invoices = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-    $stmt->close();
-
-    // Menjumlahkan pembayaran sukses pada tahun ajaran aktif.
-    $sql = "
-        SELECT COALESCE(SUM(p.amount), 0) AS total_pembayaran
-        FROM payments p
-        INNER JOIN spp_invoices i ON i.ID = p.invoice_id
-        WHERE i.student_id = ? AND i.academic_year_id = ? AND p.status = 'success'
-    ";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('ii', $studentId, $academicYearId);
-    $stmt->execute();
-    $paymentSummary = $stmt->get_result()->fetch_assoc();
-    $stmt->close();
-    $totalPayments = (float) $paymentSummary['total_pembayaran'];
-}
-
-// Mengambil riwayat pembayaran sukses milik siswa.
+// Menghitung ringkasan seluruh tagihan siswa dari semua tahun ajaran.
 $sql = "
-    SELECT i.period_month, i.period_year, p.amount, p.payment_date, p.transaction_code
+    SELECT
+        COALESCE(SUM(amount), 0) AS total_tagihan,
+        COALESCE(SUM(CASE WHEN status IN ('unpaid', 'overdue') THEN amount ELSE 0 END), 0) AS total_tunggakan
+    FROM spp_invoices
+    WHERE student_id = ?
+";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $studentId);
+$stmt->execute();
+$summary = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
+$totalInvoices = (float) $summary['total_tagihan'];
+$totalOutstanding = (float) $summary['total_tunggakan'];
+
+// Menampilkan tagihan dari seluruh tahun ajaran agar tunggakan lama tetap terlihat.
+$sql = "
+    SELECT
+        i.ID,
+        i.period_month,
+        i.period_year,
+        i.due_date,
+        i.amount,
+        i.status,
+        ay.name AS academic_year_name
+    FROM spp_invoices i
+    INNER JOIN academic_years ay ON ay.id = i.academic_year_id
+    WHERE i.student_id = ?
+    ORDER BY i.period_year DESC, i.period_month DESC, i.ID DESC
+";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $studentId);
+$stmt->execute();
+$invoices = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
+
+// Menjumlahkan seluruh pembayaran sukses siswa dari semua tahun ajaran.
+$sql = "
+    SELECT COALESCE(SUM(p.amount), 0) AS total_pembayaran
     FROM payments p
     INNER JOIN spp_invoices i ON i.ID = p.invoice_id
+    WHERE i.student_id = ? AND p.status = 'success'
+";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $studentId);
+$stmt->execute();
+$paymentSummary = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+$totalPayments = (float) $paymentSummary['total_pembayaran'];
+
+// Mengambil riwayat pembayaran sukses milik siswa dari semua tahun ajaran.
+$sql = "
+    SELECT
+        i.period_month,
+        i.period_year,
+        ay.name AS academic_year_name,
+        p.amount,
+        p.payment_date,
+        p.transaction_code
+    FROM payments p
+    INNER JOIN spp_invoices i ON i.ID = p.invoice_id
+    INNER JOIN academic_years ay ON ay.id = i.academic_year_id
     WHERE i.student_id = ? AND p.status = 'success'
     ORDER BY p.payment_date DESC, p.id DESC
 ";
@@ -185,7 +198,7 @@ $statusText = $totalOutstanding > 0 ? 'Ada Tunggakan' : 'Lunas';
       <div class="table-wrap spp-table">
         <table class="score-table">
           <caption class="visually-hidden">Daftar tagihan SPP siswa</caption>
-          <thead><tr><th scope="col">Bulan</th><th scope="col">Nominal</th><th scope="col">Jatuh Tempo</th><th scope="col">Status</th></tr></thead>
+          <thead><tr><th scope="col">Bulan</th><th scope="col">Tahun Ajaran</th><th scope="col">Nominal</th><th scope="col">Jatuh Tempo</th><th scope="col">Status</th></tr></thead>
           <tbody>
           <?php if ($invoices): ?>
             <?php foreach ($invoices as $invoice): ?>
@@ -199,13 +212,14 @@ $statusText = $totalOutstanding > 0 ? 'Ada Tunggakan' : 'Lunas';
               ?>
               <tr>
                 <td data-label="Bulan"><?= $monthNames[(int) $invoice['period_month']] . ' ' . htmlspecialchars($invoice['period_year']) ?></td>
+                <td data-label="Tahun Ajaran"><?= htmlspecialchars($invoice['academic_year_name'], ENT_QUOTES, 'UTF-8') ?></td>
                 <td data-label="Nominal"><?= $rupiah($invoice['amount']) ?></td>
                 <td data-label="Jatuh Tempo"><?= $formatDate($invoice['due_date']) ?></td>
                 <td data-label="Status"><span class="spp-badge <?= $class ?>"><?= $label ?></span></td>
               </tr>
             <?php endforeach; ?>
           <?php else: ?>
-            <tr><td colspan="4">Belum ada tagihan pada tahun ajaran aktif.</td></tr>
+            <tr><td colspan="5">Belum ada tagihan.</td></tr>
           <?php endif; ?>
           </tbody>
         </table>
@@ -215,19 +229,20 @@ $statusText = $totalOutstanding > 0 ? 'Ada Tunggakan' : 'Lunas';
       <div class="table-wrap spp-table">
         <table class="score-table">
           <caption class="visually-hidden">Riwayat pembayaran SPP siswa</caption>
-          <thead><tr><th scope="col">Bulan</th><th scope="col">Nominal</th><th scope="col">Tanggal</th><th scope="col">No. Transaksi</th></tr></thead>
+          <thead><tr><th scope="col">Bulan</th><th scope="col">Tahun Ajaran</th><th scope="col">Nominal</th><th scope="col">Tanggal</th><th scope="col">No. Transaksi</th></tr></thead>
           <tbody>
           <?php if ($paymentHistory): ?>
             <?php foreach ($paymentHistory as $payment): ?>
               <tr>
                 <td data-label="Bulan"><?= $monthNames[(int) $payment['period_month']] . ' ' . htmlspecialchars($payment['period_year']) ?></td>
+                <td data-label="Tahun Ajaran"><?= htmlspecialchars($payment['academic_year_name'], ENT_QUOTES, 'UTF-8') ?></td>
                 <td data-label="Nominal"><?= $rupiah($payment['amount']) ?></td>
                 <td data-label="Tanggal"><?= $formatDate($payment['payment_date']) ?></td>
                 <td data-label="No. Transaksi"><?= htmlspecialchars($payment['transaction_code'] ?: '-', ENT_QUOTES, 'UTF-8') ?></td>
               </tr>
             <?php endforeach; ?>
           <?php else: ?>
-            <tr><td colspan="4">Belum ada riwayat pembayaran.</td></tr>
+            <tr><td colspan="5">Belum ada riwayat pembayaran.</td></tr>
           <?php endif; ?>
           </tbody>
         </table>
