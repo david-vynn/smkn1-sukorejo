@@ -876,9 +876,194 @@ if (!$stmt) {
   mysqli_stmt_close($stmt);
 }
 
+// Statistik dashboard admin
+$academicYearId = (int) ($academicYear['ID'] ?? 0);
+
+$statsSql = "
+  SELECT
+    (SELECT COUNT(*) FROM students) AS total_students,
+    (
+      SELECT COUNT(*)
+      FROM students s
+      WHERE EXISTS (
+        SELECT 1
+        FROM spp_invoices i
+        WHERE i.student_id = s.id
+          AND i.academic_year_id = {$academicYearId}
+      )
+      AND NOT EXISTS (
+        SELECT 1
+        FROM spp_invoices i
+        WHERE i.student_id = s.id
+          AND i.academic_year_id = {$academicYearId}
+          AND i.status IN ('unpaid', 'overdue')
+      )
+    ) AS paid_students,
+    (
+      SELECT COALESCE(SUM(amount), 0)
+      FROM payments
+      WHERE status = 'success'
+        AND DATE(payment_date) = CURDATE()
+    ) AS income_today,
+    (
+      SELECT COALESCE(SUM(amount), 0)
+      FROM payments
+      WHERE status = 'success'
+        AND YEAR(payment_date) = YEAR(CURDATE())
+        AND MONTH(payment_date) = MONTH(CURDATE())
+    ) AS income_month,
+    (
+      SELECT COALESCE(SUM(amount), 0)
+      FROM spp_invoices
+      WHERE academic_year_id = {$academicYearId}
+        AND status IN ('unpaid', 'overdue')
+    ) AS outstanding,
+    (
+      SELECT COUNT(DISTINCT
+        CASE
+          WHEN transaction_code <> '' THEN transaction_code
+          ELSE CONCAT('PAY-', id)
+        END
+      )
+      FROM payments
+      WHERE status = 'success'
+    ) AS total_transactions
+";
+
+$statsResult = mysqli_query($conn, $statsSql);
+$statsRow = $statsResult ? mysqli_fetch_assoc($statsResult) : [];
+
+$dashboardStats = [
+  'total_students' => (int) ($statsRow['total_students'] ?? 0),
+  'paid_students' => (int) ($statsRow['paid_students'] ?? 0),
+  'unpaid_students' => max(
+    0,
+    (int) ($statsRow['total_students'] ?? 0) - (int) ($statsRow['paid_students'] ?? 0)
+  ),
+  'income_today' => (float) ($statsRow['income_today'] ?? 0),
+  'income_month' => (float) ($statsRow['income_month'] ?? 0),
+  'outstanding' => (float) ($statsRow['outstanding'] ?? 0),
+  'total_transactions' => (int) ($statsRow['total_transactions'] ?? 0)
+];
+
+// Filter dan data laporan transaksi
+$reportPeriod = $_GET['report_period'] ?? 'all';
+$allowedReportPeriods = ['all', 'today', 'week', 'month', 'year'];
+
+if (!in_array($reportPeriod, $allowedReportPeriods, true)) {
+  $reportPeriod = 'all';
+}
+
+$reportClass = trim($_GET['report_class'] ?? '');
+$reportStatus = $_GET['report_status'] ?? '';
+$allowedReportStatuses = ['', 'success', 'pending', 'failed'];
+
+if (!in_array($reportStatus, $allowedReportStatuses, true)) {
+  $reportStatus = '';
+}
+
+$reportToday = new DateTimeImmutable('today');
+$reportStart = new DateTimeImmutable('1900-01-01');
+$reportEnd = new DateTimeImmutable('9999-12-31');
+
+switch ($reportPeriod) {
+  case 'today':
+    $reportStart = $reportToday;
+    $reportEnd = $reportToday->modify('+1 day');
+    break;
+  case 'week':
+    $reportStart = $reportToday->modify('monday this week');
+    $reportEnd = $reportStart->modify('+7 days');
+    break;
+  case 'month':
+    $reportStart = $reportToday->modify('first day of this month');
+    $reportEnd = $reportStart->modify('+1 month');
+    break;
+  case 'year':
+    $reportStart = $reportToday->setDate((int) $reportToday->format('Y'), 1, 1);
+    $reportEnd = $reportStart->modify('+1 year');
+    break;
+}
+
+$reportTransactions = [];
+$reportSummary = [
+  'total_transactions' => 0,
+  'total_income' => 0
+];
+
+$reportSql = "
+  SELECT
+    CASE
+      WHEN p.transaction_code <> '' THEN p.transaction_code
+      ELSE CONCAT('PAY-', p.id)
+    END AS transaction_code,
+    s.nama,
+    c.class_name,
+    GROUP_CONCAT(
+      DISTINCT CONCAT(i.period_month, '/', i.period_year)
+      ORDER BY i.period_year, i.period_month
+      SEPARATOR ', '
+    ) AS periods,
+    SUM(p.amount) AS total_amount,
+    MIN(p.payment_date) AS payment_date,
+    p.status
+  FROM payments p
+  INNER JOIN spp_invoices i ON i.ID = p.invoice_id
+  INNER JOIN students s ON s.id = i.student_id
+  INNER JOIN classes c ON c.id = s.class_id
+  WHERE p.payment_date >= ?
+    AND p.payment_date < ?
+    AND (? = '' OR c.class_name = ?)
+    AND (? = '' OR p.status = ?)
+  GROUP BY
+    CASE
+      WHEN p.transaction_code <> '' THEN p.transaction_code
+      ELSE CONCAT('PAY-', p.id)
+    END,
+    s.id,
+    s.nama,
+    c.class_name,
+    p.status
+  ORDER BY MIN(p.payment_date) DESC
+";
+
+$reportStmt = mysqli_prepare($conn, $reportSql);
+
+if ($reportStmt) {
+  $reportStartValue = $reportStart->format('Y-m-d H:i:s');
+  $reportEndValue = $reportEnd->format('Y-m-d H:i:s');
+
+  mysqli_stmt_bind_param(
+    $reportStmt,
+    'ssssss',
+    $reportStartValue,
+    $reportEndValue,
+    $reportClass,
+    $reportClass,
+    $reportStatus,
+    $reportStatus
+  );
+
+  if (mysqli_stmt_execute($reportStmt)) {
+    $reportResult = mysqli_stmt_get_result($reportStmt);
+
+    while ($row = mysqli_fetch_assoc($reportResult)) {
+      $reportTransactions[] = $row;
+
+      if ($row['status'] === 'success') {
+        $reportSummary['total_income'] += (float) $row['total_amount'];
+      }
+    }
+
+    $reportSummary['total_transactions'] = count($reportTransactions);
+  }
+
+  mysqli_stmt_close($reportStmt);
+}
+
 ?>
 
-<!doctype html>
+<!doctype html
 <html lang="id">
 
 <head>
@@ -937,15 +1122,6 @@ if (!$stmt) {
     <section class="spp-section">
       <div class="container">
 
-        <p class="form-help spp-demo-note" role="note">
-          <strong>Tampilan contoh.</strong> Semua data di halaman ini adalah
-          placeholder untuk demonstrasi UI dan belum terhubung ke backend.
-          Pratinjau peran:
-          <a href="spp.html">Siswa</a> ·
-          <a href="kasir-spp.php">Kasir</a> ·
-          <a href="admin-spp.html">Admin</a>.
-        </p>
-
         <div id="spp-msg" class="form-help" role="status" aria-live="polite">
           <?php foreach ($errors as $error): ?>
             <p class="form-error">
@@ -971,31 +1147,31 @@ if (!$stmt) {
         <div class="spp-stats">
           <div class="spp-card spp-stat">
             <span class="stat-block__label">Total Siswa</span>
-            <strong class="spp-stat__v">120</strong>
+            <strong class="spp-stat__v"><?= number_format($dashboardStats['total_students'], 0, ',', '.') ?></strong>
           </div>
           <div class="spp-card spp-stat">
             <span class="stat-block__label">Siswa Lunas</span>
-            <strong class="spp-stat__v">45</strong>
+            <strong class="spp-stat__v"><?= number_format($dashboardStats['paid_students'], 0, ',', '.') ?></strong>
           </div>
           <div class="spp-card spp-stat">
             <span class="stat-block__label">Siswa Belum Lunas</span>
-            <strong class="spp-stat__v">75</strong>
+            <strong class="spp-stat__v"><?= number_format($dashboardStats['unpaid_students'], 0, ',', '.') ?></strong>
           </div>
           <div class="spp-card spp-stat">
             <span class="stat-block__label">Pemasukan Hari Ini</span>
-            <strong class="spp-stat__v">Rp450.000</strong>
+            <strong class="spp-stat__v">Rp<?= number_format($dashboardStats['income_today'], 0, ',', '.') ?></strong>
           </div>
           <div class="spp-card spp-stat">
             <span class="stat-block__label">Pemasukan Bulan Ini</span>
-            <strong class="spp-stat__v">Rp3.600.000</strong>
+            <strong class="spp-stat__v">Rp<?= number_format($dashboardStats['income_month'], 0, ',', '.') ?></strong>
           </div>
           <div class="spp-card spp-stat">
             <span class="stat-block__label">Total Tunggakan</span>
-            <strong class="spp-stat__v">Rp5.250.000</strong>
+            <strong class="spp-stat__v">Rp<?= number_format($dashboardStats['outstanding'], 0, ',', '.') ?></strong>
           </div>
           <div class="spp-card spp-stat">
             <span class="stat-block__label">Total Transaksi</span>
-            <strong class="spp-stat__v">210</strong>
+            <strong class="spp-stat__v"><?= number_format($dashboardStats['total_transactions'], 0, ',', '.') ?></strong>
           </div>
         </div>
 
@@ -1204,28 +1380,32 @@ if (!$stmt) {
           </div>
         </div>
 
-        <form class="spp-row" method="get" data-backend="pending">
+        <form class="spp-row" method="get">
           <label class="visually-hidden" for="a-period">Periode</label>
-          <select id="a-period" name="period">
-            <option value="all">Semua waktu</option>
-            <option value="today">Hari ini</option>
-            <option value="week">Minggu ini</option>
-            <option value="month">Bulan ini</option>
-            <option value="year">Tahun ini</option>
+          <select id="a-period" name="report_period">
+            <option value="all" <?= $reportPeriod === 'all' ? 'selected' : '' ?>>Semua waktu</option>
+            <option value="today" <?= $reportPeriod === 'today' ? 'selected' : '' ?>>Hari ini</option>
+            <option value="week" <?= $reportPeriod === 'week' ? 'selected' : '' ?>>Minggu ini</option>
+            <option value="month" <?= $reportPeriod === 'month' ? 'selected' : '' ?>>Bulan ini</option>
+            <option value="year" <?= $reportPeriod === 'year' ? 'selected' : '' ?>>Tahun ini</option>
           </select>
 
           <label class="visually-hidden" for="a-rkelas">Kelas</label>
-          <select id="a-rkelas" name="kelas">
+          <select id="a-rkelas" name="report_class">
             <option value="">Semua kelas</option>
-            <option value="X RPL 1">X RPL 1</option>
-            <option value="XI RPL 1">XI RPL 1</option>
-            <option value="XII RPL 1">XII RPL 1</option>
+            <?php foreach ($classes as $class): ?>
+              <option value="<?= htmlspecialchars($class['class_name']) ?>" <?= $reportClass === $class['class_name'] ? 'selected' : '' ?>>
+                <?= htmlspecialchars($class['class_name']) ?>
+              </option>
+            <?php endforeach; ?>
           </select>
 
           <label class="visually-hidden" for="a-status">Status</label>
-          <select id="a-status" name="status">
+          <select id="a-status" name="report_status">
             <option value="">Semua status</option>
-            <option value="success">Berhasil</option>
+            <option value="success" <?= $reportStatus === 'success' ? 'selected' : '' ?>>Berhasil</option>
+            <option value="pending" <?= $reportStatus === 'pending' ? 'selected' : '' ?>>Menunggu</option>
+            <option value="failed" <?= $reportStatus === 'failed' ? 'selected' : '' ?>>Gagal</option>
           </select>
 
           <button type="submit" class="btn btn-primary btn-sm">
@@ -1239,8 +1419,9 @@ if (!$stmt) {
 
         <div class="spp-gap">
           <p class="form-help">
-            Total transaksi: <strong>2</strong> · Total pemasukan (berhasil):
-            <strong>Rp150.000</strong>
+            Total transaksi: <strong><?= number_format($reportSummary['total_transactions'], 0, ',', '.') ?></strong>
+            · Total pemasukan (berhasil):
+            <strong>Rp<?= number_format($reportSummary['total_income'], 0, ',', '.') ?></strong>
           </p>
 
           <div class="table-wrap spp-table">
@@ -1261,23 +1442,22 @@ if (!$stmt) {
               </thead>
 
               <tbody>
-                <tr>
-                  <td data-label="No. Transaksi">SPP-20260705-0001</td>
-                  <td data-label="Siswa">Siswa Contoh</td>
-                  <td data-label="Kelas">XI RPL 1</td>
-                  <td data-label="Bulan">Juli 2026</td>
-                  <td data-label="Nominal">Rp150.000</td>
-                  <td data-label="Tanggal">5 Jul 2026</td>
-                </tr>
-
-                <tr>
-                  <td data-label="No. Transaksi">SPP-20260808-0003</td>
-                  <td data-label="Siswa">Siswa Contoh</td>
-                  <td data-label="Kelas">XI RPL 1</td>
-                  <td data-label="Bulan">Agustus 2026</td>
-                  <td data-label="Nominal">Rp150.000</td>
-                  <td data-label="Tanggal">8 Agu 2026</td>
-                </tr>
+                <?php if (!empty($reportTransactions)): ?>
+                  <?php foreach ($reportTransactions as $transaction): ?>
+                    <tr>
+                      <td data-label="No. Transaksi"><?= htmlspecialchars($transaction['transaction_code']) ?></td>
+                      <td data-label="Siswa"><?= htmlspecialchars($transaction['nama']) ?></td>
+                      <td data-label="Kelas"><?= htmlspecialchars($transaction['class_name']) ?></td>
+                      <td data-label="Bulan"><?= htmlspecialchars($transaction['periods']) ?></td>
+                      <td data-label="Nominal">Rp<?= number_format((float) $transaction['total_amount'], 0, ',', '.') ?></td>
+                      <td data-label="Tanggal"><?= date('d M Y H:i', strtotime($transaction['payment_date'])) ?></td>
+                    </tr>
+                  <?php endforeach; ?>
+                <?php else: ?>
+                  <tr>
+                    <td colspan="6">Tidak ada transaksi pada filter yang dipilih.</td>
+                  </tr>
+                <?php endif; ?>
               </tbody>
             </table>
           </div>
