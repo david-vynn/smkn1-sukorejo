@@ -138,10 +138,10 @@ $statusText = $totalOutstanding > 0 ? 'Ada Tunggakan' : 'Lunas';
     <a href="../index.php" class="brand">SMKN 1 SUKOREJO</a>
     <nav class="main-nav" aria-label="Navigasi utama">
       <a href="../index.php">Beranda</a>
-      <a href="../profil-sekolah.html">Profil Sekolah</a>
-      <a href="../agenda.html">Agenda</a>
-      <a href="../prestasi.html">Prestasi</a>
-      <a href="../contact.html">Kontak</a>
+      <a href="../profil-sekolah.php">Profil Sekolah</a>
+      <a href="../agenda.php">Agenda</a>
+      <a href="../prestasi.php">Prestasi</a>
+      <a href="../contact.php">Kontak</a>
     </nav>
     <div class="header-account">
       <span class="user-chip__name"><?= htmlspecialchars($_SESSION['username'] ?? $student['nama'], ENT_QUOTES, 'UTF-8') ?></span>
@@ -240,8 +240,8 @@ $statusText = $totalOutstanding > 0 ? 'Ada Tunggakan' : 'Lunas';
       <p class="footer-brand__name">SMKN 1 SUKOREJO</p>
       <p>Mencetak generasi muda yang kompeten, berkarakter, profesional, dan siap menghadapi tantangan industri global.</p>
     </div>
-    <div class="footer-col"><h3>Tautan Cepat</h3><ul><li><a href="../profil-sekolah.html">Profil Sekolah</a></li><li><a href="../agenda.html">Agenda</a></li></ul></div>
-    <div class="footer-col"><h3>Informasi</h3><ul><li><a href="../prestasi.html">Prestasi</a></li></ul></div>
+    <div class="footer-col"><h3>Tautan Cepat</h3><ul><li><a href="../profil-sekolah.php">Profil Sekolah</a></li><li><a href="../agenda.php">Agenda</a></li></ul></div>
+    <div class="footer-col"><h3>Informasi</h3><ul><li><a href="../prestasi.php">Prestasi</a></li></ul></div>
     <div class="footer-col footer-contact"><h3>Kontak Kami</h3><ul><li><span>Jl. Raya Sukorejo No. 1, Pasuruan, Jawa Timur</span></li><li><span>(0343) 611234</span></li><li><span>info@smkn1sukorejo.sch.id</span></li></ul></div>
   </div>
   <div class="footer-bottom">&copy; 2026 SMKN 1 SUKOREJO. All rights reserved.</div>
