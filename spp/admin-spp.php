@@ -1205,7 +1205,7 @@ if ($reportStmt) {
 
               <div class="form-field">
                 <label for="a-year">Tahun Ajaran</label>
-                <input type="text" id="a-year" value="<?= htmlspecialchars($academicYear['name'] ?? 'Tidak tersedia', ENT_QUOTES, 'UTF-8') ?>" readonly>
+                <input type="text" id="a-year" value="<?= htmlspecialchars($academicYear['name'] ?? 'Tidak tersedia', ENT_QUOTES, 'UTF-8') ?>" >
               </div>
 
               <div class="form-field">

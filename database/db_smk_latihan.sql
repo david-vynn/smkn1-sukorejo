@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 21, 2026 at 03:31 AM
+-- Generation Time: Nov 22, 2026 at 03:07 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -144,25 +144,6 @@ CREATE TABLE `payments` (
   `transaction_code` varchar(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `payments`
---
-
-INSERT INTO `payments` (`id`, `invoice_id`, `cashier_id`, `amount`, `payment_date`, `status`, `created_at`, `transaction_code`) VALUES
-(3, 1, 10, 150000.00, '2026-11-04 13:52:34', 'success', '2026-11-04 06:52:34', ''),
-(4, 9, 10, 150000.00, '2026-11-04 13:59:38', 'success', '2026-11-04 06:59:38', ''),
-(5, 11, 10, 150000.00, '2026-11-04 14:00:30', 'success', '2026-11-04 07:00:30', ''),
-(6, 13, 10, 150000.00, '2026-11-04 14:06:11', 'success', '2026-11-04 07:06:11', ''),
-(7, 3, 10, 150000.00, '2026-11-04 14:13:53', 'success', '2026-11-04 07:13:53', ''),
-(8, 2, 10, 150000.00, '2026-11-04 14:17:18', 'success', '2026-11-04 07:17:18', ''),
-(9, 4, 10, 150000.00, '2026-11-04 14:19:10', 'success', '2026-11-04 07:19:10', ''),
-(10, 10, 10, 150000.00, '2026-11-04 14:33:19', 'success', '2026-11-04 07:33:19', 'SPP-20261104-9C3639'),
-(11, 12, 10, 150000.00, '2026-11-04 14:37:28', 'success', '2026-11-04 07:37:28', 'SPP-20261104-3E7A0A'),
-(12, 14, 10, 150000.00, '2026-11-04 14:38:41', 'success', '2026-11-04 07:38:41', 'SPP-20261104-9025A8'),
-(13, 5, 10, 150000.00, '2026-11-04 14:39:13', 'success', '2026-11-04 07:39:13', 'SPP-20261104-A421A9'),
-(14, 6, 10, 150000.00, '2026-11-04 14:40:12', 'success', '2026-11-04 07:40:12', 'SPP-20261104-95FEBE'),
-(15, 7, 10, 150000.00, '2026-11-04 15:00:41', 'success', '2026-11-04 08:00:41', 'SPP-20261104-AA056C');
-
 -- --------------------------------------------------------
 
 --
@@ -180,52 +161,6 @@ CREATE TABLE `spp_invoices` (
   `status` enum('unpaid','overdue','paid') NOT NULL DEFAULT 'unpaid',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `spp_invoices`
---
-
-INSERT INTO `spp_invoices` (`ID`, `student_id`, `academic_year_id`, `period_month`, `period_year`, `due_date`, `amount`, `status`, `created_at`) VALUES
-(1, 1, 1, 11, '2026', '2026-11-30', 150000.00, 'paid', '2026-11-03 22:01:07'),
-(2, 1, 1, 12, '2026', '2026-12-31', 150000.00, 'paid', '2026-11-03 22:01:07'),
-(3, 1, 1, 1, '2027', '2027-01-31', 150000.00, 'paid', '2026-11-03 22:01:07'),
-(4, 1, 1, 2, '2027', '2027-02-28', 150000.00, 'paid', '2026-11-03 22:01:07'),
-(5, 1, 1, 3, '2027', '2027-03-31', 150000.00, 'paid', '2026-11-03 22:01:07'),
-(6, 1, 1, 4, '2027', '2027-04-30', 150000.00, 'paid', '2026-11-03 22:01:07'),
-(7, 1, 1, 5, '2027', '2027-05-31', 150000.00, 'paid', '2026-11-03 22:01:07'),
-(8, 1, 1, 6, '2027', '2027-06-30', 150000.00, 'unpaid', '2026-11-03 22:01:07'),
-(9, 2, 1, 11, '2026', '2026-11-30', 150000.00, 'paid', '2026-11-03 22:01:07'),
-(10, 2, 1, 12, '2026', '2026-12-31', 150000.00, 'paid', '2026-11-03 22:01:07'),
-(11, 2, 1, 1, '2027', '2027-01-31', 150000.00, 'paid', '2026-11-03 22:01:07'),
-(12, 2, 1, 2, '2027', '2027-02-28', 150000.00, 'paid', '2026-11-03 22:01:07'),
-(13, 2, 1, 3, '2027', '2027-03-31', 150000.00, 'paid', '2026-11-03 22:01:07'),
-(14, 2, 1, 4, '2027', '2027-04-30', 150000.00, 'paid', '2026-11-03 22:01:07'),
-(15, 2, 1, 5, '2027', '2027-05-31', 150000.00, 'unpaid', '2026-11-03 22:01:07'),
-(16, 2, 1, 6, '2027', '2027-06-30', 150000.00, 'unpaid', '2026-11-03 22:01:07'),
-(17, 3, 1, 11, '2026', '2026-11-30', 175000.00, 'unpaid', '2026-11-03 22:01:07'),
-(18, 3, 1, 12, '2026', '2026-12-31', 175000.00, 'unpaid', '2026-11-03 22:01:07'),
-(19, 3, 1, 1, '2027', '2027-01-31', 175000.00, 'unpaid', '2026-11-03 22:01:07'),
-(20, 3, 1, 2, '2027', '2027-02-28', 175000.00, 'unpaid', '2026-11-03 22:01:07'),
-(21, 3, 1, 3, '2027', '2027-03-31', 175000.00, 'unpaid', '2026-11-03 22:01:07'),
-(22, 3, 1, 4, '2027', '2027-04-30', 175000.00, 'unpaid', '2026-11-03 22:01:07'),
-(23, 3, 1, 5, '2027', '2027-05-31', 175000.00, 'unpaid', '2026-11-03 22:01:07'),
-(24, 3, 1, 6, '2027', '2027-06-30', 175000.00, 'unpaid', '2026-11-03 22:01:07'),
-(25, 4, 1, 11, '2026', '2026-11-30', 175000.00, 'unpaid', '2026-11-03 22:01:07'),
-(26, 4, 1, 12, '2026', '2026-12-31', 175000.00, 'unpaid', '2026-11-03 22:01:07'),
-(27, 4, 1, 1, '2027', '2027-01-31', 175000.00, 'unpaid', '2026-11-03 22:01:07'),
-(28, 4, 1, 2, '2027', '2027-02-28', 175000.00, 'unpaid', '2026-11-03 22:01:07'),
-(29, 4, 1, 3, '2027', '2027-03-31', 175000.00, 'unpaid', '2026-11-03 22:01:07'),
-(30, 4, 1, 4, '2027', '2027-04-30', 175000.00, 'unpaid', '2026-11-03 22:01:07'),
-(31, 4, 1, 5, '2027', '2027-05-31', 175000.00, 'unpaid', '2026-11-03 22:01:07'),
-(32, 4, 1, 6, '2027', '2027-06-30', 175000.00, 'unpaid', '2026-11-03 22:01:07'),
-(33, 5, 1, 11, '2026', '2026-11-30', 200000.00, 'unpaid', '2026-11-03 22:01:07'),
-(34, 5, 1, 12, '2026', '2026-12-31', 200000.00, 'unpaid', '2026-11-03 22:01:07'),
-(35, 5, 1, 1, '2027', '2027-01-31', 200000.00, 'unpaid', '2026-11-03 22:01:07'),
-(36, 5, 1, 2, '2027', '2027-02-28', 200000.00, 'unpaid', '2026-11-03 22:01:07'),
-(37, 5, 1, 3, '2027', '2027-03-31', 200000.00, 'unpaid', '2026-11-03 22:01:07'),
-(38, 5, 1, 4, '2027', '2027-04-30', 200000.00, 'unpaid', '2026-11-03 22:01:07'),
-(39, 5, 1, 5, '2027', '2027-05-31', 200000.00, 'unpaid', '2026-11-03 22:01:07'),
-(40, 5, 1, 6, '2027', '2027-06-30', 200000.00, 'unpaid', '2026-11-03 22:01:07');
 
 -- --------------------------------------------------------
 
@@ -269,8 +204,8 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `user_id`, `class_id`, `nisn`, `nama`, `created_at`) VALUES
-(1, 3, 1, '0098765432', 'Andi Saputra', '2026-11-01 04:13:44'),
-(2, 4, 2, '0098765433', 'Budi Santoso', '2026-11-01 04:13:44'),
+(1, 13, 1, '0098765432', 'Andi Saputra', '2026-11-01 04:13:44'),
+(2, 14, 2, '0098765433', 'Budi Santoso', '2026-11-01 04:13:44'),
 (3, NULL, 3, '0098765434', 'Citra Lestari', '2026-11-01 04:13:44'),
 (4, NULL, 19, '0098765435', 'Dimas Pratama', '2026-11-01 04:13:44'),
 (5, NULL, 33, '0098765436', 'Eka Putri', '2026-11-01 04:13:44');
@@ -297,14 +232,10 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `created_at`) VALUES
 (1, 'David', 'davidalvinmaulana@gmail.com', '$2y$10$nk6bLBtRq1oKQCrh0xyUmeRtD8/xHFZlJxQlvMyGSZCYay1oOfMG6', 'admin', '2026-11-01 01:33:11'),
 (2, 'Alvin', 'davidalvin.it@gmail.com', '$2y$10$4Yd.QqytsBGySnevyPmAN.2nxhL7UKoPV9ye0fy8gNawUgz11rPa6', 'admin', '2026-11-01 01:49:10'),
-(3, '0098765432', 'andisaputra@gmail.com', '$2y$10$7gJ.iBwxRYQpATHyt.NT6O.ENlnigpuGXYRcjKocgD5WCxJoyrGAC', 'siswa', '2026-11-02 02:18:40'),
-(4, '0098765433', 'budigaming@gmail.com', '$2y$10$P53NL7U06xKEpP7ZkmZZAuZep8yColIS8uWBtObZqBtPKQbKZvS6m', 'siswa', '2026-11-02 04:40:05'),
-(5, 'Pak Nasir', 'nasirkasir@gmail.com', '$2y$10$PCl.OQKPNLSIuzYsswMoveG2nD/swp4ImdwqNC6b2f167vqC.TiX.', 'kasir', '2026-11-02 11:42:51'),
-(7, 'Pak Bowo', 'bowokasir@gmail.com', '$2y$10$W0V223cPfsBRgJI1ST5gU.yPUhFNU7TDP1t.9sPE1ProhwJo7G7S.', 'kasir', '2026-11-02 11:47:17'),
-(8, 'Pak Mujib', 'mujibkasir@gmail.com', '$2y$10$So0htmjKAlLM1l4wfsUmA.xryssJqsbT0u3F.f6NVGY7nCBtC5y5y', 'kasir', '2026-11-02 12:32:48'),
-(10, 'Bu Irma', 'irmakasir@gmail.com', '$2y$10$/Gvo9rY9Vdb3bXIxNd1NmeHDt09gnNGv99LPC5G9H.blIk/wnXzc2', 'kasir', '2026-11-02 12:46:20'),
-(11, 'Joko', 'wi@gmail.com', '$2y$10$QbduFnn9ik0szmMkdsEOxOdxOPK8Q.uQKm3/MUCyC9Zd2xS1pZZTq', 'kasir', '2026-11-16 02:18:44'),
-(12, 'Riyan', 'riyan@gmail.com', '$2y$10$uxRasdNQoRPPgAg3Rz1l6.qO.ozl4T/PwNZedz2MrbZCG/DolrMWu', 'kasir', '2026-11-17 00:32:17');
+(13, '0098765432', 'andisaputra@gmail.com', '$2y$10$887SKKkl7IKb19AjkgsGL.bONyNHeUUjbV1RRV2hyNTX.aqikfxW2', 'siswa', '2026-11-22 11:31:21'),
+(14, '0098765433', 'budisantoso@gmail.com', '$2y$10$KraQx5gScMgWJWYIihE2z.Diwr8OSBf3woqxx87K4Jcnzs9phu/Pm', 'siswa', '2026-11-22 11:45:28'),
+(16, 'Neni Nailatul Izzah', 'nenikasir@gmail.com', '$2y$10$lUrXD06ZiSaKZS5S.4T0qe1SfqKbH/5PFwQ9JrGdjzIpGU8mnxJCC', 'kasir', '2026-11-22 11:53:28'),
+(17, 'Irma Sabira', 'irmakasir@gmail.com', '$2y$10$ADVoXix57b1lrxym9nz6SON5g4h1ygGYqQ3HvoIaI6Eg/l5nmhskS', 'kasir', '2026-11-22 11:54:05');
 
 --
 -- Indexes for dumped tables
@@ -345,7 +276,6 @@ ALTER TABLE `payments`
 --
 ALTER TABLE `spp_invoices`
   ADD PRIMARY KEY (`ID`),
-  ADD UNIQUE KEY `student_id` (`student_id`,`period_month`,`period_year`),
   ADD UNIQUE KEY `unique_student_invoice` (`student_id`,`academic_year_id`,`period_month`,`period_year`),
   ADD KEY `academic_year_id` (`academic_year_id`);
 
@@ -399,13 +329,13 @@ ALTER TABLE `majors`
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `spp_invoices`
 --
 ALTER TABLE `spp_invoices`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `spp_tariffs`
@@ -423,7 +353,7 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Constraints for dumped tables
