@@ -30,7 +30,7 @@ $role = $_SESSION['role'] ?? '';
 
   <header class="site-header">
     <div class="container">
-      <a href="index.html" class="brand">
+      <a href="index.php" class="brand">
         <svg class="brand__logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M12 3L2 8l10 5 8-4.09V15h2V8L12 3z" fill="currentColor" />
           <path d="M6 12.18v3.64C6 18.09 8.69 20 12 20s6-1.91 6-4.18v-3.64l-6 3-6-3z" fill="currentColor" />
@@ -38,11 +38,11 @@ $role = $_SESSION['role'] ?? '';
         SMKN 1 SUKOREJO
       </a>
       <nav class="main-nav" aria-label="Navigasi utama">
-        <a href="index.html" aria-current="page">Beranda</a>
-        <a href="profil-sekolah.html">Profil Sekolah</a>
-        <a href="agenda.html">Agenda</a>
-        <a href="prestasi.html">Prestasi</a>
-        <a href="contact.html">Kontak</a>
+        <a href="index.php" aria-current="page">Beranda</a>
+        <a href="profil-sekolah.php">Profil Sekolah</a>
+        <a href="agenda.php">Agenda</a>
+        <a href="prestasi.php">Prestasi</a>
+        <a href="contact.php">Kontak</a>
       </nav>
       <div class="header-account">
         <button type="button" class="user-chip__trigger" id="account-trigger" aria-haspopup="true"
@@ -61,7 +61,7 @@ $role = $_SESSION['role'] ?? '';
             $dashboardUrl = match ($role) {
               'admin' => 'spp/admin-spp.php',
               'kasir' => 'spp/kasir-spp.php',
-              'siswa' => 'spp/spp.html',
+              'siswa' => 'spp/spp.php',
               default => null
             };
             ?>
@@ -93,7 +93,7 @@ $role = $_SESSION['role'] ?? '';
             mempersiapkan siswa untuk sukses di dunia industri modern.</p>
           <div class="hero__actions">
 
-            <a href="program-keahlian.html" class="btn btn-outline-light">Jelajahi Program</a>
+            <a href="program-keahlian.php" class="btn btn-outline-light">Jelajahi Program</a>
           </div>
         </div>
       </div>
@@ -109,7 +109,7 @@ $role = $_SESSION['role'] ?? '';
               fasilitas, program akademik, kegiatan ekstrakurikuler, prestasi, hingga keseharian siswa.</p>
             <span class="video-intro__badge">Video Profil Resmi Sekolah</span>
             <div>
-              <a href="profil-sekolah.html" class="btn btn-outline-navy video-intro__cta">Pelajari Lebih Lanjut</a>
+              <a href="profil-sekolah.php" class="btn btn-outline-navy video-intro__cta">Pelajari Lebih Lanjut</a>
             </div>
           </div>
 
@@ -148,7 +148,7 @@ $role = $_SESSION['role'] ?? '';
             <h2>Agenda Sekolah</h2>
             <p>Informasi kegiatan dan acara terdekat di SMKN 1 Sukorejo.</p>
           </div>
-          <a href="agenda.html" class="link-arrow">Lihat Semua &rarr;</a>
+          <a href="agenda.php" class="link-arrow">Lihat Semua &rarr;</a>
         </div>
 
         <div class="agenda-grid">
@@ -203,7 +203,7 @@ $role = $_SESSION['role'] ?? '';
         <div class="section-intro">
           <span class="eyebrow">Program Keahlian</span>
           <h2>Kompetensi Unggulan Kami</h2>
-          <a href="program-keahlian.html" class="btn btn-outline-navy btn-sm section-intro__cta">Lihat Semua</a>
+          <a href="program-keahlian.php" class="btn btn-outline-navy btn-sm section-intro__cta">Lihat Semua</a>
         </div>
 
         <div class="program-showcase" id="program-showcase">
@@ -300,114 +300,114 @@ $role = $_SESSION['role'] ?? '';
             <h2>Ekstrakurikuler</h2>
             <p>Kembangkan bakat dan minat di luar jam pelajaran akademis.</p>
           </div>
-          <a href="ekstrakurikuler.html" class="link-arrow">Lihat Semua &rarr;</a>
+          <a href="ekstrakurikuler.php" class="link-arrow">Lihat Semua &rarr;</a>
         </div>
 
         <div class="ekskul-marquee marquee" aria-label="Daftar ekstrakurikuler">
           <div class="marquee__track">
-            <a href="ekstrakurikuler.html" class="ekskul-card">
+            <a href="ekstrakurikuler.php" class="ekskul-card">
               <img src="assets/images/extracurricular/futsal.png" alt="Kegiatan ekstrakurikuler Futsal" />
               <span class="ekskul-card__label">Futsal</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card">
+            <a href="ekstrakurikuler.php" class="ekskul-card">
               <img src="assets/images/extracurricular/basket.png" alt="Kegiatan ekstrakurikuler Basket" />
               <span class="ekskul-card__label">Basket</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card">
+            <a href="ekstrakurikuler.php" class="ekskul-card">
               <img src="assets/images/extracurricular/volly.png" alt="Kegiatan ekstrakurikuler Volly" />
               <span class="ekskul-card__label">Volly</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card">
+            <a href="ekstrakurikuler.php" class="ekskul-card">
               <img src="assets/images/extracurricular/badminton.png" alt="Kegiatan ekstrakurikuler Badminton" />
               <span class="ekskul-card__label">Badminton</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card">
+            <a href="ekstrakurikuler.php" class="ekskul-card">
               <img src="assets/images/extracurricular/kickboxing.png" alt="Kegiatan ekstrakurikuler Kick Boxing" />
               <span class="ekskul-card__label">Kick Boxing</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card">
+            <a href="ekstrakurikuler.php" class="ekskul-card">
               <img src="assets/images/extracurricular/perisai-diri.png" alt="Kegiatan ekstrakurikuler Perisai Diri" />
               <span class="ekskul-card__label">Perisai Diri</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card">
+            <a href="ekstrakurikuler.php" class="ekskul-card">
               <img src="assets/images/extracurricular/tari.png" alt="Kegiatan ekstrakurikuler Tari" />
               <span class="ekskul-card__label">Tari</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card">
+            <a href="ekstrakurikuler.php" class="ekskul-card">
               <img src="assets/images/extracurricular/banjari.png" alt="Kegiatan ekstrakurikuler Al Banjari" />
               <span class="ekskul-card__label">Al Banjari</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card">
+            <a href="ekstrakurikuler.php" class="ekskul-card">
               <img src="assets/images/extracurricular/band.png" alt="Kegiatan ekstrakurikuler Band" />
               <span class="ekskul-card__label">Band</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card">
+            <a href="ekstrakurikuler.php" class="ekskul-card">
               <img src="assets/images/extracurricular/pramuka.png" alt="Kegiatan ekstrakurikuler Pramuka" />
               <span class="ekskul-card__label">Pramuka</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card">
+            <a href="ekstrakurikuler.php" class="ekskul-card">
               <img src="assets/images/extracurricular/paskibra.png" alt="Kegiatan ekstrakurikuler Paskibra" />
               <span class="ekskul-card__label">Paskibra</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card">
+            <a href="ekstrakurikuler.php" class="ekskul-card">
               <img src="assets/images/extracurricular/pmr.png" alt="Kegiatan ekstrakurikuler PMR" />
               <span class="ekskul-card__label">PMR</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card">
+            <a href="ekstrakurikuler.php" class="ekskul-card">
               <img src="assets/images/extracurricular/jurnalistik.png" alt="Kegiatan ekstrakurikuler Jurnalistik" />
               <span class="ekskul-card__label">Jurnalistik</span>
             </a>
 
             <!-- Duplicate set (all activities repeated once) for seamless infinite loop (hidden from assistive tech) -->
-            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+            <a href="ekstrakurikuler.php" class="ekskul-card" aria-hidden="true" tabindex="-1">
               <img src="assets/images/ekskul-futsal.jpg" alt="" />
               <span class="ekskul-card__label">Futsal</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+            <a href="ekstrakurikuler.php" class="ekskul-card" aria-hidden="true" tabindex="-1">
               <img src="assets/images/ekskul-basket.jpg" alt="" />
               <span class="ekskul-card__label">Basket</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+            <a href="ekstrakurikuler.php" class="ekskul-card" aria-hidden="true" tabindex="-1">
               <img src="assets/images/ekskul-volly.jpg" alt="" />
               <span class="ekskul-card__label">Volly</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+            <a href="ekstrakurikuler.php" class="ekskul-card" aria-hidden="true" tabindex="-1">
               <img src="assets/images/ekskul-badminton.jpg" alt="" />
               <span class="ekskul-card__label">Badminton</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+            <a href="ekstrakurikuler.php" class="ekskul-card" aria-hidden="true" tabindex="-1">
               <img src="assets/images/ekskul-kickboxing.jpg" alt="" />
               <span class="ekskul-card__label">Kick Boxing</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+            <a href="ekstrakurikuler.php" class="ekskul-card" aria-hidden="true" tabindex="-1">
               <img src="assets/images/ekskul-perisai-diri.jpg" alt="" />
               <span class="ekskul-card__label">Perisai Diri</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+            <a href="ekstrakurikuler.php" class="ekskul-card" aria-hidden="true" tabindex="-1">
               <img src="assets/images/ekskul-tari.jpg" alt="" />
               <span class="ekskul-card__label">Tari</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+            <a href="ekstrakurikuler.php" class="ekskul-card" aria-hidden="true" tabindex="-1">
               <img src="assets/images/ekskul-albanjari.jpg" alt="" />
               <span class="ekskul-card__label">Al Banjari</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+            <a href="ekstrakurikuler.php" class="ekskul-card" aria-hidden="true" tabindex="-1">
               <img src="assets/images/ekskul-band.jpg" alt="" />
               <span class="ekskul-card__label">Band</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+            <a href="ekstrakurikuler.php" class="ekskul-card" aria-hidden="true" tabindex="-1">
               <img src="assets/images/ekskul-pramuka.jpg" alt="" />
               <span class="ekskul-card__label">Pramuka</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+            <a href="ekstrakurikuler.php" class="ekskul-card" aria-hidden="true" tabindex="-1">
               <img src="assets/images/ekskul-paskibra.jpg" alt="" />
               <span class="ekskul-card__label">Paskibra</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+            <a href="ekstrakurikuler.php" class="ekskul-card" aria-hidden="true" tabindex="-1">
               <img src="assets/images/ekskul-pmr.jpg" alt="" />
               <span class="ekskul-card__label">PMR</span>
             </a>
-            <a href="ekstrakurikuler.html" class="ekskul-card" aria-hidden="true" tabindex="-1">
+            <a href="ekstrakurikuler.php" class="ekskul-card" aria-hidden="true" tabindex="-1">
               <img src="assets/images/ekskul-jurnalistik.jpg" alt="" />
               <span class="ekskul-card__label">Jurnalistik</span>
             </a>
@@ -424,7 +424,7 @@ $role = $_SESSION['role'] ?? '';
             <h2>Staf Pengajar</h2>
             <p>Pendidik profesional yang berdedikasi membimbing siswa.</p>
           </div>
-          <a href="staf-pengajar.html" class="link-arrow">Lihat Semua &rarr;</a>
+          <a href="staf-pengajar.php" class="link-arrow">Lihat Semua &rarr;</a>
         </div>
 
         <div class="staff-grid">
@@ -462,7 +462,7 @@ $role = $_SESSION['role'] ?? '';
             <h2>SMKN 1 Sukorejo</h2>
             <p>Jl. Sumber Gareng, Sukorejo, Pasuruan</p>
           </div>
-          <a href="contact.html#location" class="btn btn-outline-navy location-preview__cta">
+          <a href="contact.php#location" class="btn btn-outline-navy location-preview__cta">
             Lihat Lokasi
             <span class="location-preview__arrow" aria-hidden="true">&rarr;</span>
           </a>
@@ -497,15 +497,15 @@ $role = $_SESSION['role'] ?? '';
       <div class="footer-col">
         <h3>Tautan Cepat</h3>
         <ul>
-          <li><a href="profil-sekolah.html">Profil Sekolah</a></li>
-          <li><a href="profil-sekolah.html#visi-misi">Visi Misi</a></li>
-          <li><a href="agenda.html">Agenda</a></li>
+          <li><a href="profil-sekolah.php">Profil Sekolah</a></li>
+          <li><a href="profil-sekolah.php#visi-misi">Visi Misi</a></li>
+          <li><a href="agenda.php">Agenda</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h3>Informasi</h3>
         <ul>
-          <li><a href="prestasi.html">Prestasi</a></li>
+          <li><a href="prestasi.php">Prestasi</a></li>
 
 
         </ul>
