@@ -112,31 +112,40 @@ if (jurusanSelect && kelasSelect) {
 }
 
 // Menghitung total pembayaran dari tagihan yang dipilih
-var billCheckboxes = document.querySelectorAll(
-  'input[name="bill_ids[]"]'
-);
-var totalInput = document.getElementById('k-amt');
-
 function calculateTotal() {
+  var billCheckboxes = document.querySelectorAll(
+    'input[name="bill_ids[]"]'
+  );
+  var totalInput = document.getElementById('k-amt');
+
+  if (!totalInput) return;
+
   var total = 0;
 
   billCheckboxes.forEach(function (checkbox) {
     if (checkbox.checked) {
-      total += Number(checkbox.dataset.amount);
+      var amount = Number.parseFloat(checkbox.getAttribute('data-amount'));
+      if (Number.isFinite(amount)) {
+        total += amount;
+      }
     }
   });
 
-  if (totalInput) {
-    totalInput.value = 'Rp' + total.toLocaleString('id-ID');
-  }
+  totalInput.value = 'Rp' + total.toLocaleString('id-ID');
 }
 
-// Memperbarui total setiap kali pilihan tagihan berubah
-billCheckboxes.forEach(function (checkbox) {
-  checkbox.addEventListener('change', calculateTotal);
+// Gunakan event delegation agar checkbox tetap terdeteksi
+// meskipun elemen tagihan dimuat atau diperbarui setelah halaman dibuka.
+document.addEventListener('change', function (event) {
+  if (
+    event.target.matches &&
+    event.target.matches('input[name="bill_ids[]"]')
+  ) {
+    calculateTotal();
+  }
 });
 
-// Menghitung nilai awal saat halaman dibuka
+// Hitung nilai awal saat halaman dibuka.
 calculateTotal();
 
 })();
